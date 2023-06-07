@@ -43,7 +43,7 @@ export default async function CurationList({
     recordId: string;
     communityId?: string;
 }) {
-    const curationNotesList = await getData(recordId);
+    const curationNotesList = await getData(recordId, communityId);
     return (
         <div>
             Related notes:
@@ -51,8 +51,8 @@ export default async function CurationList({
             {curationNotesList.map((note) => (
                 <div className="border p-5 my-5" key={note.raw.transactionHash}>
                     <div className="my-5">
-                        Summary: Curator(id: {note.raw.characterId}) curates
-                        this record on {note.dateString}
+                        Summary: {note.raw.character.metadata.content.name}{" "}
+                        curates this record on {note.dateString}
                     </div>
                     <div>Curator: {note.raw.characterId} </div>
                     <div>
