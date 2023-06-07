@@ -3,7 +3,7 @@ import { crossbell } from "crossbell/network";
 import { createContract } from "crossbell";
 import Link from "next/link";
 
-const communityId = ["56142"]; //TODO
+const communityId = ["56142", "56217"]; //TODO
 
 //Localhost
 if (process.env.CROSSBELL_RPC_ADDRESS === "http://127.0.0.1:8545") {
