@@ -34,7 +34,7 @@ export default async function RecordCard({
             <div>Author: {record.author}</div>
 
             {viewMode === "analyzed" && (
-                <JsonViewer props={rData.metadata}></JsonViewer>
+                <JsonViewer props={rData.metadata || {}}></JsonViewer>
             )}
             <Link href={`./record/${id}`}>
                 <div>More ↗ </div>

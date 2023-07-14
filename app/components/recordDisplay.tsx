@@ -68,7 +68,7 @@ export default async function RecordDisplay({
         <div>
             {viewMode === "normal" && (
                 <div>
-                    <RecordCard id={rid}></RecordCard>
+                    <RecordCard viewMode="normal" id={rid}></RecordCard>
 
                     <div>Related communities:</div>
 
@@ -89,7 +89,7 @@ export default async function RecordDisplay({
                 <div>
                     <div>Record Id: {props.rid}</div>
 
-                    <RecordCard id={props.rid}></RecordCard>
+                    <RecordCard viewMode="analyzed" id={props.rid}></RecordCard>
                     <div>
                         This record is curated in {l} communities. And there are{" "}
                         {backNotes.count} related notes.

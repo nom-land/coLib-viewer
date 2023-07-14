@@ -73,7 +73,7 @@ export default async function CommunityRecordDisplay({
         <div>
             {viewMode === "normal" && (
                 <div>
-                    <RecordCard id={rid}></RecordCard>
+                    <RecordCard id={rid} viewMode="normal"></RecordCard>
                     <CurationList
                         recordId={rid}
                         communityId={id}
