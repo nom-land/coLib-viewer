@@ -9,6 +9,7 @@ async function getData(recordId: string, communityId?: string) {
         toCharacterId: recordId,
         includeCharacter: true,
     });
+    console.log("count of backnotes: ", backNotes.list.length);
 
     const curationNotesList = [] as curationNote[];
     backNotes.list.map((n) => {
@@ -54,7 +55,8 @@ export default async function CurationList({
                         Summary: {note.raw.character.metadata.content.name}{" "}
                         curates this record on {note.dateString}
                     </div>
-                    <div>Curator: {note.raw.characterId} </div>
+                    <div>Curator id: {note.raw.characterId} </div>
+                    <div>Curator handle: {note.raw.character?.handle} </div>
                     <div>
                         {" "}
                         Curating in community#

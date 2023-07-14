@@ -15,6 +15,8 @@ async function getData(communityId: string) {
         fromCharacterId: communityId,
         linkType: "coLib-general", // TODO: change coLib to a config var
     });
+    console.log("ldata:", lData);
+    console.log("ldata:", lData.length);
 
     const { data: mData } = await c.link.getLinkingCharacters({
         fromCharacterId: communityId,
@@ -37,7 +39,6 @@ export default async function CommunityDisplay({
         mData: members,
         lData: generalList,
     } = await getData(props.id);
-
     return (
         //TODO: if this is not a community character...
         <div>

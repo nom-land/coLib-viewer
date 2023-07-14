@@ -84,7 +84,7 @@ export default async function CommunityRecordDisplay({
                 <div>
                     <div>Record Id: {rid}</div>
 
-                    <RecordCard id={rid}></RecordCard>
+                    <RecordCard id={rid} viewMode="analyzed"></RecordCard>
                     <div>
                         This record is curated in {l} communities. And there are{" "}
                         {backNotes.count} related notes.
@@ -101,7 +101,13 @@ export default async function CommunityRecordDisplay({
                                     curates this record on {note.dateString}
                                 </div>
                                 <div className="border p-5 my-5">
-                                    <div>Curator: {note.raw.characterId} </div>
+                                    <div>
+                                        Curator id: {note.raw.characterId}{" "}
+                                    </div>
+                                    <div>
+                                        Curator handle:{" "}
+                                        {note.raw.character?.handle}{" "}
+                                    </div>
                                     <JsonViewer
                                         props={
                                             note.raw.character?.metadata || {}
