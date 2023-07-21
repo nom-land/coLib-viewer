@@ -25,8 +25,8 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
-
-/* body, html {
+/* 
+body, html {
   height: 100%;
 } */
 
