@@ -1,6 +1,7 @@
 import { createIndexer } from "crossbell";
 import { curationNote } from "../typings/types";
 import { getAttr } from "../utils";
+import CharacterHeader from "./characterHeader";
 
 async function getData(recordId: string, communityId?: string) {
     const indexer = createIndexer();
@@ -30,6 +31,17 @@ async function getData(recordId: string, communityId?: string) {
                             n.metadata?.content?.date_published
                         ).toISOString()) ||
                     "",
+                content: n.metadata?.content?.content?.toString() || "",
+                curatorAvatars: n.character?.metadata?.content?.avatars || [],
+                curatorName: n.character?.metadata?.content?.name || "",
+                curatorHandle: n.character?.handle || "",
+                suggestedTags:
+                    (JSON.parse(
+                        getAttr(
+                            n.metadata?.content?.attributes,
+                            "suggested tags"
+                        ) as string
+                    ) as string[]) || [],
                 raw: n,
             });
         }
@@ -46,29 +58,24 @@ export default async function CurationList({
 }) {
     const curationNotesList = await getData(recordId, communityId);
     return (
-        <div>
-            Related notes:
+        <div className="my-5">
+            Curated by:
             {/* <JsonViewer props={backNotes.list[0]}></JsonViewer> */}
             {curationNotesList.map((note) => (
-                <div className="border p-5 my-5" key={note.raw.transactionHash}>
-                    <div className="my-5">
-                        Summary: {note.raw.character.metadata.content.name}{" "}
-                        curates this record on {note.dateString}
-                    </div>
-                    <div>Curator id: {note.raw.characterId} </div>
-                    <div>Curator handle: {note.raw.character?.handle} </div>
-                    <div>
-                        {" "}
-                        Curating in community#
-                        {getAttr(
-                            note.raw.metadata.content.attributes,
-                            "curation community"
-                        )}{" "}
-                    </div>
-                    <div>
-                        Date:
-                        {note.dateString}
-                    </div>
+                <div
+                    className="card p-5 my-5 w-[48rem]"
+                    key={note.raw.transactionHash}
+                >
+                    <CharacterHeader
+                        name={note.curatorName}
+                        date={note.dateString}
+                        handle={note.curatorHandle}
+                        avatar={note.curatorAvatars[0]}
+                    />
+                    <div className="py-5">{note.content}</div>
+                    {note.suggestedTags.map((tag, i) => (
+                        <div key={i}>#{tag}</div>
+                    ))}
                 </div>
             ))}
         </div>

@@ -3,6 +3,8 @@ import RecordCard from "@/app/components/recordCard";
 import { ViewMode, curationNote } from "@/app/typings/types";
 import { LinkEntity, NoteEntity, createIndexer } from "crossbell";
 import CurationList from "./curationList";
+import Link from "next/link";
+import { getAttr } from "../utils";
 const appName = "coLib";
 
 async function getData(id: string) {
@@ -59,6 +61,17 @@ export default async function RecordDisplay({
                             n.metadata?.content?.date_published
                         ).toISOString()) ||
                     "",
+                content: n.metadata?.content?.content?.toString() || "",
+                curatorAvatars: n.character?.metadata?.content?.avatars || [],
+                curatorName: n.character?.metadata?.content?.name || "",
+                curatorHandle: n.character?.handle || "",
+                suggestedTags:
+                    (JSON.parse(
+                        getAttr(
+                            n.metadata?.content?.attributes,
+                            "suggested tags"
+                        ) as string
+                    ) as string[]) || [],
                 raw: n,
             });
         }
@@ -68,19 +81,41 @@ export default async function RecordDisplay({
         <div>
             {viewMode === "normal" && (
                 <div>
-                    <RecordCard viewMode="normal" id={rid}></RecordCard>
+                    <RecordCard
+                        viewMode="normal"
+                        id={rid}
+                        context="app"
+                    ></RecordCard>
 
-                    <div>Related communities:</div>
-
-                    {curationList.map((c) => (
-                        <div className="border" key={c.raw.transactionHash}>
-                            <div>
-                                Community id:{" "}
-                                {c.raw.fromCharacter?.metadata?.content?.name}
-                            </div>
-                            <div>Curation list: {c.list}</div>
+                    <div>
+                        <div className="my-5">Related communities:</div>
+                        <div className="grid">
+                            {curationList.map((c) => (
+                                <div
+                                    className="card w-[18rem]"
+                                    key={c.raw.transactionHash}
+                                >
+                                    <div className="text-xl font-bold">
+                                        {c.list}
+                                    </div>
+                                    <div>
+                                        in{" "}
+                                        <Link
+                                            href={`./community/${c.communityId}`}
+                                        >
+                                            <span className="font-bold">
+                                                {
+                                                    c.raw.fromCharacter
+                                                        ?.metadata?.content
+                                                        ?.name
+                                                }
+                                            </span>
+                                        </Link>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
 
                     <CurationList recordId={rid}></CurationList>
                 </div>
@@ -89,7 +124,11 @@ export default async function RecordDisplay({
                 <div>
                     <div>Record Id: {props.rid}</div>
 
-                    <RecordCard viewMode="analyzed" id={props.rid}></RecordCard>
+                    <RecordCard
+                        viewMode="analyzed"
+                        id={props.rid}
+                        context="app"
+                    ></RecordCard>
                     <div>
                         This record is curated in {l} communities. And there are{" "}
                         {backNotes.count} related notes.

@@ -24,9 +24,3 @@ export default function ViewSwitcher({
         </>
     );
 }
-
-// export default function CommunityPage() {
-//     let normalView = true;
-
-//     return <NormalCommunityPage children={DetailedCommunityPage} />;
-// }

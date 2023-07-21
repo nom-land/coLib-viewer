@@ -3,6 +3,7 @@ import RecordCard from "@/app/components/recordCard";
 import { ViewMode } from "@/app/typings/types";
 import { LinkEntity, NoteEntity, createIndexer } from "crossbell";
 import CurationList from "./curationList";
+import CommunityHeader from "./CommunityHeader";
 const appName = "coLib";
 
 async function getData(id: string) {
@@ -73,7 +74,12 @@ export default async function CommunityRecordDisplay({
         <div>
             {viewMode === "normal" && (
                 <div>
-                    <RecordCard id={rid} viewMode="normal"></RecordCard>
+                    <CommunityHeader communityId={id}></CommunityHeader>
+                    <RecordCard
+                        id={rid}
+                        viewMode="normal"
+                        context="community"
+                    ></RecordCard>
                     <CurationList
                         recordId={rid}
                         communityId={id}
@@ -84,7 +90,11 @@ export default async function CommunityRecordDisplay({
                 <div>
                     <div>Record Id: {rid}</div>
 
-                    <RecordCard id={rid} viewMode="analyzed"></RecordCard>
+                    <RecordCard
+                        id={rid}
+                        viewMode="analyzed"
+                        context="community"
+                    ></RecordCard>
                     <div>
                         This record is curated in {l} communities. And there are{" "}
                         {backNotes.count} related notes.
