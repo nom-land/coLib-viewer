@@ -24,6 +24,7 @@ async function getData(recordId: string, communityId?: string) {
                     return;
                 }
             }
+            console.log("Metadata", n.metadata?.content?.attributes);
             curationNotesList.push({
                 dateString:
                     (n.metadata?.content?.date_published &&
@@ -35,13 +36,12 @@ async function getData(recordId: string, communityId?: string) {
                 curatorAvatars: n.character?.metadata?.content?.avatars || [],
                 curatorName: n.character?.metadata?.content?.name || "",
                 curatorHandle: n.character?.handle || "",
-                suggestedTags:
-                    (JSON.parse(
-                        getAttr(
-                            n.metadata?.content?.attributes,
-                            "suggested tags"
-                        ) as string
-                    ) as string[]) || [],
+                suggestedTags: JSON.parse(
+                    (getAttr(
+                        n.metadata?.content?.attributes,
+                        "suggested tags"
+                    ) as string) || "[]"
+                ) as string[],
                 raw: n,
             });
         }

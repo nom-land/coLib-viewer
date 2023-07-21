@@ -8,7 +8,7 @@
   --background-end-rgb: 255, 255, 255;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
@@ -33,16 +33,9 @@ body {
 
 @layer components {
   .card {
-    background-color: theme('colors.white');
+    background-color: #d3dce6;
     border-radius: theme('borderRadius.lg');
     padding: theme('spacing.6');
     box-shadow: theme('boxShadow.xl');
   }
-  .compact-card {
-    background-color: theme('colors.white');
-    border-radius: theme('borderRadius.lg');
-    padding: theme('spacing.3');
-    box-shadow: theme('boxShadow.xl');
-  }
-  
 }
