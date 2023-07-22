@@ -16,3 +16,5 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
         </>
     );
 }
+
+export const revalidate = 60; // revalidate this page every 60 seconds

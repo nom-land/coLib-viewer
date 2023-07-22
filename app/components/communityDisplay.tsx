@@ -113,14 +113,20 @@ export default async function CommunityDisplay({
                             ))}
                         </section>
                         <section className="flex-none w-80">
-                            <div className="py-5"> Members </div>
+                            <div className="py-5 "> Members </div>
                             {members.map((member) => (
-                                <CharacterHeader
-                                    key={member.characterId.toString()}
-                                    name={member.metadata?.name || "Unknown"}
-                                    handle={member.handle}
-                                    avatar={(member.metadata?.avatars || [])[0]}
-                                />
+                                <div className="mb-5">
+                                    <CharacterHeader
+                                        key={member.characterId.toString()}
+                                        name={
+                                            member.metadata?.name || "Unknown"
+                                        }
+                                        handle={member.handle}
+                                        avatar={
+                                            (member.metadata?.avatars || [])[0]
+                                        }
+                                    />
+                                </div>
 
                                 // <div
                                 //     className="compact-card"

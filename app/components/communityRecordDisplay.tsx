@@ -56,7 +56,10 @@ export default async function CommunityRecordDisplay({
         if (
             n.metadata?.content?.attributes?.find(
                 (a) => a.trait_type === "entity type"
-            )?.value === "curation"
+            )?.value === "curation" ||
+            n.metadata?.content?.attributes?.find(
+                (a) => a.trait_type === "entity type"
+            )?.value === "discussion"
         ) {
             curationNotesList.push({
                 dateString:
@@ -114,6 +117,7 @@ export default async function CommunityRecordDisplay({
                                     <div>
                                         Curator id: {note.raw.characterId}{" "}
                                     </div>
+                                    <div>Note id: {note.raw.noteId || ""} </div>
                                     <div>
                                         Curator handle:{" "}
                                         {note.raw.character?.handle}{" "}

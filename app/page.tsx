@@ -1,6 +1,4 @@
-import Image from "next/image";
 import { crossbell } from "crossbell/network";
-import { createContract } from "crossbell";
 import Link from "next/link";
 import { homeName } from "./config";
 
@@ -15,7 +13,7 @@ if (process.env.CROSSBELL_RPC_ADDRESS === "http://127.0.0.1:8545") {
 
 export default async function Home() {
     return (
-        <div className="container mx-auto py-10 px-40 h-screen">
+        <div className="container mx-auto py-10 px-40 min-h-screen">
             <div className="my-10">Welcome to {homeName}!</div>
             <div className="grid grid-cols-4 gap-4">
                 {communityIds.map((id) => (
@@ -27,3 +25,5 @@ export default async function Home() {
         </div>
     );
 }
+
+export const revalidate = 60; // revalidate this page every 60 seconds

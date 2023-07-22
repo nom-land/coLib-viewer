@@ -10,9 +10,9 @@
 
 @media (prefers-color-scheme: light) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 224, 226, 230;
+    --background-end-rgb: 255, 255, 255;
   }
 }
 
@@ -25,17 +25,18 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
-/* 
+
 body, html {
-  height: 100%;
-} */
+  min-height: 100%;
+}
 
 
 @layer components {
   .card {
-    background-color: #d3dce6;
+    background-color: #d4d4d4;
+    border-color: #d4d4d4;
     border-radius: theme('borderRadius.lg');
     padding: theme('spacing.6');
-    box-shadow: theme('boxShadow.xl');
+    box-shadow: theme('boxShadow.sm');
   }
 }

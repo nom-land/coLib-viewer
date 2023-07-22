@@ -15,11 +15,14 @@ async function getData(recordId: string, communityId?: string) {
     const curationNotesList = [] as curationNote[];
     backNotes.list.map((n) => {
         const attrs = n.metadata?.content?.attributes;
-        if (getAttr(attrs, "entity type") === "curation") {
+        const entityType = getAttr(attrs, "entity type");
+        if (entityType === "curation" || entityType === "discussion") {
             if (communityId) {
                 if (
                     getAttr(attrs, "curation community")?.toString() !==
-                    communityId
+                        communityId &&
+                    getAttr(attrs, "discussion community")?.toString() !==
+                        communityId
                 ) {
                     return;
                 }
