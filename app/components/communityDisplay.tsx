@@ -8,8 +8,11 @@ import ReactDom from "react-dom";
 import ReactMarkdown from "react-markdown";
 import CommunityHeader from "./CommunityHeader";
 import CharacterHeader from "./characterHeader";
-// import remarkGfm from 'remark-gfm'
 
+interface CurationListData {
+    listName: string;
+    data: Character[];
+}
 async function getData(communityId: string) {
     const c = createContract();
 
@@ -30,7 +33,7 @@ async function getData(communityId: string) {
         new Set(links.list.map((l) => l.linkType))
     ).filter((l) => l.startsWith(appName + "-") && l !== appName + "-members");
 
-    const curations = [] as Character[][];
+    const curations = [] as CurationListData[];
     console.log("links", links);
     await Promise.all(
         curationLinkTypes.map(async (l) => {
@@ -38,7 +41,10 @@ async function getData(communityId: string) {
                 fromCharacterId: communityId,
                 linkType: l,
             });
-            curations.push(lData);
+            curations.push({
+                listName: l.slice(appName.length + 1),
+                data: lData,
+            });
             // console.log("ldata:", lData);
             // console.log("ldata:", lData.length);
         })
@@ -77,11 +83,14 @@ export default async function CommunityDisplay({
                     <CommunityHeader communityId={props.id}></CommunityHeader>
                     <div className="flex gap-5 w-full">
                         <section className="flex-1">
-                            {lists.map((list, i) => (
+                            {items.map((list, i) => (
                                 <div key={i}>
-                                    <div className="text-lg"> {list} </div>
+                                    <div className="text-lg">
+                                        {" "}
+                                        {list.listName}{" "}
+                                    </div>
                                     <div className="grid grid-cols-3 gap-4">
-                                        {items[i].map((record) => (
+                                        {list.data.map((record) => (
                                             <>
                                                 <Link
                                                     key={record.characterId.toString()}
