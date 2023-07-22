@@ -124,9 +124,11 @@ export default async function CommunityDisplay({
                         <section className="flex-none w-80">
                             <div className="py-5 "> Members </div>
                             {members.map((member) => (
-                                <div className="mb-5">
+                                <div
+                                    className="mb-5"
+                                    key={member.characterId.toString()}
+                                >
                                     <CharacterHeader
-                                        key={member.characterId.toString()}
                                         name={
                                             member.metadata?.name || "Unknown"
                                         }
