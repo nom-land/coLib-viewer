@@ -28,6 +28,8 @@ async function getData(communityId: string) {
     const indexer = createIndexer();
     // add pagination
     const links = await indexer.link.getMany(communityId);
+    // links.list.map(l => l.linklistId)
+
     // TODO:... use another prefix
     const curationLinkTypes = Array.from(
         new Set(links.list.map((l) => l.linkType))

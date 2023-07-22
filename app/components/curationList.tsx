@@ -45,6 +45,12 @@ async function getData(recordId: string, communityId?: string) {
                         "suggested tags"
                     ) as string) || "[]"
                 ) as string[],
+                listNames: JSON.parse(
+                    (getAttr(
+                        n.metadata?.content?.attributes,
+                        "curation lists"
+                    ) as string) || "[]"
+                ) as string[],
                 raw: n,
             });
         }
@@ -75,6 +81,16 @@ export default async function CurationList({
                         handle={note.curatorHandle}
                         avatar={note.curatorAvatars[0]}
                     />
+
+                    <div className="text-lg my-5">
+                        <span className="text-sm font-extralight">
+                            {" "}
+                            add it to list{" "}
+                        </span>
+                        <span className="m-1 text-2xl">
+                            {note.listNames.join(", ")}
+                        </span>
+                    </div>
                     <div className="py-5">{note.content}</div>
                     {note.suggestedTags.map((tag, i) => (
                         <div key={i}>#{tag}</div>

@@ -7,4 +7,5 @@ export interface curationNote {
     curatorName: string;
     curatorHandle: string;
     suggestedTags: string[];
+    listNames: string[];
 }
