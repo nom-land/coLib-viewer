@@ -72,6 +72,7 @@ export default async function RecordDisplay({
                             "suggested tags"
                         ) as string
                     ) as string[]) || [],
+                listNames: [],
                 raw: n,
             });
         }

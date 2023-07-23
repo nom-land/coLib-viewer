@@ -28,7 +28,7 @@ async function getData(communityId: string) {
     const indexer = createIndexer();
     // add pagination
     const links = await indexer.link.getMany(communityId);
-    // links.list.map(l => l.linklistId)
+    //  links.list.map(l => l.linklistId)
 
     // TODO:... use another prefix
     const curationLinkTypes = Array.from(
@@ -102,11 +102,12 @@ export default async function CommunityDisplay({
                                                 >
                                                     <div className="card border p-5 my-5">
                                                         <div className="text-xl font-bold my-3">
-                                                            {
+                                                            {(
+                                                                record.metadata as any
+                                                            )["title"] ||
                                                                 (
                                                                     record.metadata as any
-                                                                )["title"]
-                                                            }
+                                                                )["url"]}
                                                         </div>
                                                         <ReactMarkdown>
                                                             {
