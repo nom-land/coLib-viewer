@@ -1,6 +1,4 @@
-import { data } from "autoprefixer";
-import { Character, createContract } from "crossbell";
-import { get } from "http";
+import { createContract } from "crossbell";
 import Link from "next/link";
 
 async function getData(communityId: string) {
@@ -18,7 +16,7 @@ export default async function CommunityHeader(props: { communityId: string }) {
     return (
         <>
             <Link href={`/community/${props.communityId}`}>
-                <section className="p-5">
+                <section className="px-5">
                     Libirary of{" "}
                     <span className="text-4xl ">
                         {communityChar.metadata?.name}

@@ -3,7 +3,7 @@ import RecordCard from "@/app/components/recordCard";
 import { ViewMode } from "@/app/typings/types";
 import { LinkEntity, NoteEntity, createIndexer } from "crossbell";
 import CurationList from "./curationList";
-import CommunityHeader from "./CommunityHeader";
+import CommunityHeader from "./communityHeader";
 const appName = "coLib";
 
 async function getData(id: string) {

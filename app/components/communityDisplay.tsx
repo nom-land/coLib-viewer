@@ -6,7 +6,7 @@ import { appName } from "../config";
 import React from "react";
 import ReactDom from "react-dom";
 import ReactMarkdown from "react-markdown";
-import CommunityHeader from "./CommunityHeader";
+import CommunityHeader from "./communityHeader";
 import CharacterHeader from "./characterHeader";
 
 interface CurationListData {

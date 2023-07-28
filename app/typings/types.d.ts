@@ -1,5 +1,6 @@
 export type ViewMode = "normal" | "analyzed";
-export interface curationNote {
+export interface CurationNote {
+    postId: string;
     raw: NoteEntity;
     dateString: string;
     content: string;
@@ -8,4 +9,6 @@ export interface curationNote {
     curatorHandle: string;
     suggestedTags: string[];
     listNames: string[];
+    recordId: string;
+    communityId: string;
 }

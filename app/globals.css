@@ -39,4 +39,10 @@ body, html {
     padding: theme('spacing.6');
     box-shadow: theme('boxShadow.sm');
   }
+  .tag {
+    border-radius: 1rem;
+    border: 1px solid #000000;
+    width: fit-content;
+    padding: 0 0.5rem;
+  }
 }

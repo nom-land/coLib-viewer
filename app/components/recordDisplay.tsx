@@ -1,6 +1,6 @@
 import JsonViewer from "@/app/components/jsonViewer";
 import RecordCard from "@/app/components/recordCard";
-import { ViewMode, curationNote } from "@/app/typings/types";
+import { ViewMode, CurationNote } from "@/app/typings/types";
 import { LinkEntity, NoteEntity, createIndexer } from "crossbell";
 import CurationList from "./curationList";
 import Link from "next/link";
@@ -47,14 +47,19 @@ export default async function RecordDisplay({
         }
     });
 
-    const curationNotesList = [] as curationNote[];
+    const curationNotesList = [] as CurationNote[];
     backNotes.list.map((n) => {
+        const attrs = n.metadata?.content?.attributes;
+
         if (
-            n.metadata?.content?.attributes?.find(
-                (a) => a.trait_type === "entity type"
-            )?.value === "curation"
+            attrs?.find((a) => a.trait_type === "entity type")?.value ===
+            "curation"
         ) {
             curationNotesList.push({
+                postId: n.characterId.toString() + "-" + n.noteId.toString(),
+                recordId: getAttr(attrs, "curation record") as string,
+                communityId: getAttr(attrs, "curation community") as string,
+
                 dateString:
                     (n.metadata?.content?.date_published &&
                         new Date(
@@ -67,10 +72,7 @@ export default async function RecordDisplay({
                 curatorHandle: n.character?.handle || "",
                 suggestedTags:
                     (JSON.parse(
-                        getAttr(
-                            n.metadata?.content?.attributes,
-                            "suggested tags"
-                        ) as string
+                        getAttr(attrs, "suggested tags") as string
                     ) as string[]) || [],
                 listNames: [],
                 raw: n,

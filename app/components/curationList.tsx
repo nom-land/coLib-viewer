@@ -1,20 +1,24 @@
 import { createIndexer } from "crossbell";
-import { curationNote } from "../typings/types";
-import { getAttr } from "../utils";
-import CharacterHeader from "./characterHeader";
+import { CurationNote } from "../typings/types";
+import { getAttr, getCuration } from "../utils";
+import NoteCard from "./noteCard";
+import Link from "next/link";
+
+interface CurationStat {
+    replies: number;
+}
 
 async function getData(recordId: string, communityId?: string) {
     const indexer = createIndexer();
 
-    const backNotes = await indexer.note.getMany({
+    const curations = await indexer.note.getMany({
         toCharacterId: recordId,
         includeCharacter: true,
     });
-    console.log("count of backnotes: ", backNotes.list.length);
-
-    const curationNotesList = [] as curationNote[];
-    backNotes.list.map((n) => {
-        const attrs = n.metadata?.content?.attributes;
+    const curationList = [] as CurationNote[];
+    const curationStat = new Map<string, CurationStat>();
+    curations.list.map((curationNote) => {
+        const attrs = curationNote.metadata?.content?.attributes;
         const entityType = getAttr(attrs, "entity type");
         if (entityType === "curation" || entityType === "discussion") {
             if (communityId) {
@@ -27,35 +31,32 @@ async function getData(recordId: string, communityId?: string) {
                     return;
                 }
             }
-            console.log("Metadata", n.metadata?.content?.attributes);
-            curationNotesList.push({
-                dateString:
-                    (n.metadata?.content?.date_published &&
-                        new Date(
-                            n.metadata?.content?.date_published
-                        ).toISOString()) ||
-                    "",
-                content: n.metadata?.content?.content?.toString() || "",
-                curatorAvatars: n.character?.metadata?.content?.avatars || [],
-                curatorName: n.character?.metadata?.content?.name || "",
-                curatorHandle: n.character?.handle || "",
-                suggestedTags: JSON.parse(
-                    (getAttr(
-                        n.metadata?.content?.attributes,
-                        "suggested tags"
-                    ) as string) || "[]"
-                ) as string[],
-                listNames: JSON.parse(
-                    (getAttr(
-                        n.metadata?.content?.attributes,
-                        "curation lists"
-                    ) as string) || "[]"
-                ) as string[],
-                raw: n,
-            });
+            console.log("Metadata", curationNote.metadata?.content?.attributes);
+
+            const curation = getCuration(curationNote);
+
+            curationList.push(curation);
         }
     });
-    return curationNotesList;
+
+    await Promise.all(
+        curations.list.map(async (curationNote) => {
+            const { count } = await indexer.note.getMany({
+                toCharacterId: curationNote.characterId,
+                toNoteId: curationNote.noteId,
+                limit: 0,
+            });
+            const curationId =
+                curationNote.characterId.toString() +
+                "-" +
+                curationNote.noteId.toString();
+            curationStat.set(curationId, {
+                replies: count,
+            });
+        })
+    );
+
+    return { curationList, curationStat };
 }
 
 export default async function CurationList({
@@ -65,37 +66,35 @@ export default async function CurationList({
     recordId: string;
     communityId?: string;
 }) {
-    const curationNotesList = await getData(recordId, communityId);
+    const { curationList, curationStat } = await getData(recordId, communityId);
     return (
         <div className="my-5">
             Curated by:
             {/* <JsonViewer props={backNotes.list[0]}></JsonViewer> */}
-            {curationNotesList.map((note) => (
-                <div
-                    className="card p-5 my-5 w-[48rem]"
-                    key={note.raw.transactionHash}
-                >
-                    <CharacterHeader
-                        name={note.curatorName}
-                        date={note.dateString}
-                        handle={note.curatorHandle}
-                        avatar={note.curatorAvatars[0]}
-                    />
+            {curationList.map((note) => (
+                <Link href={`/curation/${note.postId}`} key={note.postId}>
+                    <NoteCard noteType="curation" note={note}>
+                        <div className="flex gap-1 items-center">
+                            <svg
+                                className="h-5 w-5 text-black"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                                />
+                            </svg>
 
-                    <div className="text-lg my-5">
-                        <span className="text-sm font-extralight">
-                            {" "}
-                            add it to list{" "}
-                        </span>
-                        <span className="m-1 text-2xl">
-                            {note.listNames.join(", ")}
-                        </span>
-                    </div>
-                    <div className="py-5">{note.content}</div>
-                    {note.suggestedTags.map((tag, i) => (
-                        <div key={i}>#{tag}</div>
-                    ))}
-                </div>
+                            <span className="text-sm">
+                                {curationStat.get(note.postId)?.replies || 0}
+                            </span>
+                        </div>
+                    </NoteCard>
+                </Link>
             ))}
         </div>
     );

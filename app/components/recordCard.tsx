@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ViewMode } from "../typings/types";
 import JsonViewer from "./jsonViewer";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { appName } from "../config";
 
 async function getData(id: string) {
     const c = createContract();
@@ -50,14 +49,56 @@ export default async function RecordCard({
 
     return (
         //sm:w-full
-        <div className=" w-[36rem] card p-5 card p-5 ">
+        <div className=" w-[36rem] card p-5 card my-5 ">
             <div className="text-lg font-bold"> {record.title}</div>
-            {record.url && <Link href={record.url}>{record.url}</Link>}
-            <div>Record Type: {recordType}</div>
-            <div>Author: {record.author || "unknown"}</div>
-            <div>Language: {record.language || "unknown"}</div>
-            <div>Copyright: {record.copyright || "unknown"}</div>
-            <div>Original: {record.derivation || "unknown"}</div>
+            <div className="flex items-center gap-1">
+                <svg
+                    className="h-4 w-4 text-black"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    {" "}
+                    <path stroke="none" d="M0 0h24v24H0z" />{" "}
+                    <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />{" "}
+                    <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+                </svg>
+                {record.url && (
+                    <Link href={record.url} title={record.url}>
+                        {record.url.length > 60
+                            ? record.url.slice(0, 25) +
+                              "..." +
+                              record.url.slice(-25)
+                            : record.url}
+                    </Link>
+                )}
+            </div>
+
+            <div>
+                <span className="font-extralight text-sm">Record Type:</span>{" "}
+                {recordType}
+            </div>
+            <div>
+                <span className="font-extralight text-sm">Author:</span>{" "}
+                {record.author || "unknown"}
+            </div>
+            <div>
+                <span className="font-extralight text-sm">Language:</span>{" "}
+                {record.language || "unknown"}
+            </div>
+            <div>
+                <span className="font-extralight text-sm">Copyright:</span> :{" "}
+                {record.copyright || "unknown"}
+            </div>
+            <div>
+                <span className="font-extralight text-sm">Original:</span> :{" "}
+                {record.derivation || "unknown"}
+            </div>
 
             {viewMode === "analyzed" && (
                 <JsonViewer props={rData.metadata || {}}></JsonViewer>
