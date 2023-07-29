@@ -20,8 +20,8 @@ export default async function CurationPage({
     else
         return (
             <>
-                <div className="container mx-auto my-5">
-                    <div className="grid grid-cols-2 gap-5">
+                <div className="container mx-auto ">
+                    <div className="grid grid-cols-2 gap-5 py-5">
                         <div>
                             <div>
                                 <NoteCard

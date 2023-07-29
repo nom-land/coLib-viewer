@@ -1,54 +1,70 @@
 import JsonViewer from "@/app/components/jsonViewer";
-import { getCharIdString } from "@/app/utils";
 import { Character, createContract, createIndexer } from "crossbell";
 import Link from "next/link";
 import { appName } from "../config";
 import React from "react";
-import ReactDom from "react-dom";
-import ReactMarkdown from "react-markdown";
 import CommunityHeader from "./communityHeader";
 import CharacterHeader from "./characterHeader";
+import SimpleRecordCard from "./simpleRecordCard";
 
 interface CurationListData {
+    listId: number;
     listName: string;
     data: Character[];
 }
+
 async function getData(communityId: string) {
     const c = createContract();
 
     const { data: cData } = await c.character.get({
         characterId: communityId,
     });
-    console.log("cData", communityId, cData);
+    // console.log("cData", communityId, cData);
     // Get all lists of the community
     // const indexer = createIndexer();
     // const res = await indexer.liLufthansanklist.getMany(communityId);
     // console.log("res", res);
 
     const indexer = createIndexer();
+    // indexer.link.getManyByLinklistId()
     // add pagination
     const links = await indexer.link.getMany(communityId);
-    //  links.list.map(l => l.linklistId)
-
     // TODO:... use another prefix
+    const curationListIds = Array.from(
+        new Set(
+            links.list
+                .filter(
+                    (l) =>
+                        l.linkType.startsWith(appName + "-") &&
+                        l.linkType !== appName + "-members"
+                )
+                .map((l) => l.linklistId)
+        )
+    );
+    const idsMap = new Map<number, string>();
+
+    console.log("curationListIds", curationListIds);
+
     const curationLinkTypes = Array.from(
         new Set(links.list.map((l) => l.linkType))
     ).filter((l) => l.startsWith(appName + "-") && l !== appName + "-members");
 
     const curations = [] as CurationListData[];
-    console.log("links", links);
     await Promise.all(
-        curationLinkTypes.map(async (l) => {
-            const { data: lData } = await c.link.getLinkingCharacters({
-                fromCharacterId: communityId,
-                linkType: l,
-            });
-            curations.push({
-                listName: l.slice(appName.length + 1),
-                data: lData,
-            });
-            // console.log("ldata:", lData);
-            // console.log("ldata:", lData.length);
+        curationListIds.map(async (id) => {
+            const l = idsMap.get(id)!;
+            if (l.startsWith(appName + "-") && l !== appName + "-members") {
+                // indexer.link.getManyByLinklistId(linklistIds.get(l)!);
+                const { data: lData } = await c.link.getLinkingCharacters({
+                    fromCharacterId: communityId,
+                    linkType: l,
+                });
+                curations.push({
+                    listId: id,
+                    listName: l.slice(appName.length + 1),
+                    data: lData,
+                });
+            }
         })
     );
 
@@ -83,14 +99,17 @@ export default async function CommunityDisplay({
             {props.viewMode === "normal" && (
                 <div>
                     <CommunityHeader communityId={props.id}></CommunityHeader>
+                    <hr className="my-5"></hr>
                     <div className="flex gap-5 w-full">
                         <section className="flex-1">
                             {items.map((list, i) => (
-                                <div key={i}>
-                                    <div className="text-lg">
-                                        {" "}
-                                        {list.listName}{" "}
-                                    </div>
+                                <div key={i} className="p-3">
+                                    <Link href={`./list/${list.listId}`}>
+                                        <div className="text-lg">
+                                            {" "}
+                                            {list.listName}{" "}
+                                        </div>
+                                    </Link>
                                     <div className="grid grid-cols-3 gap-4">
                                         {list.data.map((record) => (
                                             <>
@@ -100,23 +119,9 @@ export default async function CommunityDisplay({
                                                         props.id
                                                     }/record/${record.characterId.toString()}`}
                                                 >
-                                                    <div className="card border p-5 my-5">
-                                                        <div className="text-xl font-bold my-3">
-                                                            {(
-                                                                record.metadata as any
-                                                            )["title"] ||
-                                                                (
-                                                                    record.metadata as any
-                                                                )["url"]}
-                                                        </div>
-                                                        <ReactMarkdown>
-                                                            {
-                                                                (
-                                                                    record.metadata as any
-                                                                )["description"]
-                                                            }
-                                                        </ReactMarkdown>
-                                                    </div>
+                                                    <SimpleRecordCard
+                                                        recordId={record.characterId.toString()}
+                                                    />
                                                 </Link>
                                             </>
                                         ))}
@@ -141,18 +146,6 @@ export default async function CommunityDisplay({
                                         }
                                     />
                                 </div>
-
-                                // <div
-                                //     className="compact-card"
-                                //     key={member.handle}
-                                // >
-                                //     <div className="text-lg">
-                                //         {member.metadata?.name}
-                                //     </div>
-                                //     {/* <div className="text-sm font-light">
-                                //         {getCharIdString(member)}
-                                //     </div> */}
-                                // </div>
                             ))}
                         </section>
                     </div>

@@ -3,16 +3,9 @@ import Link from "next/link";
 import { ViewMode } from "../typings/types";
 import JsonViewer from "./jsonViewer";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import { getCharacterData } from "../apis";
+import { shortenUrl } from "../utils";
 
-async function getData(id: string) {
-    const c = createContract();
-
-    const { data: rData } = await c.character.get({
-        characterId: id,
-    });
-
-    return rData;
-}
 interface ArticleData {
     url?: string;
     links?: string[];
@@ -43,12 +36,11 @@ export default async function RecordCard({
     viewMode: ViewMode;
     context: "community" | "app";
 }) {
-    const rData = await getData(id);
+    const rData = await getCharacterData(id);
     const record = { ...(rData.metadata as ExtendedArticleData) };
     const recordType = (record as any)["record_type"] as string;
 
     return (
-        //sm:w-full
         <div className=" w-[36rem] card p-5 card my-5 ">
             <div className="text-lg font-bold"> {record.title}</div>
             <div className="flex items-center gap-1">
@@ -70,11 +62,7 @@ export default async function RecordCard({
                 </svg>
                 {record.url && (
                     <Link href={record.url} title={record.url}>
-                        {record.url.length > 60
-                            ? record.url.slice(0, 25) +
-                              "..." +
-                              record.url.slice(-25)
-                            : record.url}
+                        {shortenUrl(record.url)}
                     </Link>
                 )}
             </div>
