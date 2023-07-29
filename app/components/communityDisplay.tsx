@@ -42,6 +42,9 @@ async function getData(communityId: string) {
         )
     );
     const idsMap = new Map<number, string>();
+    links.list.forEach((l) => {
+        idsMap.set(l.linklistId, l.linkType);
+    });
 
     console.log("curationListIds", curationListIds);
 
