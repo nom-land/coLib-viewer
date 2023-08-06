@@ -22,6 +22,7 @@ interface CommunityCurationList {
     raw: LinkEntity;
     communityId: string;
     list: string;
+    listId: number;
 }
 
 export default async function RecordDisplay({
@@ -43,6 +44,7 @@ export default async function RecordDisplay({
                 raw: l,
                 communityId: l.fromCharacterId!.toString(),
                 list: listName,
+                listId: l.linklistId,
             });
         }
     });
@@ -94,18 +96,19 @@ export default async function RecordDisplay({
                         <div className="my-5">Related communities:</div>
                         <div className="grid">
                             {curationList.map((c) => (
-                                <div
-                                    className="card w-[18rem]"
-                                    key={c.raw.transactionHash}
+                                <Link
+                                    key={c.listId}
+                                    href={`./list/${c.listId}`}
                                 >
-                                    <div className="text-xl font-bold">
-                                        {c.list}
-                                    </div>
-                                    <div>
-                                        in{" "}
-                                        <Link
-                                            href={`./community/${c.communityId}`}
-                                        >
+                                    <div
+                                        className="card w-[18rem] my-2"
+                                        key={c.raw.transactionHash}
+                                    >
+                                        <div className="text-xl font-bold">
+                                            {c.list}
+                                        </div>
+                                        <div>
+                                            in{" "}
                                             <span className="font-bold">
                                                 {
                                                     c.raw.fromCharacter
@@ -113,9 +116,9 @@ export default async function RecordDisplay({
                                                         ?.name
                                                 }
                                             </span>
-                                        </Link>
+                                        </div>
                                     </div>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     </div>

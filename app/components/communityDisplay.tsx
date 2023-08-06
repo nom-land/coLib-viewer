@@ -1,5 +1,5 @@
 import JsonViewer from "@/app/components/jsonViewer";
-import { Character, createContract, createIndexer } from "crossbell";
+import { Character, Numberish, createContract, createIndexer } from "crossbell";
 import Link from "next/link";
 import { appName } from "../config";
 import React from "react";
@@ -13,20 +13,25 @@ interface CurationListData {
     data: Character[];
 }
 
+async function getFirstCuration(recordId: Numberish) {
+    const indexer = createIndexer();
+    const backNotes = await indexer.note.getMany({
+        toCharacterId: recordId,
+        includeCharacter: true,
+        orderBy: "createdAt",
+    });
+    const { characterId, noteId } = backNotes.list[0];
+    return { characterId, noteId };
+}
+
 async function getData(communityId: string) {
     const c = createContract();
 
     const { data: cData } = await c.character.get({
         characterId: communityId,
     });
-    // console.log("cData", communityId, cData);
-    // Get all lists of the community
-    // const indexer = createIndexer();
-    // const res = await indexer.liLufthansanklist.getMany(communityId);
-    // console.log("res", res);
 
     const indexer = createIndexer();
-    // indexer.link.getManyByLinklistId()
     // add pagination
     const links = await indexer.link.getMany(communityId);
     // TODO:... use another prefix
@@ -71,6 +76,20 @@ async function getData(communityId: string) {
         })
     );
 
+    const curationMap = new Map<Numberish, string>(); // recordId -> curationPostId
+    await Promise.all(
+        curations.map(async (c) => {
+            await Promise.all(
+                c.data.map(async (d) => {
+                    const { characterId, noteId } = await getFirstCuration(
+                        d.characterId
+                    );
+                    curationMap.set(d.characterId, characterId + "-" + noteId);
+                })
+            );
+        })
+    );
+
     const { data: mData } = await c.link.getLinkingCharacters({
         fromCharacterId: communityId,
         linkType: appName + "-members",
@@ -78,7 +97,7 @@ async function getData(communityId: string) {
     const curationLists = curationLinkTypes.map((c) =>
         c.slice(appName.length + 1)
     );
-    return { cData, curationLists, curations, mData };
+    return { cData, curationLists, curations, mData, curationMap };
 }
 
 export default async function CommunityDisplay({
@@ -94,6 +113,7 @@ export default async function CommunityDisplay({
         mData: members,
         curationLists: lists,
         curations: items,
+        curationMap,
     } = await getData(props.id);
 
     return (
@@ -113,14 +133,14 @@ export default async function CommunityDisplay({
                                             {list.listName}{" "}
                                         </div>
                                     </Link>
-                                    <div className="grid grid-cols-3 gap-4">
+                                    <div className="grid grid-cols-3 gap-3">
                                         {list.data.map((record) => (
                                             <>
                                                 <Link
                                                     key={record.characterId.toString()}
-                                                    href={`./community/${
-                                                        props.id
-                                                    }/record/${record.characterId.toString()}`}
+                                                    href={`./curation/${curationMap.get(
+                                                        record.characterId
+                                                    )}`}
                                                 >
                                                     <SimpleRecordCard
                                                         recordId={record.characterId.toString()}
@@ -132,7 +152,7 @@ export default async function CommunityDisplay({
                                 </div>
                             ))}
                         </section>
-                        <section className="flex-none w-80">
+                        <section className="flex-none w-85">
                             <div className="py-5 "> Members </div>
                             {members.map((member) => (
                                 <div

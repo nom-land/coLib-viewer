@@ -1,6 +1,11 @@
-import { getCharacterData } from "@/app/apis";
+import {
+    CurationListData,
+    getCharacterData,
+    getCurationData,
+} from "@/app/apis";
+import CharacterHeader from "@/app/components/characterHeader";
 import { MetaLine } from "@/app/components/metaLine";
-import SimpleRecordCard from "@/app/components/simpleRecordCard";
+import NoteStatLine from "@/app/components/noteStatLine";
 import { appName } from "@/app/config";
 import { createContract, createIndexer } from "crossbell";
 import Link from "next/link";
@@ -10,16 +15,23 @@ export default async function ListPage({ params }: { params: { id: number } }) {
     const {
         fromCharacterId: communityId,
         linkType,
-        curations,
+        records,
+        curationData,
         lastUpdated,
     } = await getData(id);
     const community = await getCharacterData(communityId.toString());
     const listName = linkType.slice(appName.length + 1);
+    const curations = [] as (CurationListData | undefined)[];
+    records.forEach((r) => {
+        console.log(r.metadata);
+        curations.push(curationData.get(r.characterId.toString()));
+    });
+
     // TODO: top curators
     return (
         <div className="container mx-auto min-h-screen">
-            <div className="flex gap-5 py-5">
-                <div className="list-data card my-5 fixed w-[24rem]">
+            <div className="py-5">
+                <div className="list-data my-5">
                     <div className="text-4xl font-bold">{listName}</div>
 
                     <Link href={`/community/${communityId}`}>
@@ -27,19 +39,59 @@ export default async function ListPage({ params }: { params: { id: number } }) {
                             {community.metadata?.name || community.handle}
                         </div>
                     </Link>
-                    <MetaLine lastUpdated={lastUpdated} l={curations.length} />
+                    <MetaLine lastUpdated={lastUpdated} l={records.length} />
                 </div>
-                <div className="list-items grid grid-cols-3 gap-4 pl-[25rem]">
-                    {curations.map((c) => (
-                        <Link
-                            key={c.characterId.toString()}
-                            href={`/community/${communityId}/record/${c.characterId}`}
-                        >
-                            <SimpleRecordCard
-                                key={c.handle}
-                                recordId={c.characterId.toString()}
-                            />
-                        </Link>
+                <div className="list-items gap-4">
+                    {records.map((r, i) => (
+                        <div className="card my-5" key={i}>
+                            {curations[i]?.curationList.map((curation) => (
+                                <Link
+                                    key={r.characterId.toString()}
+                                    href={`/curation/${curation.postId}`}
+                                >
+                                    <div>
+                                        <CharacterHeader
+                                            name={curation.curatorName}
+                                            handle={curation.curatorHandle}
+                                            avatar={curation.curatorAvatars[0]}
+                                            date={curation.dateString}
+                                        ></CharacterHeader>
+                                        <div className="my-3">
+                                            <blockquote className="py-2 px-3 my-4 border-l-4 border-gray-300 dark:border-gray-500">
+                                                <p className="leading-relaxed text-gray-900 ">
+                                                    {curation.content}
+                                                </p>
+                                            </blockquote>
+                                        </div>
+                                        <div className="flex gap-1 my-5">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                strokeWidth={1.5}
+                                                stroke="currentColor"
+                                                className="w-6 h-6"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+                                                />
+                                            </svg>
+
+                                            {(r.metadata as any).title}
+                                        </div>
+                                        <NoteStatLine
+                                            replies={
+                                                curations[i]?.curationStat?.get(
+                                                    curation.postId
+                                                )?.replies || 0
+                                            }
+                                        ></NoteStatLine>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
                     ))}
                 </div>
             </div>
@@ -58,15 +110,34 @@ async function getData(id: number) {
 
     const linkType = list[0].linkType;
     const c = createContract();
-    const { data: curations } = await c.link.getLinkingCharacters({
+    const { data: records } = await c.link.getLinkingCharacters({
         fromCharacterId,
         linkType,
     });
 
+    const listName = linkType.slice(appName.length + 1);
+
+    const curationData = new Map<string, CurationListData>();
+    await Promise.all(
+        records.map(async (r) => {
+            curationData.set(
+                r.characterId.toString(),
+                await getCurationData(
+                    r.characterId.toString(),
+                    fromCharacterId.toString(),
+                    listName
+                )
+            );
+        })
+    );
+
     return {
         fromCharacterId,
         linkType,
-        curations,
+        records,
+        curationData,
         lastUpdated,
     };
 }
+
+export const revalidate = 60; // revalidate this page every 60 seconds

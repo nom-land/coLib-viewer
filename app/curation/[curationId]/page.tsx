@@ -4,6 +4,8 @@ import NoteCard from "../../components/noteCard";
 import RecordCard from "@/app/components/recordCard";
 import CommunityHeader from "@/app/components/communityHeader";
 import RepliesList from "@/app/components/repliesList";
+import Link from "next/link";
+import { appName } from "@/app/config";
 
 export default async function CurationPage({
     params,
@@ -12,9 +14,26 @@ export default async function CurationPage({
 }) {
     // character id and note id is split by "-" in curationId
     const { curationId } = params;
-    const [id, rid] = curationId.split("-");
-    const note = await getData(id, rid);
-    const replies = await getReplies(id, rid);
+    const [cid, rid] = curationId.split("-");
+    const note = await getData(cid, rid);
+    const replies = await getReplies(cid, rid);
+    const indexer = createIndexer();
+    const communityId = note?.communityId;
+
+    const listIds = new Map<string, number>();
+    if (communityId)
+        await Promise.allSettled(
+            (note?.listNames || []).map(async (l) => {
+                const lid = await indexer.linklist.getMany(communityId, {
+                    linkType: appName + "-" + l,
+                    limit: 1,
+                });
+                console.log(l, lid.list[0].linklistId);
+                listIds.set(l, lid.list[0].linklistId);
+
+                console.log(note?.listNames[0]);
+            })
+        );
 
     if (!note) return <div>This is note a valid curation.</div>;
     else
@@ -40,18 +59,28 @@ export default async function CurationPage({
                         </div>
                         <div>
                             <CommunityHeader
-                                communityId={note?.communityId}
+                                communityId={note.communityId}
                             ></CommunityHeader>{" "}
-                            <div className="px-5">
+                            <div className="px-3 my-2">
                                 {"List "}
                                 <span className="text-4xl">
-                                    {note?.listNames.join(", ")}
+                                    {note.listNames.map((l, i) => (
+                                        <Link
+                                            key={i}
+                                            href={`/list/${listIds.get(l)}`}
+                                        >
+                                            {l}
+                                            {i !== note.listNames.length - 1
+                                                ? ", "
+                                                : ""}
+                                        </Link>
+                                    ))}
                                 </span>
                             </div>
                             <RecordCard
                                 id={note?.recordId || ""}
                                 viewMode="normal"
-                                context="app"
+                                context="community"
                             ></RecordCard>
                         </div>
                     </div>
@@ -59,6 +88,7 @@ export default async function CurationPage({
             </>
         );
 }
+
 async function getData(characterId: string, noteId: string) {
     const c = createContract();
     const { data: cData } = await c.character.get({
