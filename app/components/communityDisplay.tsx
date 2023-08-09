@@ -1,7 +1,7 @@
 import JsonViewer from "@/app/components/jsonViewer";
 import { Character, Numberish, createContract, createIndexer } from "crossbell";
 import Link from "next/link";
-import { appName } from "../config";
+import { getListLinkTypePrefix, getMembersLinkType } from "../config";
 import React from "react";
 import CommunityHeader from "./communityHeader";
 import CharacterHeader from "./characterHeader";
@@ -33,43 +33,33 @@ async function getData(communityId: string) {
 
     const indexer = createIndexer();
     // add pagination
-    const links = await indexer.link.getMany(communityId);
-    // TODO:... use another prefix
-    const curationListIds = Array.from(
-        new Set(
-            links.list
-                .filter(
-                    (l) =>
-                        l.linkType.startsWith(appName + "-") &&
-                        l.linkType !== appName + "-members"
-                )
-                .map((l) => l.linklistId)
-        )
-    );
+    const links = await indexer.linklist.getMany(communityId, { limit: 1000 });
+
+    const curationListIds = links.list
+        .filter((l) => l.linkType.startsWith(getListLinkTypePrefix()))
+        .map((l) => l.linklistId);
     const idsMap = new Map<number, string>();
     links.list.forEach((l) => {
         idsMap.set(l.linklistId, l.linkType);
     });
 
-    console.log("curationListIds", curationListIds);
-
     const curationLinkTypes = Array.from(
         new Set(links.list.map((l) => l.linkType))
-    ).filter((l) => l.startsWith(appName + "-") && l !== appName + "-members");
+    ).filter((l) => l.startsWith(getListLinkTypePrefix()));
 
-    const curations = [] as CurationListData[];
+    const records = [] as CurationListData[];
     await Promise.all(
         curationListIds.map(async (id) => {
             const l = idsMap.get(id)!;
-            if (l.startsWith(appName + "-") && l !== appName + "-members") {
+            if (l.startsWith(getListLinkTypePrefix())) {
                 // indexer.link.getManyByLinklistId(linklistIds.get(l)!);
                 const { data: lData } = await c.link.getLinkingCharacters({
                     fromCharacterId: communityId,
                     linkType: l,
                 });
-                curations.push({
+                records.push({
                     listId: id,
-                    listName: l.slice(appName.length + 1),
+                    listName: l.slice(getListLinkTypePrefix().length),
                     data: lData,
                 });
             }
@@ -78,7 +68,7 @@ async function getData(communityId: string) {
 
     const curationMap = new Map<Numberish, string>(); // recordId -> curationPostId
     await Promise.all(
-        curations.map(async (c) => {
+        records.map(async (c) => {
             await Promise.all(
                 c.data.map(async (d) => {
                     const { characterId, noteId } = await getFirstCuration(
@@ -92,12 +82,12 @@ async function getData(communityId: string) {
 
     const { data: mData } = await c.link.getLinkingCharacters({
         fromCharacterId: communityId,
-        linkType: appName + "-members",
+        linkType: getMembersLinkType(),
     });
     const curationLists = curationLinkTypes.map((c) =>
-        c.slice(appName.length + 1)
+        c.slice(getListLinkTypePrefix().length)
     );
-    return { cData, curationLists, curations, mData, curationMap };
+    return { cData, curationLists, curations: records, mData, curationMap };
 }
 
 export default async function CommunityDisplay({

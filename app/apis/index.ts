@@ -28,7 +28,6 @@ export async function getCurationData(
     const curationList = [] as CurationNote[];
     const curationStat = new Map<string, CurationStat>();
     curations.list.map((curationNote) => {
-        console.log("toLinklistId", curationNote.linkKey);
         const attrs = curationNote.metadata?.content?.attributes;
         const entityType = getAttr(attrs, "entity type");
         if (entityType === "curation" || entityType === "discussion") {
@@ -54,8 +53,6 @@ export async function getCurationData(
                     return;
                 }
             }
-
-            console.log("Metadata", curationNote.metadata?.content?.attributes);
 
             const curation = getCuration(curationNote);
 

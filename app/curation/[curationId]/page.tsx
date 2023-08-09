@@ -5,7 +5,7 @@ import RecordCard from "@/app/components/recordCard";
 import CommunityHeader from "@/app/components/communityHeader";
 import RepliesList from "@/app/components/repliesList";
 import Link from "next/link";
-import { appName } from "@/app/config";
+import { getListLinkTypePrefix } from "@/app/config";
 
 export default async function CurationPage({
     params,
@@ -25,13 +25,10 @@ export default async function CurationPage({
         await Promise.allSettled(
             (note?.listNames || []).map(async (l) => {
                 const lid = await indexer.linklist.getMany(communityId, {
-                    linkType: appName + "-" + l,
+                    linkType: getListLinkTypePrefix() + l,
                     limit: 1,
                 });
-                console.log(l, lid.list[0].linklistId);
                 listIds.set(l, lid.list[0].linklistId);
-
-                console.log(note?.listNames[0]);
             })
         );
 

@@ -17,7 +17,6 @@ export default async function RepliesList({
         borderCss = "";
     }
 
-    console.log(borderCss);
     return (
         <>
             <div>

@@ -6,7 +6,7 @@ import {
 import CharacterHeader from "@/app/components/characterHeader";
 import { MetaLine } from "@/app/components/metaLine";
 import NoteStatLine from "@/app/components/noteStatLine";
-import { appName } from "@/app/config";
+import { getListLinkTypePrefix } from "@/app/config";
 import { createContract, createIndexer } from "crossbell";
 import Link from "next/link";
 
@@ -20,10 +20,9 @@ export default async function ListPage({ params }: { params: { id: number } }) {
         lastUpdated,
     } = await getData(id);
     const community = await getCharacterData(communityId.toString());
-    const listName = linkType.slice(appName.length + 1);
+    const listName = linkType.slice(getListLinkTypePrefix().length);
     const curations = [] as (CurationListData | undefined)[];
     records.forEach((r) => {
-        console.log(r.metadata);
         curations.push(curationData.get(r.characterId.toString()));
     });
 
@@ -115,7 +114,7 @@ async function getData(id: number) {
         linkType,
     });
 
-    const listName = linkType.slice(appName.length + 1);
+    const listName = linkType.slice(getListLinkTypePrefix().length);
 
     const curationData = new Map<string, CurationListData>();
     await Promise.all(
