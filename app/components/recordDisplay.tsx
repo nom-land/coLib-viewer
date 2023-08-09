@@ -1,11 +1,11 @@
 import JsonViewer from "@/app/components/jsonViewer";
 import RecordCard from "@/app/components/recordCard";
 import { ViewMode, CurationNote } from "@/app/typings/types";
-import { LinkEntity, NoteEntity, createIndexer } from "crossbell";
+import { LinkEntity, createIndexer } from "crossbell";
 import CurationList from "./curationList";
 import Link from "next/link";
 import { getAttr } from "../utils";
-const appName = "coLib";
+import { getListLinkTypePrefix } from "../config";
 
 async function getData(id: string) {
     const indexer = createIndexer();
@@ -33,13 +33,13 @@ export default async function RecordDisplay({
     const { rid, viewMode } = props;
     const { backLinks, backNotes } = await getData(rid);
     const l = backLinks.list.filter((link) =>
-        link.linkType.startsWith(appName)
+        link.linkType.startsWith(getListLinkTypePrefix())
     ).length; //TODO: only "dao" character
 
     const curationList = [] as CommunityCurationList[];
     backLinks.list.map((l) => {
-        if (l.linkType.startsWith(appName + "-")) {
-            const listName = l.linkType.slice(appName.length + 1);
+        if (l.linkType.startsWith(getListLinkTypePrefix())) {
+            const listName = l.linkType.slice(getListLinkTypePrefix().length);
             curationList.push({
                 raw: l,
                 communityId: l.fromCharacterId!.toString(),
