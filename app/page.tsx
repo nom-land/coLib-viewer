@@ -3,7 +3,7 @@ import Link from "next/link";
 import { homeName } from "./config";
 
 // Only the selected communities will be displayed
-const communityIds = ["57198"]; //TODO
+const communityIds = ["57747"]; //TODO
 
 //Localhost
 if (process.env.CROSSBELL_RPC_ADDRESS === "http://127.0.0.1:8545") {
@@ -15,7 +15,6 @@ export default async function Home() {
     return (
         <div className="container mx-auto py-10 px-40 min-h-screen">
             <div className="my-10">Welcome to {homeName}!</div>
-            <div>This is a preview page.</div>
             <div className="grid grid-cols-4 gap-4">
                 {communityIds.map((id) => (
                     <Link className="card" key={id} href={`./community/${id}`}>
