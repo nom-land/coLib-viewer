@@ -8,7 +8,7 @@ export default async function CommunityHeader(props: { communityId: string }) {
         <>
             <Link href={`/community/${props.communityId}`}>
                 <section className="px-3">
-                    Libirary of{" "}
+                    Library of{" "}
                     <span className="text-4xl ">
                         {communityChar.metadata?.name}
                     </span>
