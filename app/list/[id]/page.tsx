@@ -6,6 +6,7 @@ import {
 import CharacterHeader from "@/app/components/characterHeader";
 import { MetaLine } from "@/app/components/metaLine";
 import NoteStatLine from "@/app/components/noteStatLine";
+import Tags from "@/app/components/tags";
 import { getListLinkTypePrefix } from "@/app/config";
 import { createContract, createIndexer } from "crossbell";
 import Link from "next/link";
@@ -61,6 +62,11 @@ export default async function ListPage({ params }: { params: { id: number } }) {
                                                     {curation.content}
                                                 </p>
                                             </blockquote>
+                                        </div>
+                                        <div>
+                                            <Tags
+                                                tags={curation.suggestedTags}
+                                            />
                                         </div>
                                         <div className="flex gap-1 my-5">
                                             <svg

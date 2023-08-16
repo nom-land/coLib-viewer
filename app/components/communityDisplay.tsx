@@ -5,7 +5,7 @@ import { getListLinkTypePrefix, getMembersLinkType } from "../config";
 import React from "react";
 import CommunityHeader from "./communityHeader";
 import CharacterHeader from "./characterHeader";
-import SimpleRecordCard from "./simpleRecordCard";
+import CharacterAvatar from "./characterAvatar";
 
 interface CurationListData {
     listId: number;
@@ -112,18 +112,17 @@ export default async function CommunityDisplay({
             {props.viewMode === "normal" && (
                 <div>
                     <CommunityHeader communityId={props.id}></CommunityHeader>
-                    <hr className="my-5"></hr>
-                    <div className="flex gap-5 w-full">
-                        <section className="flex-1">
+                    <div className="flex gap-5 w-full my-5">
+                        <section className="flex-1 grid grid-cols-3 gap-5">
                             {items.map((list, i) => (
-                                <div key={i} className="p-3">
+                                <div key={i} className="p-3 card">
                                     <Link href={`./list/${list.listId}`}>
                                         <div className="text-lg">
                                             {" "}
                                             {list.listName}{" "}
                                         </div>
-                                    </Link>
-                                    <div className="grid grid-cols-3 gap-3">
+                                        <div>{list.data.length} records</div>
+                                        {/* <div className="grid grid-cols-3 gap-3">
                                         {list.data.map((record) => (
                                             <>
                                                 <Link
@@ -138,28 +137,34 @@ export default async function CommunityDisplay({
                                                 </Link>
                                             </>
                                         ))}
-                                    </div>
+                                    </div> */}
+                                    </Link>
                                 </div>
                             ))}
                         </section>
                         <section className="flex-none w-85">
-                            <div className="py-5 "> Members </div>
-                            {members.map((member) => (
-                                <div
-                                    className="mb-5"
-                                    key={member.characterId.toString()}
-                                >
-                                    <CharacterHeader
-                                        name={
-                                            member.metadata?.name || "Unknown"
-                                        }
-                                        handle={member.handle}
-                                        avatar={
-                                            (member.metadata?.avatars || [])[0]
-                                        }
-                                    />
-                                </div>
-                            ))}
+                            <div className="pb-5">Members </div>
+                            <div className="grid grid-cols-5 gap-1">
+                                {members.map((member) => (
+                                    <div
+                                        className="mb-1"
+                                        key={member.characterId.toString()}
+                                    >
+                                        <CharacterAvatar
+                                            name={
+                                                member.metadata?.name ||
+                                                "Unknown"
+                                            }
+                                            handle={member.handle}
+                                            avatar={
+                                                (member.metadata?.avatars ||
+                                                    [])[0]
+                                            }
+                                            size={40}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
                         </section>
                     </div>
                 </div>
