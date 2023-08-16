@@ -28,9 +28,9 @@ interface CommunityCurationList {
 export default async function RecordDisplay({
     props,
 }: {
-    props: { rid: string; viewMode: ViewMode };
+    props: { rid: string };
 }) {
-    const { rid, viewMode } = props;
+    const { rid } = props;
     const { backLinks, backNotes } = await getData(rid);
     const l = backLinks.list.filter((link) =>
         link.linkType.startsWith(getListLinkTypePrefix())
@@ -84,106 +84,43 @@ export default async function RecordDisplay({
     });
 
     return (
-        <div>
-            {viewMode === "normal" && (
-                <div>
-                    <RecordCard
-                        viewMode="normal"
-                        id={rid}
-                        context="app"
-                    ></RecordCard>
+        <div className="container mx-auto">
+            <div className="p-3">
+                <RecordCard
+                    viewMode="normal"
+                    id={rid}
+                    context="app"
+                ></RecordCard>
 
-                    <div>
-                        <div className="my-5">Related communities:</div>
-                        <div className="grid">
-                            {curationList.map((c) => (
-                                <Link
-                                    key={c.listId}
-                                    href={`./list/${c.listId}`}
+                <div>
+                    <div className="my-5">Related communities:</div>
+                    <div className="grid">
+                        {curationList.map((c) => (
+                            <Link key={c.listId} href={`./list/${c.listId}`}>
+                                <div
+                                    className="card w-[18rem] my-2"
+                                    key={c.raw.transactionHash}
                                 >
-                                    <div
-                                        className="card w-[18rem] my-2"
-                                        key={c.raw.transactionHash}
-                                    >
-                                        <div className="text-xl font-bold">
-                                            {c.list}
-                                        </div>
-                                        <div>
-                                            in{" "}
-                                            <span className="font-bold">
-                                                {
-                                                    c.raw.fromCharacter
-                                                        ?.metadata?.content
-                                                        ?.name
-                                                }
-                                            </span>
-                                        </div>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
-
-                    <CurationList recordId={rid}></CurationList>
-                </div>
-            )}
-            {viewMode === "analyzed" && (
-                <div>
-                    <div>Record Id: {props.rid}</div>
-
-                    <RecordCard
-                        viewMode="analyzed"
-                        id={props.rid}
-                        context="app"
-                    ></RecordCard>
-                    <div>
-                        This record is curated in {l} communities. And there are{" "}
-                        {backNotes.count} related notes.
-                        {/* TODO: It is related with {backLinks.count} links. Parse each link. */}
-                    </div>
-                    <div>Related communities:</div>
-                    {curationList.map((c) => (
-                        <div className="border" key={c.raw.transactionHash}>
-                            <div>Community id: {c.communityId}</div>
-                            <JsonViewer
-                                props={c.raw.fromCharacter?.metadata || {}}
-                            ></JsonViewer>
-                            <div>Curation list: {c.list}</div>
-                        </div>
-                    ))}
-                    <hr></hr>
-                    <div>
-                        Related notes:
-                        {/* <JsonViewer props={backNotes.list[0]}></JsonViewer> */}
-                        {curationNotesList.map((note) => (
-                            <div key={note.raw.transactionHash}>
-                                <div className="my-5">
-                                    Summary: Curator(id: {note.raw.characterId})
-                                    curates this record on {note.dateString}
-                                </div>
-                                <div className="border p-5 my-5">
-                                    <div>Curator: {note.raw.characterId} </div>
-                                    <JsonViewer
-                                        props={
-                                            note.raw.character?.metadata || {}
-                                        }
-                                    ></JsonViewer>
-                                    <div>
-                                        Date:
-                                        {note.dateString}
+                                    <div className="text-xl font-bold">
+                                        {c.list}
                                     </div>
                                     <div>
-                                        Curation note detailed metadata:{" "}
-                                        <JsonViewer
-                                            props={note.raw.metadata || {}}
-                                        ></JsonViewer>
+                                        in{" "}
+                                        <span className="font-bold">
+                                            {
+                                                c.raw.fromCharacter?.metadata
+                                                    ?.content?.name
+                                            }
+                                        </span>
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 </div>
-            )}
+
+                <CurationList recordId={rid}></CurationList>
+            </div>
         </div>
     );
 }

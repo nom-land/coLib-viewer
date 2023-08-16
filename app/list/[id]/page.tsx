@@ -29,8 +29,8 @@ export default async function ListPage({ params }: { params: { id: number } }) {
 
     // TODO: top curators
     return (
-        <div className="container mx-auto min-h-screen">
-            <div className="py-5">
+        <div className="container mx-auto my-5">
+            <div className="py-5 px-3">
                 <div className="list-data my-5">
                     <div className="text-4xl font-bold">{listName}</div>
 

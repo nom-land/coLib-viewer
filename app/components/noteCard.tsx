@@ -13,7 +13,10 @@ export default function NoteCard({
     noteType: "curation" | "discussion";
     children?: JSX.Element;
 }) {
-    const noteCss = noteType === "curation" ? "card p-5 my-5 w-[48rem]" : "p-3";
+    const noteCss =
+        noteType === "curation"
+            ? "card p-5 my-5 w-content md:w-[48rem]"
+            : "p-3";
     return (
         <div className={noteCss} key={note.raw.transactionHash}>
             <CharacterHeader

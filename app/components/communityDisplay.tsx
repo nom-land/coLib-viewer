@@ -4,7 +4,6 @@ import Link from "next/link";
 import { getListLinkTypePrefix, getMembersLinkType } from "../config";
 import React from "react";
 import CommunityHeader from "./communityHeader";
-import CharacterHeader from "./characterHeader";
 import CharacterAvatar from "./characterAvatar";
 
 interface CurationListData {
@@ -95,34 +94,47 @@ export default async function CommunityDisplay({
 }: {
     props: {
         id: string;
-        viewMode: "normal" | "analyzed";
     };
 }) {
-    const {
-        cData: communityChar,
-        mData: members,
-        curationLists: lists,
-        curations: items,
-        curationMap,
-    } = await getData(props.id);
+    const { mData: members, curations: items } = await getData(props.id);
 
     return (
         //TODO: if this is not a community character...
-        <div>
-            {props.viewMode === "normal" && (
-                <div>
-                    <CommunityHeader communityId={props.id}></CommunityHeader>
-                    <div className="flex gap-5 w-full my-5">
-                        <section className="flex-1 grid grid-cols-3 gap-5">
-                            {items.map((list, i) => (
-                                <div key={i} className="p-3 card">
-                                    <Link href={`./list/${list.listId}`}>
-                                        <div className="text-lg">
-                                            {" "}
-                                            {list.listName}{" "}
-                                        </div>
-                                        <div>{list.data.length} records</div>
-                                        {/* <div className="grid grid-cols-3 gap-3">
+        <div className="container mx-auto my-5 p-3">
+            <div>
+                <CommunityHeader communityId={props.id}></CommunityHeader>
+                <div className="md:flex gap-5 w-full md:my-3">
+                    <section className="flex-none w-85 my-3">
+                        <div className="flex gap-1">
+                            {members.map((member) => (
+                                <div
+                                    className="mb-1"
+                                    key={member.characterId.toString()}
+                                >
+                                    <CharacterAvatar
+                                        name={
+                                            member.metadata?.name || "Unknown"
+                                        }
+                                        handle={member.handle}
+                                        avatar={
+                                            (member.metadata?.avatars || [])[0]
+                                        }
+                                        size={40}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                    <section className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-5">
+                        {items.map((list, i) => (
+                            <div key={i} className="p-3 card">
+                                <Link href={`./list/${list.listId}`}>
+                                    <div className="text-lg">
+                                        {" "}
+                                        {list.listName}{" "}
+                                    </div>
+                                    <div>{list.data.length} records</div>
+                                    {/* <div className="grid grid-cols-3 gap-3">
                                         {list.data.map((record) => (
                                             <>
                                                 <Link
@@ -138,123 +150,12 @@ export default async function CommunityDisplay({
                                             </>
                                         ))}
                                     </div> */}
-                                    </Link>
-                                </div>
-                            ))}
-                        </section>
-                        <section className="flex-none w-85">
-                            <div className="pb-5">Members </div>
-                            <div className="grid grid-cols-5 gap-1">
-                                {members.map((member) => (
-                                    <div
-                                        className="mb-1"
-                                        key={member.characterId.toString()}
-                                    >
-                                        <CharacterAvatar
-                                            name={
-                                                member.metadata?.name ||
-                                                "Unknown"
-                                            }
-                                            handle={member.handle}
-                                            avatar={
-                                                (member.metadata?.avatars ||
-                                                    [])[0]
-                                            }
-                                            size={40}
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            )}
-
-            {props.viewMode === "analyzed" && (
-                <div>
-                    <section>
-                        <div className="text-sm italic">
-                            <span>
-                                Each list is essentially a linklist emitted from
-                                the community character.{" "}
-                            </span>
-                            <br></br>
-                            <span>
-                                Each record is essentially a character on
-                                Crossbell.
-                            </span>
-                        </div>
-                    </section>
-
-                    <hr></hr>
-                    <section>
-                        <div> Community character </div>
-                        <div className="border">
-                            <div>
-                                id: {communityChar.characterId.toString()}
-                            </div>
-                            <div>handle: {communityChar.handle}</div>
-                            <div>
-                                metadata:{" "}
-                                <JsonViewer
-                                    props={communityChar.metadata || {}}
-                                ></JsonViewer>{" "}
-                            </div>
-                        </div>
-                    </section>
-
-                    <hr></hr>
-                    <section>
-                        <div> Community members(count: {members.length}) </div>
-                        {members.map((member) => (
-                            <div
-                                className="border"
-                                key={member.characterId.toString()}
-                            >
-                                <div>id: {member.characterId.toString()}</div>
-                                <div>handle: {member.handle}</div>
-                                <div>
-                                    metadata:{" "}
-                                    <JsonViewer
-                                        props={member.metadata || {}}
-                                    ></JsonViewer>{" "}
-                                </div>
+                                </Link>
                             </div>
                         ))}
                     </section>
-                    <hr></hr>
-
-                    {/* <section>
-                        <div>General(count: {generalList.length})</div>
-                        {generalList.map((record) => (
-                            <>
-                                <div
-                                    className="border p-5 my-5"
-                                    key={record.characterId.toString()}
-                                >
-                                    <div>
-                                        id: {record.characterId.toString()}{" "}
-                                    </div>
-                                    <div>handle: {record.handle} </div>
-                                    <div>
-                                        metadata:{" "}
-                                        <JsonViewer
-                                            props={record.metadata || {}}
-                                        ></JsonViewer>{" "}
-                                    </div>
-                                    <Link
-                                        href={`./community/${
-                                            props.id
-                                        }/record/${record.characterId.toString()}`}
-                                    >
-                                        <div>➡️details</div>
-                                    </Link>
-                                </div>
-                            </>
-                        ))}
-                    </section> */}
                 </div>
-            )}
+            </div>
         </div>
     );
 }

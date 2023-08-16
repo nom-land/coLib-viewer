@@ -36,25 +36,9 @@ export default async function CurationPage({
     else
         return (
             <>
-                <div className="container mx-auto ">
-                    <div className="grid grid-cols-2 gap-5 py-5">
-                        <div>
-                            <div>
-                                <NoteCard
-                                    noteType="discussion"
-                                    note={note}
-                                ></NoteCard>
-                            </div>
-                            <div className="mx-5 my-2">
-                                {replies.length}{" "}
-                                {replies.length > 1
-                                    ? "discussions"
-                                    : "discussion"}
-                            </div>
-                            <hr className="mx-5 mb-5 border-gray-300 border-b-2"></hr>
-                            <RepliesList params={{ curationId }}></RepliesList>
-                        </div>
-                        <div>
+                <div className="container mx-auto my-5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div className=" md:order-last">
                             <CommunityHeader
                                 communityId={note.communityId}
                             ></CommunityHeader>{" "}
@@ -79,6 +63,22 @@ export default async function CurationPage({
                                 viewMode="normal"
                                 context="community"
                             ></RecordCard>
+                        </div>
+                        <div>
+                            <div>
+                                <NoteCard
+                                    noteType="discussion"
+                                    note={note}
+                                ></NoteCard>
+                            </div>
+                            <div className="mx-3 my-2">
+                                {replies.length}{" "}
+                                {replies.length > 1
+                                    ? "discussions"
+                                    : "discussion"}
+                            </div>
+                            <hr className="mx-3 mb-5 border-gray-300 border-b-2"></hr>
+                            <RepliesList params={{ curationId }}></RepliesList>
                         </div>
                     </div>
                 </div>
