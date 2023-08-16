@@ -3,7 +3,7 @@ import Link from "next/link";
 import { homeName } from "./config";
 
 // Only the selected communities will be displayed
-const communityIds = ["57762", "57747"]; //TODO
+const communityIds = ["57762", "57747", "57798"]; //TODO
 
 //Localhost
 if (process.env.CROSSBELL_RPC_ADDRESS === "http://127.0.0.1:8545") {
