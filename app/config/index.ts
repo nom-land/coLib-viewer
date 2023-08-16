@@ -1,7 +1,7 @@
 // app name
 export const sourceName = "nunti";
 
-export const homeName = "Community Libiray";
+export const homeName = "Community Library";
 
 const appPrefix = sourceName.slice(0, 2);
 
