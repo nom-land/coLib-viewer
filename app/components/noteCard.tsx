@@ -33,7 +33,9 @@ export default function NoteCard({
                     </span>
                 </div>
             )}
-
+            {note.title.length > 0 && (
+                <div className="text-2xl font-bold my-3">{note.title}</div>
+            )}
             <div className="my-3">
                 <ReactMarkdown>{note.content}</ReactMarkdown>
             </div>

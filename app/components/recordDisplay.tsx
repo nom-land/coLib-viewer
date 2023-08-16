@@ -68,6 +68,7 @@ export default async function RecordDisplay({
                             n.metadata?.content?.date_published
                         ).toISOString()) ||
                     "",
+                title: n.metadata?.content?.title?.toString() || "",
                 content: n.metadata?.content?.content?.toString() || "",
                 curatorAvatars: n.character?.metadata?.content?.avatars || [],
                 curatorName: n.character?.metadata?.content?.name || "",

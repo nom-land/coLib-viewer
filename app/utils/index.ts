@@ -61,6 +61,7 @@ export function getCuration(
         curatorAvatars: cMetadata?.avatars || [],
         curatorName: cMetadata?.name || "",
         curatorHandle: c?.handle || "",
+        title: nMetadata?.title || "",
         suggestedTags: JSON.parse(
             (getAttr(attrs, "suggested tags") as string) || "[]"
         ) as string[],
