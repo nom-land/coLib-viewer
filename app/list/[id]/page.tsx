@@ -124,7 +124,7 @@ async function getData(id: number) {
 
     const curationData = new Map<string, CurationListData>();
     await Promise.all(
-        records.map(async (r) => {
+        records.reverse().map(async (r) => {
             curationData.set(
                 r.characterId.toString(),
                 await getCurationData(
