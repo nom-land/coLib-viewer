@@ -3,7 +3,7 @@ import Link from "next/link";
 import { homeName } from "../config";
 
 // Only the selected communities will be displayed
-const communityIds = ["57762", "57747", "57798"]; //TODO
+const communityIds = ["57198"]; //TODO
 
 export default async function Home() {
     return (
