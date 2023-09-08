@@ -1,11 +1,11 @@
-import { createContract, createIndexer } from "crossbell";
-import { getAttr, getCuration } from "../../utils";
+import { createIndexer } from "crossbell";
 import NoteCard from "../../components/noteCard";
 import RecordCard from "@/app/components/recordCard";
 import CommunityHeader from "@/app/components/communityHeader";
 import RepliesList from "@/app/components/repliesList";
 import Link from "next/link";
-import { getListLinkTypePrefix } from "@/app/config";
+import { createNomland, getListLinkTypePrefix } from "@/app/config";
+import Nomland from "nomland.js";
 
 export default async function CurationPage({
     params,
@@ -16,7 +16,7 @@ export default async function CurationPage({
     const { curationId } = params;
     const [cid, rid] = curationId.split("-");
     const note = await getData(cid, rid);
-    const replies = await getReplies(cid, rid);
+    const repliesCount = await getRepliesCount(cid, rid);
     const indexer = createIndexer();
     const communityId = note?.communityId;
 
@@ -60,7 +60,6 @@ export default async function CurationPage({
                             </div>
                             <RecordCard
                                 id={note?.recordId || ""}
-                                viewMode="normal"
                                 context="community"
                             ></RecordCard>
                         </div>
@@ -72,8 +71,8 @@ export default async function CurationPage({
                                 ></NoteCard>
                             </div>
                             <div className="mx-3 my-2">
-                                {replies.length}{" "}
-                                {replies.length > 1
+                                {repliesCount}{" "}
+                                {repliesCount > 1
                                     ? "discussions"
                                     : "discussion"}
                             </div>
@@ -87,34 +86,14 @@ export default async function CurationPage({
 }
 
 async function getData(characterId: string, noteId: string) {
-    const c = createContract();
-    const { data: cData } = await c.character.get({
-        characterId,
-    });
-    const { data: n } = await c.note.get({
-        characterId,
-        noteId,
-    });
-    const attrs = n.metadata?.attributes;
-    const entityType = getAttr(attrs, "entity type");
-    if (entityType !== "curation") return;
-
-    const curationNote = getCuration(n, cData);
-
+    const nomland = createNomland();
+    const curationNote = await nomland.getCuration(characterId, noteId);
     return curationNote;
 }
 
-async function getReplies(characterId: string, noteId: string) {
-    const indexer = createIndexer();
-    const data = await indexer.note.getMany({
-        toCharacterId: characterId,
-        toNoteId: noteId,
-        includeCharacter: true,
-    });
-    const replies = data.list.map((n) => {
-        return getCuration(n);
-    });
-    return replies;
+async function getRepliesCount(characterId: string, noteId: string) {
+    const nomland = createNomland();
+    return await nomland.getDiscussionsCount(characterId, noteId);
 }
 
 export const revalidate = 60; // revalidate this page every 60 seconds

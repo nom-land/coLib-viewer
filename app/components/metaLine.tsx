@@ -1,10 +1,7 @@
 "use client";
 
-import ReactTimeAgo from "react-time-ago";
-import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en";
-TimeAgo.setDefaultLocale(en.locale);
-TimeAgo.addLocale(en);
+import TimeAgo from "react-timeago";
+
 export function MetaLine({
     lastUpdated,
     l,
@@ -15,7 +12,7 @@ export function MetaLine({
     return (
         <div className="font-light text-sm">
             {l} {l > 1 ? "records" : "record"} | Updated{" "}
-            <ReactTimeAgo date={new Date(lastUpdated)} />
+            <TimeAgo date={new Date(lastUpdated)} />
         </div>
     );
 }

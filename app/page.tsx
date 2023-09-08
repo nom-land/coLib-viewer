@@ -1,6 +1,4 @@
 import { crossbell } from "crossbell/network";
-import Link from "next/link";
-import { homeName } from "./config";
 
 // Only the selected communities will be displayed
 const communityIds = ["57198"]; //TODO

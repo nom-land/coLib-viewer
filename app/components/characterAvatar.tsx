@@ -1,9 +1,6 @@
 "use client";
 import Image from "next/image";
 import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en";
-TimeAgo.setDefaultLocale(en.locale);
-TimeAgo.addLocale(en);
 
 export default function CharacterAvatar(props: {
     name: string;

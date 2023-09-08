@@ -1,7 +1,4 @@
-import { createContract } from "crossbell";
 import Link from "next/link";
-import { ViewMode } from "../typings/types";
-import JsonViewer from "./jsonViewer";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { getCharacterData } from "../apis";
 import { shortenUrl } from "../utils";
@@ -29,11 +26,9 @@ interface ExtendedArticleData extends ArticleData {
 
 export default async function RecordCard({
     id,
-    viewMode,
     context,
 }: {
     id: string;
-    viewMode: ViewMode;
     context: "community" | "app";
 }) {
     const rData = await getCharacterData(id);
@@ -49,11 +44,11 @@ export default async function RecordCard({
                     width="24"
                     height="24"
                     viewBox="0 0 24 24"
-                    stroke-width="2"
+                    strokeWidth="2"
                     stroke="currentColor"
                     fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                 >
                     {" "}
                     <path stroke="none" d="M0 0h24v24H0z" />{" "}
@@ -88,9 +83,6 @@ export default async function RecordCard({
                 {record.derivation || "unknown"}
             </div>
 
-            {viewMode === "analyzed" && (
-                <JsonViewer props={rData.metadata || {}}></JsonViewer>
-            )}
             {record.description && (
                 <ReactMarkdown>{record.description}</ReactMarkdown>
             )}

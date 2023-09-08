@@ -1,4 +1,3 @@
-import { crossbell } from "crossbell/network";
 import Link from "next/link";
 import { homeName } from "../config";
 

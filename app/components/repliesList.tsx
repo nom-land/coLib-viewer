@@ -1,5 +1,4 @@
-import { createContract, createIndexer } from "crossbell";
-import { getAttr, getCuration } from "../utils";
+import { createNomland } from "../config";
 import NoteCard from "./noteCard";
 
 export default async function RepliesList({
@@ -41,14 +40,7 @@ export default async function RepliesList({
 }
 
 async function getReplies(characterId: string, noteId: string) {
-    const indexer = createIndexer();
-    const data = await indexer.note.getMany({
-        toCharacterId: characterId,
-        toNoteId: noteId,
-        includeCharacter: true,
-    });
-    const replies = data.list.map((n) => {
-        return getCuration(n);
-    });
+    const nomland = createNomland();
+    const replies = await nomland.getDiscussions(characterId, noteId);
     return replies;
 }

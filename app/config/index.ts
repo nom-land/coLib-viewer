@@ -1,3 +1,5 @@
+import Nomland from "nomland.js";
+
 // app name
 export const sourceName = "nunti";
 
@@ -15,4 +17,8 @@ export function getListLinkTypePrefix() {
 
 export function getMembersLinkType() {
     return `${appPrefix}-members`;
+}
+
+export function createNomland() {
+    return new Nomland(sourceName);
 }

@@ -1,4 +1,3 @@
-export type ViewMode = "normal" | "analyzed";
 export interface CurationNote {
     postId: string; // postId is {curationId}-{noteId}
     raw: NoteEntity;

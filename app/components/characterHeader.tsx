@@ -1,10 +1,6 @@
 "use client";
 import Image from "next/image";
-import ReactTimeAgo from "react-time-ago";
-import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en";
-TimeAgo.setDefaultLocale(en.locale);
-TimeAgo.addLocale(en);
+import TimeAgo from "react-timeago";
 
 export default function CharacterHeader(props: {
     name: string;
@@ -28,9 +24,7 @@ export default function CharacterHeader(props: {
                 <div>
                     <div className="font-extralight text-sm ">@{handle}</div>
                     <span className="font-bold text-2xl">{name} </span>
-                    {date && (
-                        <ReactTimeAgo date={new Date(date)} locale="en-US" />
-                    )}
+                    {date && <TimeAgo date={new Date(date)} />}
                 </div>
             </div>
         </div>

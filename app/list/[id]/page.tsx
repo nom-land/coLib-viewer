@@ -1,48 +1,48 @@
-import {
-    CurationListData,
-    getCharacterData,
-    getCurationData,
-} from "@/app/apis";
+import { CurationListData, getCharacterData } from "@/app/apis";
 import CharacterHeader from "@/app/components/characterHeader";
 import { MetaLine } from "@/app/components/metaLine";
 import NoteStatLine from "@/app/components/noteStatLine";
 import Tags from "@/app/components/tags";
-import { getListLinkTypePrefix } from "@/app/config";
-import { createContract, createIndexer } from "crossbell";
+import { createNomland } from "@/app/config";
 import Link from "next/link";
+import Nomland from "nomland.js";
 
 export default async function ListPage({ params }: { params: { id: number } }) {
     const { id } = params;
     const {
-        fromCharacterId: communityId,
-        linkType,
+        community,
+        communityId,
+        listName,
         records,
         curationData,
         lastUpdated,
     } = await getData(id);
-    const community = await getCharacterData(communityId.toString());
-    const listName = linkType.slice(getListLinkTypePrefix().length);
     const curations = [] as (CurationListData | undefined)[];
-    records.forEach((r) => {
-        curations.push(curationData.get(r.characterId.toString()));
+    records!.forEach((r) => {
+        curations.push(curationData!.get(r.characterId.toString()));
     });
 
     // TODO: top curators
     return (
         <div className="container mx-auto my-5">
             <div className="py-5 px-3">
-                <div className="list-data my-5">
-                    <div className="text-4xl font-bold">{listName}</div>
+                {community && (
+                    <div className="list-data my-5">
+                        <div className="text-4xl font-bold">{listName}</div>
 
-                    <Link href={`/community/${communityId}`}>
-                        <div className="mt-10 text-2xl mb-2">
-                            {community.metadata?.name || community.handle}
-                        </div>
-                    </Link>
-                    <MetaLine lastUpdated={lastUpdated} l={records.length} />
-                </div>
+                        <Link href={`/community/${communityId}`}>
+                            <div className="mt-10 text-2xl mb-2">
+                                {community.metadata?.name || community.handle}
+                            </div>
+                        </Link>
+                        <MetaLine
+                            lastUpdated={lastUpdated}
+                            l={records!.length}
+                        />
+                    </div>
+                )}
                 <div className="list-items gap-4">
-                    {records.map((r, i) => (
+                    {records!.map((r, i) => (
                         <div className="card my-5" key={i}>
                             {curations[i]?.curationList.map((curation) => (
                                 <Link
@@ -106,43 +106,31 @@ export default async function ListPage({ params }: { params: { id: number } }) {
 
 // TODO: mock function
 async function getData(id: number) {
-    const indexer = createIndexer();
-    const { list } = await indexer.link.getManyByLinklistId(id);
-    const fromCharacterId = list[0].fromCharacterId;
-    if (!fromCharacterId) throw new Error("No fromCharacterId");
+    try {
+        const nomland = createNomland();
+        const { communityId, listName, records, curationData, lastUpdated } =
+            await nomland.lsById(id);
 
-    const lastUpdated = list[0].createdAt;
+        const community = await getCharacterData(communityId.toString());
 
-    const linkType = list[0].linkType;
-    const c = createContract();
-    const { data: records } = await c.link.getLinkingCharacters({
-        fromCharacterId,
-        linkType,
-    });
-
-    const listName = linkType.slice(getListLinkTypePrefix().length);
-
-    const curationData = new Map<string, CurationListData>();
-    await Promise.all(
-        records.reverse().map(async (r) => {
-            curationData.set(
-                r.characterId.toString(),
-                await getCurationData(
-                    r.characterId.toString(),
-                    fromCharacterId.toString(),
-                    listName
-                )
-            );
-        })
-    );
-
-    return {
-        fromCharacterId,
-        linkType,
-        records,
-        curationData,
-        lastUpdated,
-    };
+        return {
+            community,
+            communityId,
+            listName,
+            records,
+            curationData,
+            lastUpdated,
+        };
+    } catch (e) {
+        console.log("ERROR", e);
+        return {
+            communityId: 0,
+            listName: "",
+            records: [],
+            curationData: new Map(),
+            lastUpdated: "",
+        };
+    }
 }
 
 export const revalidate = 60; // revalidate this page every 60 seconds
