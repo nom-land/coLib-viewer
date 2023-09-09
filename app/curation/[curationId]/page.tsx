@@ -4,8 +4,8 @@ import RecordCard from "@/app/components/recordCard";
 import CommunityHeader from "@/app/components/communityHeader";
 import RepliesList from "@/app/components/repliesList";
 import Link from "next/link";
-import { createNomland, getListLinkTypePrefix } from "@/app/config";
-import Nomland from "nomland.js";
+import { getListLinkTypePrefix } from "@/app/config";
+import { createNomland } from "@/app/config/nomland";
 
 export default async function CurationPage({
     params,

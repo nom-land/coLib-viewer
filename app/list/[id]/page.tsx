@@ -3,9 +3,8 @@ import CharacterHeader from "@/app/components/characterHeader";
 import { MetaLine } from "@/app/components/metaLine";
 import NoteStatLine from "@/app/components/noteStatLine";
 import Tags from "@/app/components/tags";
-import { createNomland } from "@/app/config";
+import { createNomland } from "@/app/config/nomland";
 import Link from "next/link";
-import Nomland from "nomland.js";
 
 export default async function ListPage({ params }: { params: { id: number } }) {
     const { id } = params;

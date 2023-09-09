@@ -2,8 +2,8 @@ import Link from "next/link";
 import React from "react";
 import CommunityHeader from "../../components/communityHeader";
 import CharacterAvatar from "../../components/characterAvatar";
-import { createNomland, sourceName } from "@/app/config";
-
+import { sourceName } from "@/app/config";
+import Nomland from "nomland.js";
 interface CurationListData {
     listId: number;
     listName: string;
@@ -11,7 +11,7 @@ interface CurationListData {
 }
 
 async function getData(communityId: string) {
-    const nomland = createNomland();
+    const nomland = new Nomland(sourceName);
     const { list, count } = await nomland.ls(communityId);
     const curationList = [] as CurationListData[];
 

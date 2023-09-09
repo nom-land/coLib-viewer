@@ -1,4 +1,4 @@
-import { createNomland } from "../config";
+import { createNomland } from "../config/nomland";
 import NoteCard from "./noteCard";
 
 export default async function RepliesList({

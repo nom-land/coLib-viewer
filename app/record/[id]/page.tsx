@@ -4,7 +4,8 @@ import { LinkEntity } from "crossbell";
 import CurationList from "../../components/curationList";
 import Link from "next/link";
 import { getAttr } from "../../utils";
-import { createNomland, getListLinkTypePrefix } from "../../config";
+import { getListLinkTypePrefix } from "../../config";
+import { createNomland } from "../../config/nomland";
 
 async function getData(id: string) {
     const nomland = createNomland();
