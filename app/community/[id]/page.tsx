@@ -4,31 +4,12 @@ import CommunityHeader from "../../components/communityHeader";
 import CharacterAvatar from "../../components/characterAvatar";
 import { sourceName } from "@/app/config";
 import Nomland from "nomland.js";
-interface CurationListData {
-    listId: number;
-    listName: string;
-    count: number;
-}
 
 async function getData(communityId: string) {
     const nomland = new Nomland(sourceName);
-    const { list, count } = await nomland.ls(communityId);
-    const curationList = [] as CurationListData[];
-
-    await Promise.all(
-        list.map(async (topic) => {
-            const { count } = await nomland.getMetadataById(topic.listId);
-            curationList.push({
-                listId: topic.listId,
-                listName: topic.listName,
-                count,
-            });
-        })
-    );
-
+    const { list } = await nomland.ls(communityId);
     const members = await nomland.getCommunityMembers(communityId);
-
-    return { curationList, members };
+    return { list, members };
 }
 
 export default async function CommunityPage({
@@ -37,7 +18,7 @@ export default async function CommunityPage({
     params: { id: string };
 }) {
     const communityId = params.id;
-    const { members, curationList: items } = await getData(communityId);
+    const { members, list: items } = await getData(communityId);
 
     return (
         //TODO: if this is not a community character...
@@ -74,7 +55,8 @@ export default async function CommunityPage({
                                         {" "}
                                         {list.listName}{" "}
                                     </div>
-                                    <div>{list.count} records</div>
+                                    {/* TODO */}
+                                    <div>{list.count - 1} records</div>
                                 </Link>
                             </div>
                         ))}

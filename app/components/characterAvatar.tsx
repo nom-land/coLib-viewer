@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import TimeAgo from "javascript-time-ago";
 
 export default function CharacterAvatar(props: {
     name: string;
