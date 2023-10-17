@@ -2,6 +2,9 @@
   "name": "colib-viewer",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "19.0.0"
+  },
   "scripts": {
     "dev": "CROSSBELL_RPC_ADDRESS=http://127.0.0.1:8545 next dev",
     "dev:mainnet": "next dev",
