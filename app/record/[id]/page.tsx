@@ -87,7 +87,7 @@ export default async function RecordDisplay({
                     <div className="my-5">Related communities:</div>
                     <div className="grid">
                         {curationList.map((c) => (
-                            <Link key={c.listId} href={`./list/${c.listId}`}>
+                            <Link key={c.listId} href={`/list/${c.listId}`}>
                                 <div
                                     className="card w-[18rem] my-2"
                                     key={c.raw.transactionHash}

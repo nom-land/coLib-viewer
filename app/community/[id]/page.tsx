@@ -50,7 +50,7 @@ export default async function CommunityPage({
                     <section className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-5">
                         {items.map((list, i) => (
                             <div key={i} className="p-3 card">
-                                <Link href={`./list/${list.listId}`}>
+                                <Link href={`/list/${list.listId}`}>
                                     <div className="text-lg">
                                         {" "}
                                         {list.listName}{" "}

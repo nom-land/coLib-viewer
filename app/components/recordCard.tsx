@@ -89,7 +89,7 @@ export default async function RecordCard({
 
             {context === "community" && (
                 <div className="font-light text-sm mt-4">
-                    <Link href={`./record/${id}`}>
+                    <Link href={`/record/${id}`}>
                         <div>
                             See what other communities are talking about this{" "}
                             {recordType}↗{" "}
