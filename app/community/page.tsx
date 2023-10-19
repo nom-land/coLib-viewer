@@ -2,7 +2,7 @@ import Link from "next/link";
 import { homeName } from "../config";
 
 // Only the selected communities will be displayed
-const communityIds = ["57198"]; //TODO
+const communityIds = ["57762", "57747", "57798"]; //TODO
 
 export default async function Home() {
     return (
@@ -20,3 +20,4 @@ export default async function Home() {
 }
 
 export const revalidate = 60; // revalidate this page every 60 seconds
+8908;

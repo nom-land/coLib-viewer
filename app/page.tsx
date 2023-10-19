@@ -1,8 +1,5 @@
 import { crossbell } from "crossbell/network";
 
-// Only the selected communities will be displayed
-const communityIds = ["57198"]; //TODO
-
 //Localhost
 if (process.env.CROSSBELL_RPC_ADDRESS === "http://127.0.0.1:8545") {
     (crossbell.id as any) = 31337;

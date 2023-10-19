@@ -14,6 +14,7 @@ export default async function CurationPage({
 }) {
     // character id and note id is split by "-" in curationId
     const { curationId } = params;
+
     const [cid, rid] = curationId.split("-");
     const note = await getData(cid, rid);
     const repliesCount = await getRepliesCount(cid, rid);
@@ -21,6 +22,7 @@ export default async function CurationPage({
     const communityId = note?.communityId;
 
     const listIds = new Map<string, number>();
+
     if (communityId)
         await Promise.allSettled(
             (note?.listNames || []).map(async (l) => {
@@ -31,8 +33,8 @@ export default async function CurationPage({
                 listIds.set(l, lid.list[0].linklistId);
             })
         );
-
-    if (!note) return <div>This is note a valid curation.</div>;
+    console.log(listIds);
+    if (!note) return <div>This is not a valid curation.</div>;
     else
         return (
             <>
@@ -87,7 +89,11 @@ export default async function CurationPage({
 
 async function getData(characterId: string, noteId: string) {
     const nomland = createNomland();
+    console.log("before");
+
     const curationNote = await nomland.getCuration(characterId, noteId);
+    console.log(curationNote);
+
     return curationNote;
 }
 
