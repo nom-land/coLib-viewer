@@ -2,21 +2,22 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { CurationNote } from "../typings/types";
 import CharacterHeader from "./characterHeader";
 import Tags from "./tags";
+import LinkPreview from "./linkPreview";
+import Link from "next/link";
 
 // return a component
 export default function NoteCard({
     note,
     noteType,
+    listIds,
     children,
 }: {
     note: CurationNote;
     noteType: "curation" | "discussion";
+    listIds?: Map<string, number>;
     children?: JSX.Element;
 }) {
-    const noteCss =
-        noteType === "curation"
-            ? "card p-5 my-5 w-content md:w-[48rem]"
-            : "p-3";
+    const noteCss = noteType === "curation" ? "p-5 mb-5 w-content" : "p-3";
     return (
         <div className={noteCss} key={note.raw.transactionHash}>
             <CharacterHeader
@@ -25,15 +26,20 @@ export default function NoteCard({
                 handle={note.curatorHandle}
                 avatar={note.curatorAvatars[0]}
             />
-            {noteType === "curation" && (
+            {noteType === "curation" && listIds && (
                 <div className="text-lg my-5">
-                    <span className="text-sm font-extralight">
-                        {" "}
-                        add it to list{" "}
+                    add it to list{" "}
+                    <span className="text-2xl">
+                        {note.listNames.map((l, i) => (
+                            <Link key={i} href={`/list/${listIds.get(l)}`}>
+                                {l}{" "}
+                                {i !== note.listNames.length - 1 ? ", " : ""}
+                            </Link>
+                        ))}{" "}
                     </span>
-                    <span className="m-1 text-2xl">
-                        {note.listNames.join(", ")}
-                    </span>
+                    {/* <span className="m-1 text-2xl">
+                            {note.listNames.join(", ")}
+                        </span> */}
                 </div>
             )}
             {note.title.length > 0 && (

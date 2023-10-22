@@ -12,6 +12,10 @@ module.exports = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      backgroundColor: {
+        'callout-background': 'transparent', // A light blue similar to Twitter's OG card
+        'callout-background-focused': '#E8F5FE', // A slightly darker blue for focus/hover state
+      },
     },
   },
   plugins: [],

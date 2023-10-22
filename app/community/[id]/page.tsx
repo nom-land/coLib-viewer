@@ -26,8 +26,8 @@ export default async function CommunityPage({
             <div>
                 <CommunityHeader communityId={communityId}></CommunityHeader>
                 <div className="md:flex gap-5 w-full md:my-3">
-                    <section className="flex-none w-85 my-3">
-                        <div className="flex gap-1">
+                    <section className="flex-none my-3 ">
+                        <div className="flex gap-1 grid grid-cols-8 md:grid-cols-5">
                             {members.map((member) => (
                                 <div
                                     className="mb-1"

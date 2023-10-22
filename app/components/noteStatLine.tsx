@@ -1,6 +1,6 @@
 export default function NoteStatLine({ replies }: { replies: number }) {
     return (
-        <div className="flex gap-1 items-center">
+        <div className="flex gap-1 pt-3 items-center">
             <svg
                 className="h-5 w-5 text-black"
                 fill="none"

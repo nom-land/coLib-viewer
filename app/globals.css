@@ -36,7 +36,7 @@ body, html {
     background-color: #d4d4d4;
     border-color: #d4d4d4;
     border-radius: theme('borderRadius.lg');
-    padding: theme('spacing.6');
+    padding: theme('spacing.4');
     box-shadow: theme('boxShadow.sm');
   }
   .tag {

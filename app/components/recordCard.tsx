@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { getCharacterData } from "../apis";
-import { shortenUrl } from "../utils";
+import LinkPreview from "./linkPreview";
 
 interface ArticleData {
     url?: string;
@@ -36,10 +36,11 @@ export default async function RecordCard({
     const recordType = (record as any)["record_type"] as string;
 
     return (
-        <div className="w-content md:w-[36rem] card p-5 card my-5 mx-3">
+        <div className="w-content md:w-[36rem] card p-5 card mx-3">
+            {record.url && <LinkPreview url={record.url} />}
             <div className="text-lg font-bold"> {record.title}</div>
-            <div className="flex items-center gap-1">
-                <svg
+            <div className="flex items-center gap-1 truncate">
+                {/* <svg
                     className="h-4 w-4 text-black"
                     width="24"
                     height="24"
@@ -54,10 +55,10 @@ export default async function RecordCard({
                     <path stroke="none" d="M0 0h24v24H0z" />{" "}
                     <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />{" "}
                     <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
-                </svg>
+                </svg> */}
                 {record.url && (
                     <Link href={record.url} title={record.url}>
-                        {shortenUrl(record.url)}
+                        🔗 {record.url}
                     </Link>
                 )}
             </div>

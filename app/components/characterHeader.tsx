@@ -22,9 +22,17 @@ export default function CharacterHeader(props: {
             />
             <div>
                 <div>
-                    <div className="font-extralight text-sm ">@{handle}</div>
-                    <span className="font-bold text-2xl">{name} </span>
-                    {date && <TimeAgo date={new Date(date)} />}
+                    <div className="font-extralight text-sm truncate">
+                        @{handle}
+                    </div>
+                    <div className="flex gap-1">
+                        <div className="font-bold text-xl truncate max-w-[9rem] items-end flex">
+                            {name}{" "}
+                        </div>
+                        <div className="flex items-end">
+                            {date && <TimeAgo date={new Date(date)} />}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

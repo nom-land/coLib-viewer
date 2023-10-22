@@ -3,7 +3,6 @@ import NoteCard from "../../components/noteCard";
 import RecordCard from "@/app/components/recordCard";
 import CommunityHeader from "@/app/components/communityHeader";
 import RepliesList from "@/app/components/repliesList";
-import Link from "next/link";
 import { getListLinkTypePrefix } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
 
@@ -39,27 +38,15 @@ export default async function CurationPage({
         return (
             <>
                 <div className="container mx-auto my-5">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div className=" md:order-last">
-                            <CommunityHeader
-                                communityId={note.communityId}
-                            ></CommunityHeader>{" "}
-                            <div className="px-3 my-2">
-                                {"List "}
-                                <span className="text-4xl">
-                                    {note.listNames.map((l, i) => (
-                                        <Link
-                                            key={i}
-                                            href={`/list/${listIds.get(l)}`}
-                                        >
-                                            {l}
-                                            {i !== note.listNames.length - 1
-                                                ? ", "
-                                                : ""}
-                                        </Link>
-                                    ))}
-                                </span>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-5">
+                        <div className="lg:order-last">
+                            <div className="p-3">
+                                <CommunityHeader
+                                    communityId={note.communityId}
+                                    excludeDescription={true}
+                                ></CommunityHeader>{" "}
                             </div>
+
                             <RecordCard
                                 id={note?.recordId || ""}
                                 context="community"
@@ -68,8 +55,9 @@ export default async function CurationPage({
                         <div>
                             <div>
                                 <NoteCard
-                                    noteType="discussion"
+                                    noteType="curation"
                                     note={note}
+                                    listIds={listIds}
                                 ></NoteCard>
                             </div>
                             <div className="mx-3 my-2">
