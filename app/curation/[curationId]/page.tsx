@@ -32,7 +32,6 @@ export default async function CurationPage({
                 listIds.set(l, lid.list[0].linklistId);
             })
         );
-    console.log(listIds);
     if (!note) return <div>This is not a valid curation.</div>;
     else
         return (
@@ -77,10 +76,7 @@ export default async function CurationPage({
 
 async function getData(characterId: string, noteId: string) {
     const nomland = createNomland();
-    console.log("before");
-
     const curationNote = await nomland.getCuration(characterId, noteId);
-    console.log(curationNote);
 
     return curationNote;
 }
