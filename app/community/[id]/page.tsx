@@ -55,8 +55,7 @@ export default async function CommunityPage({
                                         {" "}
                                         {list.listName}{" "}
                                     </div>
-                                    {/* TODO */}
-                                    <div>{list.count - 1} records</div>
+                                    <div>{list.count} records</div>
                                 </Link>
                             </div>
                         ))}

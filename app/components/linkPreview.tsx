@@ -47,8 +47,9 @@ function UnfurledUrlPreview({
     url: string;
     urlData: UrlData;
 }) {
+    if (urlData.imageSrc)
+        urlData.imageSrc = urlData.imageSrc?.replace("http://", "https://");
     const [domLoaded, setDomLoaded] = useState(false);
-    const [iconError, setIconError] = useState(new Map<string, boolean>());
 
     useEffect(() => {
         setDomLoaded(true);

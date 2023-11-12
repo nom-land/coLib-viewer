@@ -33,4 +33,11 @@ export const communityProfiles = [
             "岁月不静好，刹那也永恒。我们一起体验分享边界的流动，世界的宽广。",
         image: "https://cdn.discordapp.com/icons/1139223604177948733/b24842e6eaee8415f49d0fb31cf6c37e.webp",
     },
+    {
+        id: "59538",
+        name: "Web3 Frontend",
+        description:
+            "W3F（前端开发者的快乐老家）——一个致力于连接 Web2 和 Web3，为前端开发者提供技术知识和商业机会的社区。我们提供技术教程、研讨会、实践项目、线下活动和专家互动。我们的使命是帮助前端开发者掌握 Web3 技术，建立声誉，创造商业机会。",
+        image: "/w3f.jpg",
+    },
 ];

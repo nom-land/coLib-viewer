@@ -23,6 +23,7 @@ export default async function CommunityHeader(props: {
                                 src={community?.image!}
                                 width={50}
                                 height={50}
+                                className="w-20 h-20 mb-5"
                                 alt={communityChar.metadata?.name || ""}
                             />
                         </div>

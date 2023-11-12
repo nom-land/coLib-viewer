@@ -1,8 +1,6 @@
 import Link from "next/link";
-import { communityProfiles, homeName } from "../config";
+import { communityProfiles } from "../config";
 import Image from "next/image";
-// Only the selected communities will be displayed
-const communityIds = ["57762", "57747", "57798"]; //TODO
 
 export default async function Home() {
     return (
