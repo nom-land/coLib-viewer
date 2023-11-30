@@ -20,6 +20,12 @@ export function getMembersLinkType() {
 // TODO: hardcoded community description
 export const communityProfiles = [
     {
+        id: "59949",
+        name: "Uncommons｜💚💊",
+        description: "Crypto Salon for Public Goods Builders.",
+        image: "/uncommons.jpg",
+    },
+    {
         id: "57762",
         name: "dDAO-滴叨滴叨滴叨",
         description:

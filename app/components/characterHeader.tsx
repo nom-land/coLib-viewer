@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 import TimeAgo from "react-timeago";
+import CharacterAvatar from "./characterAvatar";
 
 export default function CharacterHeader(props: {
     name: string;
@@ -13,13 +13,14 @@ export default function CharacterHeader(props: {
     return (
         <div className="flex gap-3">
             {/* TODO: default avatar */}
-            <Image
+            {/* <Image
                 className="rounded-full"
                 src={avatar}
                 width={size || 50}
                 height={size || 50}
                 alt={handle}
-            />
+            /> */}
+            <CharacterAvatar name={name} handle={handle} avatar={avatar} />
             <div>
                 <div>
                     <div className="font-extralight text-sm truncate">
@@ -27,7 +28,9 @@ export default function CharacterHeader(props: {
                     </div>
                     <div className="flex gap-1">
                         <div className="font-bold text-xl truncate max-w-[9rem] items-end flex">
-                            {name}{" "}
+                            {name.endsWith("undefined")
+                                ? name.split(" ")[0]
+                                : name}{" "}
                         </div>
                         <div className="flex items-end">
                             {date && <TimeAgo date={new Date(date)} />}

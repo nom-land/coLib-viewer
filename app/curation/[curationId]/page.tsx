@@ -35,8 +35,8 @@ export default async function CurationPage({
     if (!note) return <div>This is not a valid curation.</div>;
     else
         return (
-            <>
-                <div className="container mx-auto my-5">
+            <div className="min-h-screen flex flex-col">
+                <div className="container mx-auto my-5 flex-grow">
                     <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-5">
                         <div className="lg:order-last">
                             <div className="p-3">
@@ -70,7 +70,18 @@ export default async function CurationPage({
                         </div>
                     </div>
                 </div>
-            </>
+                <div className="text-center mb-5">
+                    <div className="text-sm">
+                        Powered by{" "}
+                        <a
+                            className="text-blue-500 hover:text-blue-800"
+                            href="https://colib.app"
+                        >
+                            Colib.app
+                        </a>
+                    </div>
+                </div>
+            </div>
         );
 }
 

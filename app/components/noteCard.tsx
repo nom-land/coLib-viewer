@@ -2,8 +2,6 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { CurationNote } from "../typings/types";
 import CharacterHeader from "./characterHeader";
 import Tags from "./tags";
-import LinkPreview from "./linkPreview";
-import Link from "next/link";
 
 // return a component
 export default function NoteCard({
@@ -26,7 +24,7 @@ export default function NoteCard({
                 handle={note.curatorHandle}
                 avatar={note.curatorAvatars[0]}
             />
-            {noteType === "curation" && listIds && (
+            {/* {noteType === "curation" && listIds && (
                 <div className="text-lg my-5">
                     add it to list{" "}
                     <span className="text-2xl">
@@ -37,11 +35,8 @@ export default function NoteCard({
                             </Link>
                         ))}{" "}
                     </span>
-                    {/* <span className="m-1 text-2xl">
-                            {note.listNames.join(", ")}
-                        </span> */}
                 </div>
-            )}
+            )} */}
             {note.title.length > 0 && (
                 <div className="text-2xl font-bold my-3">{note.title}</div>
             )}

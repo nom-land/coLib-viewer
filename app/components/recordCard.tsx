@@ -40,22 +40,6 @@ export default async function RecordCard({
             {record.url && <LinkPreview url={record.url} />}
             <div className="text-lg font-bold"> {record.title}</div>
             <div className="flex items-center gap-1 truncate">
-                {/* <svg
-                    className="h-4 w-4 text-black"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2"
-                    stroke="currentColor"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                >
-                    {" "}
-                    <path stroke="none" d="M0 0h24v24H0z" />{" "}
-                    <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />{" "}
-                    <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
-                </svg> */}
                 {record.url && (
                     <Link href={record.url} title={record.url}>
                         🔗 {record.url}
@@ -67,25 +51,31 @@ export default async function RecordCard({
                 <span className="font-extralight text-sm">Record Type:</span>{" "}
                 {recordType}
             </div>
-            <div>
-                <span className="font-extralight text-sm">Author:</span>{" "}
-                {record.author || "unknown"}
-            </div>
-            <div>
-                <span className="font-extralight text-sm">Language:</span>{" "}
-                {record.language || "unknown"}
-            </div>
-            <div>
+            {(record.author || record.authors?.join(", ")) && (
+                <div>
+                    <span className="font-extralight text-sm">Author:</span>{" "}
+                    {record.author || record.authors.join(", ")}
+                </div>
+            )}
+            {record.language && record.language !== "unknown" && (
+                <div>
+                    <span className="font-extralight text-sm">Language:</span>{" "}
+                    {record.language}
+                </div>
+            )}
+            {/* <div>
                 <span className="font-extralight text-sm">Copyright:</span> :{" "}
                 {record.copyright || "unknown"}
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
                 <span className="font-extralight text-sm">Original:</span> :{" "}
                 {record.derivation || "unknown"}
-            </div>
+            </div> */}
 
             {record.description && (
-                <ReactMarkdown>{record.description}</ReactMarkdown>
+                <ReactMarkdown>
+                    {record.description.slice(0, 140) + "..."}
+                </ReactMarkdown>
             )}
 
             {context === "community" && (

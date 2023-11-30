@@ -18,7 +18,6 @@ export default async function ListPage({ params }: { params: { id: number } }) {
         count,
     } = await getData(id);
 
-    // TODO: top curators
     return (
         <div className="container mx-auto my-5">
             <div className="py-5 px-3">

@@ -79,38 +79,55 @@ export default async function RecordDisplay({
     });
 
     return (
-        <div className="container mx-auto">
-            <div className="p-3">
-                <RecordCard id={rid} context="app"></RecordCard>
+        <div className="min-h-screen flex flex-col">
+            <div className="container mx-auto flex-grow">
+                <div className="p-3">
+                    <RecordCard id={rid} context="app"></RecordCard>
 
-                <div>
-                    <div className="my-5">Related communities:</div>
-                    <div className="grid">
-                        {curationList.map((c) => (
-                            <Link key={c.listId} href={`/list/${c.listId}`}>
-                                <div
-                                    className="card w-[18rem] my-2"
-                                    key={c.raw.transactionHash}
+                    <div>
+                        <div className="my-5">Related communities:</div>
+                        <div className="grid">
+                            {curationList.map((c) => (
+                                <Link
+                                    key={c.listId}
+                                    href={`/community/${c.communityId}`}
                                 >
-                                    <div className="text-xl font-bold">
-                                        {c.list}
+                                    <div
+                                        className="card w-[18rem] my-2"
+                                        key={c.raw.transactionHash}
+                                    >
+                                        {/* <div className="text-xl font-bold">
+                                            {c.list}
+                                        </div> */}
+                                        <div>
+                                            {/* in{" "} */}
+                                            <span className="font-bold">
+                                                {
+                                                    c.raw.fromCharacter
+                                                        ?.metadata?.content
+                                                        ?.name
+                                                }
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div>
-                                        in{" "}
-                                        <span className="font-bold">
-                                            {
-                                                c.raw.fromCharacter?.metadata
-                                                    ?.content?.name
-                                            }
-                                        </span>
-                                    </div>
-                                </div>
-                            </Link>
-                        ))}
+                                </Link>
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                <CurationList recordId={rid}></CurationList>
+                    <CurationList recordId={rid}></CurationList>
+                </div>
+            </div>
+            <div className="text-center mb-5">
+                <div className="text-sm">
+                    Powered by{" "}
+                    <a
+                        className="text-blue-500 hover:text-blue-800"
+                        href="https://colib.app"
+                    >
+                        Colib.app
+                    </a>
+                </div>
             </div>
         </div>
     );
