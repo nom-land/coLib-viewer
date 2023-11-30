@@ -34,7 +34,7 @@ export default async function ListPage({ params }: { params: { id: number } }) {
                     </div>
                 )}
                 <div className="list-items gap-4">
-                    {curationNotes!.map((cur, i) => (
+                    {curationNotes!.map((cur: any, i: number) => (
                         <div className="card my-3" key={i}>
                             <Link
                                 key={cur.n.postId}

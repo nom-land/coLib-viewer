@@ -27,12 +27,12 @@ export default async function RecordDisplay({
     const rid = params.id;
 
     const { backLinks, backNotes } = await getData(rid);
-    const l = backLinks.list.filter((link) =>
+    const l = backLinks.list.filter((link: any) =>
         link.linkType.startsWith(getListLinkTypePrefix())
     ).length; //TODO: only "dao" character
 
     const curationList = [] as CommunityCurationList[];
-    backLinks.list.map((l) => {
+    backLinks.list.map((l: any) => {
         if (l.linkType.startsWith(getListLinkTypePrefix())) {
             const listName = l.linkType.slice(getListLinkTypePrefix().length);
             curationList.push({
@@ -45,11 +45,11 @@ export default async function RecordDisplay({
     });
 
     const curationNotesList = [] as CurationNote[];
-    backNotes.list.map((n) => {
+    backNotes.list.map((n: any) => {
         const attrs = n.metadata?.content?.attributes;
 
         if (
-            attrs?.find((a) => a.trait_type === "entity type")?.value ===
+            attrs?.find((a: any) => a.trait_type === "entity type")?.value ===
             "curation"
         ) {
             curationNotesList.push({

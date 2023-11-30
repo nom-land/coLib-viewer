@@ -34,7 +34,7 @@ export default async function CommunityPage({
                     <div className="gap-5 w-full md:flex md:my-3">
                         <section className="flex-none my-3">
                             <div className="flex gap-1 grid grid-cols-8 md:grid-cols-5">
-                                {members.map((member) => (
+                                {members.map((member: any) => (
                                     <div
                                         className="mb-1"
                                         key={member.characterId.toString()}

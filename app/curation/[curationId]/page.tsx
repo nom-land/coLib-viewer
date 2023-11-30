@@ -24,7 +24,7 @@ export default async function CurationPage({
 
     if (communityId)
         await Promise.allSettled(
-            (note?.listNames || []).map(async (l) => {
+            (note?.listNames || []).map(async (l: any) => {
                 const lid = await indexer.linklist.getMany(communityId, {
                     linkType: getListLinkTypePrefix() + l,
                     limit: 1,
