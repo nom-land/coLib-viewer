@@ -17,7 +17,7 @@ export default async function CurationList({
     );
     return (
         <div className="my-5">
-            Curated by:
+            <span className="px-3">Curated by:</span>
             {/* <JsonViewer props={backNotes.list[0]}></JsonViewer> */}
             {curationList.map((note) => (
                 <Link href={`/curation/${note.postId}`} key={note.postId}>

@@ -71,8 +71,9 @@ function UnfurledUrlPreview({
                                 <div className="relative w-[89px] h-[89px] md:w-[109px] md:h-[109px] flex-shrink-0">
                                     <Image
                                         src={urlData.imageSrc}
-                                        layout="fill" // This ensures the image will expand to the size of the container
-                                        objectFit="cover"
+                                        fill
+                                        style={{ objectFit: "cover" }}
+                                        sizes="100%"
                                         alt="Website preview"
                                         loading="lazy"
                                     />
@@ -81,32 +82,6 @@ function UnfurledUrlPreview({
 
                             <div className={`p-3`}>
                                 <div className="flex items-center gap-2 overflow-hidden w-full">
-                                    {/* {urlData.favicon &&
-                                    (iconError.get(urlData.favicon!) ? (
-                                        <Image
-                                            src={"/favicon.ico"}
-                                            width={16}
-                                            height={16}
-                                            alt="Website icon"
-                                        />
-                                    ) : (
-                                        <Image
-                                            src={urlData.favicon}
-                                            className="object-cover" // Assuming 4 in Chakra equals to 1rem or 16px in Tailwind
-                                            alt="Website icon"
-                                            loading="lazy"
-                                            width={16}
-                                            height={16}
-                                            onError={() =>
-                                                setIconError(
-                                                    iconError.set(
-                                                        urlData.favicon!,
-                                                        true
-                                                    )
-                                                )
-                                            }
-                                        />
-                                    ))} */}
                                     <span className="whitespace-nowrap overflow-hidden overflow-ellipsis text-md text-gray-500 font-normal text-sm">
                                         {new URL(url).hostname}
                                     </span>
@@ -159,7 +134,7 @@ const BookmarkFallback = forwardRef<HTMLDivElement, { url: string }>(
                 className="flex mb-4 p-3 rounded-sm bg-blue border border-border"
                 ref={ref}
             >
-                <span className="break-words">{url}</span>
+                <span className="break-words overflow-hidden">{url}</span>
             </div>
         );
     }

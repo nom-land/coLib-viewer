@@ -4,6 +4,7 @@ import LinkPreview from "./linkPreview";
 import NoteStatLine from "./noteStatLine";
 import Tags from "./tags";
 import { CurationNote, CurationStat } from "nomland.js";
+import { useEffect } from "react";
 
 // TODO: exported from nomland.js
 interface Curation {
@@ -16,6 +17,7 @@ interface Curation {
 
 export default function CurationFeed(props: { curationNotes: Curation[] }) {
     const { curationNotes } = props;
+
     return (
         <div className="list-items gap-4">
             {curationNotes.map((cur, i) => (

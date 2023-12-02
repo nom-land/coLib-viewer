@@ -7,7 +7,6 @@ import Tags from "./tags";
 export default function NoteCard({
     note,
     noteType,
-    listIds,
     children,
 }: {
     note: CurationNote;
@@ -15,7 +14,7 @@ export default function NoteCard({
     listIds?: Map<string, number>;
     children?: JSX.Element;
 }) {
-    const noteCss = noteType === "curation" ? "p-5 mb-5 w-content" : "p-3";
+    const noteCss = noteType === "curation" ? "px-3 py-5 w-content" : "p-3";
     return (
         <div className={noteCss} key={note.raw.transactionHash}>
             <CharacterHeader

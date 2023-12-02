@@ -36,7 +36,7 @@ export default async function RecordCard({
     const recordType = (record as any)["record_type"] as string;
 
     return (
-        <div className="w-content md:w-[36rem] card p-5 card mx-3">
+        <div className="w-content md:w-[36rem] card p-5 mx-3 my-5">
             {record.url && <LinkPreview url={record.url} />}
             <div className="text-lg font-bold"> {record.title}</div>
             <div className="flex items-center gap-1 truncate">

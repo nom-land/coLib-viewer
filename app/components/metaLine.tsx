@@ -11,8 +11,8 @@ export function MetaLine({
 }) {
     return (
         <div className="font-light text-sm">
-            {l} {l > 1 ? "records" : "record"} | Updated{" "}
-            <TimeAgo date={new Date(lastUpdated)} />
+            {/* {l} {l > 1 ? "records" : "record"} | Updated{" "} */}
+            Updated <TimeAgo date={new Date(lastUpdated)} />
         </div>
     );
 }

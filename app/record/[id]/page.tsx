@@ -6,6 +6,7 @@ import Link from "next/link";
 import { getAttr } from "../../utils";
 import { getListLinkTypePrefix } from "../../config";
 import { createNomland } from "../../config/nomland";
+import Layout from "@/app/components/layout";
 
 async function getData(id: string) {
     const nomland = createNomland();
@@ -79,13 +80,13 @@ export default async function RecordDisplay({
     });
 
     return (
-        <div className="min-h-screen flex flex-col">
-            <div className="container mx-auto flex-grow">
-                <div className="p-3">
+        <Layout>
+            <div className="container mx-auto">
+                <div className="">
                     <RecordCard id={rid} context="app"></RecordCard>
 
-                    <div>
-                        <div className="my-5">Related communities:</div>
+                    <div className="px-3">
+                        <div>Related communities:</div>
                         <div className="grid">
                             {curationList.map((c) => (
                                 <Link
@@ -118,17 +119,6 @@ export default async function RecordDisplay({
                     <CurationList recordId={rid}></CurationList>
                 </div>
             </div>
-            <div className="text-center mb-5">
-                <div className="text-sm">
-                    Powered by{" "}
-                    <a
-                        className="text-blue-500 hover:text-blue-800"
-                        href="https://colib.app"
-                    >
-                        Colib.app
-                    </a>
-                </div>
-            </div>
-        </div>
+        </Layout>
     );
 }

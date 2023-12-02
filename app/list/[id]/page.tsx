@@ -16,7 +16,7 @@ export default async function ListPage({ params }: { params: { id: number } }) {
         curationNotes,
         lastUpdated,
         count,
-    } = await getData(id);
+    } = await getInitialData(id);
 
     return (
         <div className="container mx-auto my-5">
@@ -102,8 +102,7 @@ export default async function ListPage({ params }: { params: { id: number } }) {
     );
 }
 
-// TODO: mock function
-async function getData(id: number) {
+async function getInitialData(id: number) {
     try {
         const nomland = createNomland();
         // TODO: pagination

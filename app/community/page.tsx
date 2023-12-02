@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { communityProfiles } from "../config";
 import Image from "next/image";
+import Layout from "../components/layout";
 
 export default async function Home() {
     return (
-        <div className="min-h-screen flex flex-col">
-            <div className="container mx-auto py-10 px-10 lg:px-40  flex-grow">
+        <Layout>
+            <div className="container mx-auto py-10 px-10 lg:px-40">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {communityProfiles.map((profile) => (
                         <Link
@@ -32,18 +33,7 @@ export default async function Home() {
                     ))}
                 </div>
             </div>
-            <div className="text-center mb-5">
-                <div className="text-sm">
-                    Powered by{" "}
-                    <a
-                        className="text-blue-500 hover:text-blue-800"
-                        href="https://colib.app"
-                    >
-                        Colib.app
-                    </a>
-                </div>
-            </div>
-        </div>
+        </Layout>
     );
 }
 
