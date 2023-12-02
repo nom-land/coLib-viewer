@@ -32,7 +32,7 @@ export default function CurationFeed(props: { curationNotes: Curation[] }) {
                             ></CharacterHeader>
                             <div className="my-3">
                                 {/* <blockquote className="py-2 px-3 my-4 border-l-4 border-gray-300 dark:border-gray-500"> */}
-                                <div className="leading-relaxed text-gray-900">
+                                <div className="leading-relaxed text-gray-900 whitespace-pre-line">
                                     {cur.n.content}
                                 </div>
                                 {/* </blockquote> */}

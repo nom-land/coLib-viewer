@@ -14,10 +14,10 @@ interface Curation {
     stat: CurationStat;
 }
 
-const fetchNextFeeds = async (communityId: string, currentSkip: number) => {
+const fetchNextFeeds = async (communityId: string, currentCursor?: string) => {
     const nomland = createNomland();
-
-    const { curationNotes } = await nomland.getFeeds(communityId, currentSkip);
+    const params = currentCursor ? { cursor: currentCursor } : {};
+    const { curationNotes } = await nomland.getFeeds(communityId, params);
     return curationNotes;
 };
 
@@ -53,9 +53,11 @@ export default function InfiniteFeed(props: {
         setIsLoading(true);
 
         if (upcomingItems.length > 0) {
+            const cur = upcomingItems[upcomingItems.length - 1].n.postId;
+
             setItems((prevItems) => [...prevItems, ...upcomingItems]);
             setUpcomingItems([]);
-            const curationNotes = await fetchNextFeeds(communityId, skip);
+            const curationNotes = await fetchNextFeeds(communityId, cur);
             setSkip(skip + 10);
 
             setUpcomingItems(curationNotes);
@@ -65,19 +67,17 @@ export default function InfiniteFeed(props: {
             }
         } else {
             let currentSkip = skip;
-            const curationNotes = await fetchNextFeeds(
-                communityId,
-                currentSkip
-            );
+            let cur = initialNotes[initialNotes.length - 1].n.postId;
+
+            const curationNotes = await fetchNextFeeds(communityId, cur);
             setItems((prevItems) => [...prevItems, ...curationNotes]);
 
             if (nomoreData(curationNotes)) {
                 return;
             }
-            const upcomingNotes = await fetchNextFeeds(
-                communityId,
-                currentSkip + 10
-            );
+
+            cur = curationNotes[curationNotes.length - 1].n.postId;
+            const upcomingNotes = await fetchNextFeeds(communityId, cur);
             setSkip(currentSkip + 20);
 
             setUpcomingItems(upcomingNotes);
@@ -119,7 +119,7 @@ export default function InfiniteFeed(props: {
         const setup = async () => {
             // check if the current feed is newest, if not add it to the top
             setIsLoading(true);
-            const feeds = await fetchNextFeeds(communityId, 0);
+            const feeds = await fetchNextFeeds(communityId);
             const arr = [] as Curation[];
             for (let i = 0; i < feeds.length; i++) {
                 if (initialNotes[0])
@@ -147,8 +147,10 @@ export default function InfiniteFeed(props: {
                     <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
                 </div>
             )}
-            {!loadMore && (
-                <div className="text-center text-sm my-5">No more data</div>
+            {!isLoading && !loadMore && (
+                <div className="text-center text-sm my-5">
+                    <span className="text-gray-500">- No more data -</span>
+                </div>
             )}
             {showUpBtn && (
                 <button
