@@ -25,6 +25,7 @@
     "postcss": "8.4.24",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-intersection-observer": "^9.5.3",
     "react-json-view": "^1.21.3",
     "react-markdown": "^8.0.7",
     "react-time-ago": "^7.2.1",

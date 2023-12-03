@@ -4,6 +4,7 @@ import { CurationNote, CurationStat } from "nomland.js";
 import CurationFeed from "./curationFeed";
 import { useEffect, useState } from "react";
 import { createNomland } from "../config/nomland";
+import { InView } from "react-intersection-observer";
 
 // TODO: exported from nomland.js
 interface Curation {
@@ -33,26 +34,30 @@ export default function InfiniteFeed(props: {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [skip, setSkip] = useState<number>(10);
     const [showUpBtn, setShowUpBtn] = useState<boolean>(false);
-    const [loadMore, setLoadMore] = useState<boolean>(
-        initialNotes.length === 10
-    );
+    const [hasMore, setHasMore] = useState<boolean>(initialNotes.length === 10);
 
-    async function fetchMoreData() {
-        const nomoreData = (result: Curation[]) => {
+    const [effectComplete, setEffectComplete] = useState<boolean>(false);
+    const [inView, setInView] = useState(false);
+
+    async function fetchMoreData(firstLoad?: boolean) {
+        console.log("fetching", firstLoad, "isLoading", isLoading);
+        console.log("upcoming", upcomingItems);
+
+        const hasMoreData = (result: Curation[]) => {
             if (result.length < 10) {
-                setLoadMore(false);
+                setHasMore(false);
                 setIsLoading(false);
-                return true;
+                return false;
             }
-            return false;
+            return true;
         };
 
-        if (!loadMore) {
-            return;
-        }
         setIsLoading(true);
 
         if (upcomingItems.length > 0) {
+            if (firstLoad) {
+                return;
+            }
             const cur = upcomingItems[upcomingItems.length - 1].n.postId;
 
             setItems((prevItems) => [...prevItems, ...upcomingItems]);
@@ -62,7 +67,7 @@ export default function InfiniteFeed(props: {
 
             setUpcomingItems(curationNotes);
 
-            if (nomoreData(curationNotes)) {
+            if (!hasMoreData(curationNotes)) {
                 return;
             }
         } else {
@@ -72,7 +77,7 @@ export default function InfiniteFeed(props: {
             const curationNotes = await fetchNextFeeds(communityId, cur);
             setItems((prevItems) => [...prevItems, ...curationNotes]);
 
-            if (nomoreData(curationNotes)) {
+            if (!hasMoreData(curationNotes)) {
                 return;
             }
 
@@ -81,7 +86,7 @@ export default function InfiniteFeed(props: {
             setSkip(currentSkip + 20);
 
             setUpcomingItems(upcomingNotes);
-            if (nomoreData(upcomingNotes)) {
+            if (!hasMoreData(upcomingNotes)) {
                 return;
             }
         }
@@ -98,26 +103,12 @@ export default function InfiniteFeed(props: {
             } else {
                 setShowUpBtn(false);
             }
-
-            if (
-                window.innerHeight + document.documentElement.scrollTop !==
-                    document.documentElement.offsetHeight ||
-                isLoading
-            ) {
-                return;
-            }
-            fetchMoreData();
         };
 
         window.addEventListener("scroll", handleScroll, { passive: true });
-        window.addEventListener("touchmove", handleScroll);
 
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-            window.removeEventListener("touchmove", handleScroll);
-        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [communityId, isLoading, loadMore, upcomingItems, showUpBtn, skip]);
+    }, [communityId, isLoading, hasMore, upcomingItems, showUpBtn, skip]);
 
     useEffect(() => {
         const setup = async () => {
@@ -137,21 +128,44 @@ export default function InfiniteFeed(props: {
             setIsLoading(false);
 
             // initial load upcoming data
-            fetchMoreData();
+            console.log("initial", isLoading);
+            fetchMoreData(true);
         };
 
-        setup();
+        setup().then(() => {
+            setEffectComplete(true);
+        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        const checkAndFetch = async () => {
+            if (inView && !isLoading && hasMore && effectComplete) {
+                console.log("in view", isLoading);
+                fetchMoreData();
+            }
+        };
+
+        checkAndFetch();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isLoading, inView]);
+
+    const handleInView = (inView: boolean) => {
+        setInView(inView);
+    };
+
     return (
         <>
             <CurationFeed curationNotes={items} />
-            {isLoading && (
-                <div className="flex justify-center my-3">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
-                </div>
-            )}
-            {!isLoading && !loadMore && (
+            <InView as="div" onChange={handleInView}>
+                {isLoading && (
+                    <div className="flex justify-center my-3">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
+                    </div>
+                )}
+            </InView>
+
+            {!isLoading && !hasMore && (
                 <div className="text-center text-sm my-5">
                     <span className="text-gray-500">- No more data -</span>
                 </div>
