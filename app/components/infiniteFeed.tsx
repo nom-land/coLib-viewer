@@ -109,9 +109,13 @@ export default function InfiniteFeed(props: {
             fetchMoreData();
         };
 
-        window.addEventListener("scroll", handleScroll);
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        window.addEventListener("touchmove", handleScroll);
 
-        return () => window.removeEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+            window.removeEventListener("touchmove", handleScroll);
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [communityId, isLoading, loadMore, upcomingItems, showUpBtn, skip]);
 

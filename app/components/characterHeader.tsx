@@ -24,7 +24,10 @@ export default function CharacterHeader(props: {
             <div>
                 <div>
                     <div className="font-extralight text-sm truncate">
-                        @{handle}
+                        @
+                        {handle.length > 14
+                            ? handle.slice(0, 4) + "..." + handle.slice(-4)
+                            : handle}
                     </div>
                     <div className="flex gap-1">
                         <div className="font-bold text-xl truncate max-w-[9rem] items-end flex">
