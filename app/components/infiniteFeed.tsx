@@ -16,10 +16,22 @@ interface Curation {
 }
 
 const fetchNextFeeds = async (communityId: string, currentCursor?: string) => {
-    const nomland = createNomland();
-    const params = currentCursor ? { cursor: currentCursor } : {};
-    const { curationNotes } = await nomland.getFeeds(communityId, params);
-    return curationNotes;
+    try {
+        const nomland = createNomland();
+        const params = currentCursor ? { cursor: currentCursor } : {};
+        const { curationNotes } = await nomland.getFeeds(communityId, params);
+        return curationNotes;
+    } catch (e) {
+        console.error(
+            "fetchNextFeeds(" +
+                communityId +
+                ", " +
+                currentCursor +
+                ") fails: ",
+            e
+        );
+        return [];
+    }
 };
 
 export default function InfiniteFeed(props: {
@@ -56,8 +68,10 @@ export default function InfiniteFeed(props: {
 
         if (upcomingItems.length > 0) {
             if (firstLoad) {
+                setIsLoading(false);
                 return;
             }
+
             const cur = upcomingItems[upcomingItems.length - 1].n.postId;
 
             setItems((prevItems) => [...prevItems, ...upcomingItems]);
@@ -72,9 +86,15 @@ export default function InfiniteFeed(props: {
             }
         } else {
             let currentSkip = skip;
+
+            if (!hasMoreData(initialNotes)) {
+                return;
+            }
+
             let cur = initialNotes[initialNotes.length - 1].n.postId;
 
             const curationNotes = await fetchNextFeeds(communityId, cur);
+
             setItems((prevItems) => [...prevItems, ...curationNotes]);
 
             if (!hasMoreData(curationNotes)) {
@@ -128,7 +148,6 @@ export default function InfiniteFeed(props: {
             setIsLoading(false);
 
             // initial load upcoming data
-            console.log("initial", isLoading);
             fetchMoreData(true);
         };
 
@@ -141,7 +160,6 @@ export default function InfiniteFeed(props: {
     useEffect(() => {
         const checkAndFetch = async () => {
             if (inView && !isLoading && hasMore && effectComplete) {
-                console.log("in view", isLoading);
                 fetchMoreData();
             }
         };

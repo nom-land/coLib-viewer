@@ -9,7 +9,7 @@ export default function CharacterAvatar(props: {
     size?: number;
 }) {
     const { name, handle, avatar, size } = props;
-    const [imageError, setImageError] = useState(false);
+    const [imageError, setImageError] = useState(!avatar);
 
     return (
         <div className="flex gap-5">
