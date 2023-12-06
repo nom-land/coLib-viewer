@@ -1,6 +1,6 @@
 import { createContract, createIndexer } from "crossbell";
-import { CurationNote } from "../typings/types";
 import { getAttr, getCuration } from "../utils";
+import { CurationNote } from "nomland.js";
 
 interface CurationStat {
     replies: number;

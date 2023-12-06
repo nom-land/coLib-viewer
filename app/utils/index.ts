@@ -13,7 +13,7 @@ import {
     NoteEntity,
     NoteMetadata,
 } from "crossbell";
-import { CurationNote } from "../typings/types";
+import { CurationNote } from "nomland.js";
 
 export function getAttr(attrs: AttributesMetadata["attributes"], key: string) {
     return attrs?.find((a) => a.trait_type === key)?.value;
