@@ -5,6 +5,7 @@ import CurationFeed from "./curationFeed";
 import { useEffect, useState } from "react";
 import { createNomland } from "../config/nomland";
 import { InView } from "react-intersection-observer";
+import { MetaLine } from "./metaLine";
 
 // TODO: exported from nomland.js
 interface Curation {
@@ -50,6 +51,10 @@ export default function InfiniteFeed(props: {
 
     const [effectComplete, setEffectComplete] = useState<boolean>(false);
     const [inView, setInView] = useState(false);
+
+    const [lastUpdated, setLastUpdated] = useState<string>(
+        initialNotes[0]?.n.dateString || ""
+    );
 
     async function fetchMoreData(firstLoad?: boolean) {
         console.log("fetching", firstLoad, "isLoading", isLoading);
@@ -136,6 +141,9 @@ export default function InfiniteFeed(props: {
             setIsLoading(true);
             const feeds = await fetchNextFeeds(communityId);
             const arr = [] as Curation[];
+
+            if (feeds[0]?.n.dateString) setLastUpdated(feeds[0].n.dateString);
+
             for (let i = 0; i < feeds.length; i++) {
                 if (initialNotes[0])
                     if (feeds[i].n.postId === initialNotes[0].n.postId) {
@@ -174,6 +182,10 @@ export default function InfiniteFeed(props: {
 
     return (
         <>
+            {/* div float right  */}
+            <div className="my-3">
+                <MetaLine lastUpdated={lastUpdated} l={0} />
+            </div>
             <CurationFeed curationNotes={items} />
             <InView as="div" onChange={handleInView}>
                 {isLoading && (

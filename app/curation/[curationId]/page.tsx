@@ -77,9 +77,13 @@ export default async function CurationPage({
 
 async function getData(characterId: string, noteId: string) {
     const nomland = createNomland();
-    const curationNote = await nomland.getCuration(characterId, noteId);
+    try {
+        const curationNote = await nomland.getCuration(characterId, noteId);
 
-    return curationNote;
+        return curationNote;
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 async function getRepliesCount(characterId: string, noteId: string) {

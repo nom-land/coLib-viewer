@@ -8,8 +8,19 @@ export default function CharacterAvatar(props: {
     avatar: string;
     size?: number;
 }) {
-    const { name, handle, avatar, size } = props;
-    const [imageError, setImageError] = useState(!avatar);
+    const { name, handle, size } = props;
+
+    let avatar = props.avatar;
+
+    let wrongAvatar = !avatar || false;
+
+    if (avatar?.startsWith("https://") || avatar?.startsWith("http://")) {
+    } else if (avatar?.startsWith("ipfs://")) {
+        avatar = `https://ipfs.crossbell.io/ipfs/${avatar.slice(7)}`;
+    } else {
+        wrongAvatar = true;
+    }
+    const [imageError, setImageError] = useState(wrongAvatar);
 
     return (
         <div className="flex gap-5">

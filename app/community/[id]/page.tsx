@@ -8,11 +8,11 @@ import InfiniteFeed from "@/app/components/infiniteFeed";
 
 async function getInitialData(communityId: string) {
     const nomland = createNomland();
-    const { curationNotes, lastUpdated } = await nomland.getFeeds(communityId);
+    const { curationNotes } = await nomland.getFeeds(communityId);
 
     // const { list } = await nomland.ls(communityId);
     const members = await nomland.getCommunityMembers(communityId);
-    return { curationNotes, lastUpdated, members };
+    return { curationNotes, members };
 }
 
 export default async function CommunityPage({
@@ -21,9 +21,7 @@ export default async function CommunityPage({
     params: { id: string };
 }) {
     const communityId = params.id;
-    const { members, lastUpdated, curationNotes } = await getInitialData(
-        communityId
-    );
+    const { members, curationNotes } = await getInitialData(communityId);
     const count = curationNotes.length;
 
     return (
@@ -60,10 +58,6 @@ export default async function CommunityPage({
                             </div>
                         </section>
                         <section className="md:w-2/3 md:flex-grow">
-                            {/* div float right  */}
-                            <div className="my-3">
-                                <MetaLine lastUpdated={lastUpdated} l={count} />
-                            </div>
                             <InfiniteFeed
                                 initialNotes={curationNotes}
                                 communityId={communityId}
