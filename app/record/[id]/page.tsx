@@ -1,5 +1,4 @@
 import RecordCard from "@/app/components/recordCard";
-import { CurationNote } from "@/app/typings/types";
 import { LinkEntity } from "crossbell";
 import CurationList from "../../components/curationList";
 import Link from "next/link";
@@ -7,6 +6,7 @@ import { getAttr } from "../../utils";
 import { getListLinkTypePrefix } from "../../config";
 import { createNomland } from "../../config/nomland";
 import Layout from "@/app/components/layout";
+import { CurationNote } from "nomland.js";
 
 async function getData(id: string) {
     const nomland = createNomland();
@@ -71,7 +71,6 @@ export default async function RecordDisplay({
                 curatorHandle: n.character?.handle || "",
                 suggestedTags: n.metatdata?.content?.tags || [],
                 attachments: n.metadata?.attachments || [],
-                listNames: [],
                 raw: n,
             });
         }
