@@ -26,6 +26,12 @@ export const communityProfiles = [
         image: "/uncommons.jpg",
     },
     {
+        id: "60095",
+        name: "WAMO 2023 ChiangMai🇹🇭",
+        description: "瓦猫托邦 Wamotopia ：由主题营地共同构成的璀璨瓦猫宇宙",
+        image: "/wamo.jpg",
+    },
+    {
         id: "57762",
         name: "dDAO-滴叨滴叨滴叨",
         description:

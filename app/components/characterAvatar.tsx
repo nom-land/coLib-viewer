@@ -14,7 +14,12 @@ export default function CharacterAvatar(props: {
 
     let wrongAvatar = !avatar || false;
 
-    if (avatar?.startsWith("https://") || avatar?.startsWith("http://")) {
+    if (
+        avatar?.startsWith("https://") ||
+        avatar?.startsWith("http://") ||
+        avatar?.startsWith("/") ||
+        avatar?.startsWith("./")
+    ) {
     } else if (avatar?.startsWith("ipfs://")) {
         avatar = `https://ipfs.crossbell.io/ipfs/${avatar.slice(7)}`;
     } else {

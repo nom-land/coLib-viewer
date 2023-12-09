@@ -2,7 +2,6 @@ import React from "react";
 import CommunityHeader from "../../components/communityHeader";
 import CharacterAvatar from "../../components/characterAvatar";
 import { createNomland } from "@/app/config/nomland";
-import { MetaLine } from "@/app/components/metaLine";
 import Layout from "@/app/components/layout";
 import InfiniteFeed from "@/app/components/infiniteFeed";
 
