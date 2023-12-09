@@ -10,6 +10,7 @@ export default function CharacterHeader(props: {
     size?: number;
 }) {
     const { name, handle, avatar, date, size } = props;
+
     return (
         <div className="flex gap-3">
             {/* TODO: default avatar */}

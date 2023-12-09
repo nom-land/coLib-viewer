@@ -69,10 +69,8 @@ export default async function RecordDisplay({
                 curatorAvatars: n.character?.metadata?.content?.avatars || [],
                 curatorName: n.character?.metadata?.content?.name || "",
                 curatorHandle: n.character?.handle || "",
-                suggestedTags:
-                    (JSON.parse(
-                        getAttr(attrs, "suggested tags") as string
-                    ) as string[]) || [],
+                suggestedTags: n.metatdata?.content?.tags || [],
+                attachments: n.metadata?.attachments || [],
                 listNames: [],
                 raw: n,
             });
