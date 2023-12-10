@@ -5,7 +5,6 @@ import CommunityHeader from "@/app/components/communityHeader";
 import RepliesList from "@/app/components/repliesList";
 import { getListLinkTypePrefix } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
-import Layout from "@/app/components/layout";
 
 export default async function CurationPage({
     params,
@@ -36,42 +35,38 @@ export default async function CurationPage({
     if (!note) return <div>This is not a valid curation.</div>;
     else
         return (
-            <Layout>
-                <div className="container mx-auto my-5">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-5">
-                        <div className="lg:order-last">
-                            <div className="m-3">
-                                <CommunityHeader
-                                    communityId={note.communityId}
-                                    excludeDescription={true}
-                                ></CommunityHeader>{" "}
-                            </div>
+            <div className="container mx-auto my-5">
+                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-5">
+                    <div className="lg:order-last">
+                        <div className="m-3">
+                            <CommunityHeader
+                                communityId={note.communityId}
+                                excludeDescription={true}
+                            ></CommunityHeader>{" "}
+                        </div>
 
-                            <RecordCard
-                                id={note?.recordId || ""}
-                                context="community"
-                            ></RecordCard>
-                        </div>
+                        <RecordCard
+                            id={note?.recordId || ""}
+                            context="community"
+                        ></RecordCard>
+                    </div>
+                    <div>
                         <div>
-                            <div>
-                                <NoteCard
-                                    noteType="curation"
-                                    note={note}
-                                    listIds={listIds}
-                                ></NoteCard>
-                            </div>
-                            <div className="mx-3 my-2">
-                                {repliesCount}{" "}
-                                {repliesCount > 1
-                                    ? "discussions"
-                                    : "discussion"}
-                            </div>
-                            <hr className="mx-3 mb-5 border-gray-300 border-b-2"></hr>
-                            <RepliesList params={{ curationId }}></RepliesList>
+                            <NoteCard
+                                noteType="curation"
+                                note={note}
+                                listIds={listIds}
+                            ></NoteCard>
                         </div>
+                        <div className="mx-3 my-2">
+                            {repliesCount}{" "}
+                            {repliesCount > 1 ? "discussions" : "discussion"}
+                        </div>
+                        <hr className="mx-3 mb-5 border-gray-300 border-b-2"></hr>
+                        <RepliesList params={{ curationId }}></RepliesList>
                     </div>
                 </div>
-            </Layout>
+            </div>
         );
 }
 

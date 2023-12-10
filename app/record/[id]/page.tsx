@@ -5,7 +5,6 @@ import Link from "next/link";
 import { getAttr } from "../../utils";
 import { getListLinkTypePrefix } from "../../config";
 import { createNomland } from "../../config/nomland";
-import Layout from "@/app/components/layout";
 import { CurationNote } from "nomland.js";
 
 async function getData(id: string) {
@@ -77,45 +76,42 @@ export default async function RecordDisplay({
     });
 
     return (
-        <Layout>
-            <div className="container mx-auto">
-                <div className="">
-                    <RecordCard id={rid} context="app"></RecordCard>
+        <div className="container mx-auto">
+            <div className="">
+                <RecordCard id={rid} context="app"></RecordCard>
 
-                    <div className="px-3">
-                        <div>Related communities:</div>
-                        <div className="grid">
-                            {curationList.map((c) => (
-                                <Link
-                                    key={c.listId}
-                                    href={`/community/${c.communityId}`}
+                <div className="px-3">
+                    <div>Related communities:</div>
+                    <div className="grid">
+                        {curationList.map((c) => (
+                            <Link
+                                key={c.listId}
+                                href={`/community/${c.communityId}`}
+                            >
+                                <div
+                                    className="card w-[18rem] my-2"
+                                    key={c.raw.transactionHash}
                                 >
-                                    <div
-                                        className="card w-[18rem] my-2"
-                                        key={c.raw.transactionHash}
-                                    >
-                                        {/* <div className="text-xl font-bold">
+                                    {/* <div className="text-xl font-bold">
                                             {c.list}
                                         </div> */}
-                                        <div>
-                                            {/* in{" "} */}
-                                            <span className="font-bold">
-                                                {
-                                                    c.raw.fromCharacter
-                                                        ?.metadata?.content
-                                                        ?.name
-                                                }
-                                            </span>
-                                        </div>
+                                    <div>
+                                        {/* in{" "} */}
+                                        <span className="font-bold">
+                                            {
+                                                c.raw.fromCharacter?.metadata
+                                                    ?.content?.name
+                                            }
+                                        </span>
                                     </div>
-                                </Link>
-                            ))}
-                        </div>
+                                </div>
+                            </Link>
+                        ))}
                     </div>
-
-                    <CurationList recordId={rid}></CurationList>
                 </div>
+
+                <CurationList recordId={rid}></CurationList>
             </div>
-        </Layout>
+        </div>
     );
 }
