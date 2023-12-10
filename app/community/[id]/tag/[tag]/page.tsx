@@ -21,7 +21,9 @@ export async function generateMetadata({
 
     return {
         title: tag,
-        description: `#${tag} in ${community?.name || site.title}`,
+        description: `sharing notes with #${tag} in community "${
+            community?.name || site.title
+        }"`,
         icons: community?.image || `${site.url}/favicon.ico`,
     };
 }
