@@ -1,12 +1,29 @@
 import CommunityHeader from "@/app/components/communityHeader";
 import InfiniteFeed from "@/app/components/infiniteFeed";
+import { communityProfiles } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
+import { site } from "@/app/layout";
 
 async function getInitialData(communityId: string, tag: string) {
     const nomland = createNomland();
     const { curationNotes } = await nomland.getFeeds(communityId, tag);
 
     return { curationNotes };
+}
+
+export async function generateMetadata({
+    params,
+}: {
+    params: { tag: string; id: string };
+}) {
+    const tag = decodeURIComponent(params.tag);
+    const community = communityProfiles.find((c) => c.id === params.id);
+
+    return {
+        title: tag,
+        description: `#${tag} in ${community?.name || site.title}`,
+        icons: community?.image || `${site.url}/favicon.ico`,
+    };
 }
 
 export default async function CommunityTagPage({

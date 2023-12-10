@@ -5,6 +5,23 @@ import CommunityHeader from "@/app/components/communityHeader";
 import RepliesList from "@/app/components/repliesList";
 import { getListLinkTypePrefix } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
+import { site } from "@/app/layout";
+
+export async function generateMetadata({
+    params,
+}: {
+    params: { curationId: string };
+}) {
+    const { curationId } = params;
+    const [cid, rid] = curationId.split("-");
+    const note = await getData(cid, rid);
+
+    return {
+        title: note?.raw?.toCharacter?.metadata?.content?.title || site.title, // TODO:
+        description: note?.content || site.description,
+        icons: note?.curatorAvatars?.[0] || `${site.url}/favicon.ico`,
+    };
+}
 
 export default async function CurationPage({
     params,

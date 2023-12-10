@@ -4,6 +4,7 @@ import CharacterAvatar from "../../components/characterAvatar";
 import { createNomland } from "@/app/config/nomland";
 import InfiniteFeed from "@/app/components/infiniteFeed";
 import { communityProfiles } from "@/app/config";
+import { site } from "@/app/layout";
 
 async function getInitialData(communityId: string) {
     const nomland = createNomland();
@@ -11,6 +12,16 @@ async function getInitialData(communityId: string) {
 
     const members = await nomland.getCommunityMembers(communityId);
     return { curationNotes, members };
+}
+
+export async function generateMetadata({ params }: { params: { id: string } }) {
+    const c = communityProfiles.find((c) => c.id === params.id);
+
+    return {
+        title: c?.name || site.title,
+        description: c?.description || site.description,
+        icons: c?.image || `${site.url}/favicon.ico`,
+    };
 }
 
 export default async function CommunityPage({
