@@ -36,8 +36,8 @@ dependencies:
     specifier: 13.5.6
     version: 13.5.6(react-dom@18.2.0)(react@18.2.0)
   nomland.js:
-    specifier: 0.2.3
-    version: 0.2.3(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(typescript@5.1.3)(utf-8-validate@6.0.3)
+    specifier: 0.2.7
+    version: 0.2.7(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(typescript@5.1.3)(utf-8-validate@6.0.3)
   postcss:
     specifier: 8.4.24
     version: 8.4.24
@@ -311,7 +311,7 @@ packages:
       '@vladfrangu/async_event_emitter': 2.2.4
       discord-api-types: 0.37.61
       tslib: 2.6.2
-      ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@6.0.3)
+      ws: 8.15.0(bufferutil@4.0.8)(utf-8-validate@6.0.3)
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -3260,8 +3260,8 @@ packages:
     resolution: {integrity: sha512-y10wOWt8yZpqXmOgRo77WaHEmhYQYGNA6y421PKsKYWEK8aW+cqAphborZDhqfyKrbZEN92CN1X2KbafY2s7Yw==}
     dev: false
 
-  /nomland.js@0.2.3(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(typescript@5.1.3)(utf-8-validate@6.0.3):
-    resolution: {integrity: sha512-4jdekAfNROMPDdBfKiHyEbQJ4+JkbnKpn5wfQ8Xdx4Thw+335WlCsOsG2GQ89Cxp2KXoPoTwEeS6tP+OYPtwuQ==}
+  /nomland.js@0.2.7(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(typescript@5.1.3)(utf-8-validate@6.0.3):
+    resolution: {integrity: sha512-PmlP7Q3tDT30gfAFV8xC1GpcrPulVDpm0K6DeYWnxAhLezkgKGB/DBB6T/dp7TgNqDZL5CuwmOmodBwMFKK0BQ==}
     dependencies:
       '@extractus/article-extractor': 7.3.1(encoding@0.1.13)
       '@nomland/elephant': 0.2.4(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(utf-8-validate@6.0.3)

@@ -66,7 +66,10 @@ export default function CurationFeed(props: { curationNotes: Curation[] }) {
                                     {cur.record.title}
                                 </div>
                             )}
-                            <Tags tags={cur.n.suggestedTags} />
+                            <Tags
+                                cid={cur.n.communityId}
+                                tags={cur.n.suggestedTags}
+                            />
 
                             <NoteStatLine
                                 replies={cur.stat.replies || 0}

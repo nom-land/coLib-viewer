@@ -21,7 +21,6 @@ export default async function CommunityPage({
 }) {
     const communityId = params.id;
     const { members, curationNotes } = await getInitialData(communityId);
-    const count = curationNotes.length;
 
     return (
         //TODO: if this is not a community character...
@@ -60,6 +59,7 @@ export default async function CommunityPage({
                             <InfiniteFeed
                                 initialNotes={curationNotes}
                                 communityId={communityId}
+                                tag={""}
                             />
                         </section>
                     </div>

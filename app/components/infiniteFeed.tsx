@@ -16,11 +16,19 @@ interface Curation {
     stat: CurationStat;
 }
 
-const fetchNextFeeds = async (communityId: string, currentCursor?: string) => {
+const fetchNextFeeds = async (
+    communityId: string,
+    tag: string,
+    currentCursor?: string
+) => {
     try {
         const nomland = createNomland();
         const params = currentCursor ? { cursor: currentCursor } : {};
-        const { curationNotes } = await nomland.getFeeds(communityId, params);
+        const { curationNotes } = await nomland.getFeeds(
+            communityId,
+            tag,
+            params
+        );
         return curationNotes;
     } catch (e) {
         console.error(
@@ -38,8 +46,9 @@ const fetchNextFeeds = async (communityId: string, currentCursor?: string) => {
 export default function InfiniteFeed(props: {
     initialNotes: Curation[];
     communityId: string;
+    tag: string;
 }) {
-    const { initialNotes, communityId } = props;
+    const { initialNotes, communityId, tag } = props;
 
     const [items, setItems] = useState<Curation[]>(initialNotes || []);
     const [upcomingItems, setUpcomingItems] = useState<Curation[]>([]);
@@ -57,9 +66,6 @@ export default function InfiniteFeed(props: {
     );
 
     async function fetchMoreData(firstLoad?: boolean) {
-        console.log("fetching", firstLoad, "isLoading", isLoading);
-        console.log("upcoming", upcomingItems);
-
         const hasMoreData = (result: Curation[]) => {
             if (result.length < 10) {
                 setHasMore(false);
@@ -81,7 +87,7 @@ export default function InfiniteFeed(props: {
 
             setItems((prevItems) => [...prevItems, ...upcomingItems]);
             setUpcomingItems([]);
-            const curationNotes = await fetchNextFeeds(communityId, cur);
+            const curationNotes = await fetchNextFeeds(communityId, tag, cur);
             setSkip(skip + 10);
 
             setUpcomingItems(curationNotes);
@@ -98,7 +104,7 @@ export default function InfiniteFeed(props: {
 
             let cur = initialNotes[initialNotes.length - 1].n.postId;
 
-            const curationNotes = await fetchNextFeeds(communityId, cur);
+            const curationNotes = await fetchNextFeeds(communityId, tag, cur);
 
             setItems((prevItems) => [...prevItems, ...curationNotes]);
 
@@ -107,7 +113,7 @@ export default function InfiniteFeed(props: {
             }
 
             cur = curationNotes[curationNotes.length - 1].n.postId;
-            const upcomingNotes = await fetchNextFeeds(communityId, cur);
+            const upcomingNotes = await fetchNextFeeds(communityId, tag, cur);
             setSkip(currentSkip + 20);
 
             setUpcomingItems(upcomingNotes);
@@ -139,7 +145,7 @@ export default function InfiniteFeed(props: {
         const setup = async () => {
             // check if the current feed is newest, if not add it to the top
             setIsLoading(true);
-            const feeds = await fetchNextFeeds(communityId);
+            const feeds = await fetchNextFeeds(communityId, tag);
             const arr = [] as Curation[];
 
             if (feeds[0]?.n.dateString) setLastUpdated(feeds[0].n.dateString);

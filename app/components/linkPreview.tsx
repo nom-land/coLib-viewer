@@ -59,7 +59,8 @@ function UnfurledUrlPreview({
             {domLoaded && (
                 <div>
                     <div
-                        onClick={() => {
+                        onClick={(e) => {
+                            e.preventDefault();
                             window.open(url, "_blank");
                         }}
                     >
