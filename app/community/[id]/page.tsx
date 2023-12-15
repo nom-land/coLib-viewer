@@ -3,8 +3,7 @@ import CommunityHeader from "../../components/communityHeader";
 import CharacterAvatar from "../../components/characterAvatar";
 import { createNomland } from "@/app/config/nomland";
 import InfiniteFeed from "@/app/components/infiniteFeed";
-import { communityProfiles } from "@/app/config";
-import { site } from "@/app/layout";
+import { communityProfiles, site } from "@/app/config";
 
 async function getInitialData(communityId: string) {
     const nomland = createNomland();

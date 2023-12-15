@@ -1,8 +1,7 @@
 import CommunityHeader from "@/app/components/communityHeader";
 import InfiniteFeed from "@/app/components/infiniteFeed";
-import { communityProfiles } from "@/app/config";
+import { communityProfiles, site } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
-import { site } from "@/app/layout";
 
 async function getInitialData(communityId: string, tag: string) {
     const nomland = createNomland();

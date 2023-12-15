@@ -3,9 +3,8 @@ import NoteCard from "../../components/noteCard";
 import RecordCard from "@/app/components/recordCard";
 import CommunityHeader from "@/app/components/communityHeader";
 import RepliesList from "@/app/components/repliesList";
-import { getListLinkTypePrefix } from "@/app/config";
+import { getListLinkTypePrefix, site } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
-import { site } from "@/app/layout";
 
 export async function generateMetadata({
     params,

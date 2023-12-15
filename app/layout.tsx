@@ -1,13 +1,8 @@
+import { site } from "./config";
 import "./globals.css";
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
-
-export const site = {
-    title: "CoLib: Community Library",
-    description: "Library collectively maintained by community",
-    url: "https://colib.app",
-};
 
 export const metadata = {
     title: site.title,

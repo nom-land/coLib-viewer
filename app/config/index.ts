@@ -53,3 +53,9 @@ export const communityProfiles = [
         image: "/w3f.jpg",
     },
 ];
+
+export const site = {
+    title: "CoLib: Community Library",
+    description: "Library collectively maintained by community",
+    url: "https://colib.app",
+};
