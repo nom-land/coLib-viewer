@@ -34,7 +34,6 @@ export default async function RecordCard({
     const rData = await getCharacterData(id);
     const record = { ...(rData.metadata as ExtendedArticleData) };
     const recordType = (record as any)["record_type"] as string;
-
     return (
         <div className="w-content md:w-[36rem] card p-5 mx-3 my-5">
             {record.url && <LinkPreview url={record.url} />}
@@ -51,10 +50,14 @@ export default async function RecordCard({
                 <span className="font-extralight text-sm">Record Type:</span>{" "}
                 {recordType}
             </div>
-            {(record.author || record.authors?.join(", ")) && (
+            {(record.author ||
+                record.authors?.join(", ") ||
+                (record as any).metaData?.authors) && (
                 <div>
                     <span className="font-extralight text-sm">Author:</span>{" "}
-                    {record.author || record.authors.join(", ")}
+                    {record.author ||
+                        record.authors?.join(", ") ||
+                        (record as any).metaData?.authors?.join(", ")}
                 </div>
             )}
             {record.language && record.language !== "unknown" && (
@@ -74,7 +77,8 @@ export default async function RecordCard({
 
             {record.description && (
                 <ReactMarkdown>
-                    {record.description.slice(0, 140) + "..."}
+                    {record.description.slice(0, 160) +
+                        (record.description.length > 160 ? "..." : "")}
                 </ReactMarkdown>
             )}
 
