@@ -46,3 +46,8 @@ body, html {
     padding: 0 0.5rem;
   }
 }
+
+.community-desc a {
+  color: #000000;
+  text-decoration: underline;
+}

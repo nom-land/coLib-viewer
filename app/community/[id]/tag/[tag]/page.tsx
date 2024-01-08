@@ -5,7 +5,10 @@ import { createNomland } from "@/app/config/nomland";
 
 async function getInitialData(communityId: string, tag: string) {
     const nomland = createNomland();
-    const { curationNotes } = await nomland.getFeeds(communityId, tag);
+    const curationNotes = await nomland.getFeeds({
+        community: communityId,
+        tag,
+    });
 
     return { curationNotes };
 }

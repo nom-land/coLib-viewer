@@ -23,11 +23,13 @@ const fetchNextFeeds = async (
 ) => {
     try {
         const nomland = createNomland();
-        const params = currentCursor ? { cursor: currentCursor } : {};
-        const { curationNotes } = await nomland.getFeeds(
-            communityId,
-            tag,
-            params
+        const options = currentCursor ? { cursor: currentCursor } : {};
+        const curationNotes = await nomland.getFeeds(
+            {
+                community: communityId,
+                tag,
+            },
+            options
         );
         return curationNotes;
     } catch (e) {

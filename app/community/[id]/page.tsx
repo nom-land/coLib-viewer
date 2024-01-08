@@ -7,8 +7,7 @@ import { communityProfiles, site } from "@/app/config";
 
 async function getInitialData(communityId: string) {
     const nomland = createNomland();
-    const { curationNotes } = await nomland.getFeeds(communityId);
-
+    const curationNotes = await nomland.getFeeds({ community: communityId });
     const members = await nomland.getCommunityMembers(communityId);
     return { curationNotes, members };
 }

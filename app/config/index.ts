@@ -39,6 +39,14 @@ export const communityProfiles = [
         image: "https://cdn.discordapp.com/icons/995771542631890944/f983de7913a29163a0a80874e353b16c.webp",
     },
     {
+        id: "60549",
+        name: "MoveOn",
+        description:
+            "Movescriptions means MRC20 with SFT &NFT&FT functions. We are the first smart inscriptions! Build on Sui [@SuiNetwork](https://twitter.com/SuiNetwork) SMOVE Autonomous World.",
+        image: "/move.jpg",
+    },
+
+    {
         id: "57798",
         name: "Ever Not Forever",
         description:
