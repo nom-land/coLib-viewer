@@ -1,9 +1,8 @@
-import { createIndexer } from "crossbell";
 import NoteCard from "../../components/noteCard";
 import RecordCard from "@/app/components/recordCard";
 import CommunityHeader from "@/app/components/communityHeader";
 import RepliesList from "@/app/components/repliesList";
-import { getListLinkTypePrefix, site } from "@/app/config";
+import { site } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
 
 export async function generateMetadata({
@@ -33,21 +32,7 @@ export default async function CurationPage({
     const [cid, rid] = curationId.split("-");
     const note = await getData(cid, rid);
     const repliesCount = await getRepliesCount(cid, rid);
-    const indexer = createIndexer();
-    const communityId = note?.communityId;
 
-    const listIds = new Map<string, number>();
-
-    if (communityId)
-        await Promise.allSettled(
-            (note?.listNames || []).map(async (l: any) => {
-                const lid = await indexer.linklist.getMany(communityId, {
-                    linkType: getListLinkTypePrefix() + l,
-                    limit: 1,
-                });
-                listIds.set(l, lid.list[0].linklistId);
-            })
-        );
     if (!note) return <div>This is not a valid curation.</div>;
     else
         return (
@@ -71,7 +56,6 @@ export default async function CurationPage({
                             <NoteCard
                                 noteType="curation"
                                 note={note}
-                                listIds={listIds}
                             ></NoteCard>
                         </div>
                         <div className="mx-3 my-2">

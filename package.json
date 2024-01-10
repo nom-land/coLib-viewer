@@ -21,7 +21,7 @@
     "eslint-config-next": "13.4.4",
     "javascript-time-ago": "^2.5.9",
     "next": "14.0.4",
-    "nomland.js": "0.2.15",
+    "nomland.js": "0.2.19",
     "postcss": "8.4.24",
     "react": "18.2.0",
     "react-dom": "18.2.0",

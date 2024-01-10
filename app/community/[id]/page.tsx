@@ -4,6 +4,7 @@ import CharacterAvatar from "../../components/characterAvatar";
 import { createNomland } from "@/app/config/nomland";
 import InfiniteFeed from "@/app/components/infiniteFeed";
 import { communityProfiles, site } from "@/app/config";
+import Link from "next/link";
 
 async function getInitialData(communityId: string) {
     const nomland = createNomland();
@@ -37,23 +38,30 @@ export default async function CommunityPage({
                 <CommunityHeader communityId={communityId}></CommunityHeader>
 
                 <div className="gap-5 w-full md:flex md:my-3">
-                    <section className="flex-none my-3">
-                        <div className="flex gap-1 grid grid-cols-8 md:grid-cols-5">
+                    <section className="my-3">
+                        <div className="gap-1 grid grid-cols-8 md:grid-cols-5">
                             {members.map((member: any) => (
                                 <div
                                     className="mb-1"
                                     key={member.characterId.toString()}
                                 >
-                                    <CharacterAvatar
-                                        name={
-                                            member.metadata?.name || "Unknown"
-                                        }
-                                        handle={member.handle}
-                                        avatar={
-                                            (member.metadata?.avatars || [])[0]
-                                        }
-                                        size={40}
-                                    />
+                                    <Link
+                                        href={`/curator/${member.characterId.toString()}`}
+                                        target="_blank"
+                                    >
+                                        <CharacterAvatar
+                                            name={
+                                                member.metadata?.name ||
+                                                "Unknown"
+                                            }
+                                            handle={member.handle}
+                                            avatar={
+                                                (member.metadata?.avatars ||
+                                                    [])[0]
+                                            }
+                                            size="m"
+                                        />
+                                    </Link>
                                 </div>
                             ))}
                         </div>

@@ -14,7 +14,7 @@ module.exports = {
       },
       backgroundColor: {
         'callout-background': 'transparent', // A light blue similar to Twitter's OG card
-        'callout-background-focused': '#E8F5FE', // A slightly darker blue for focus/hover state
+        'callout-background-focused': '#E5E7EB', // A slightly darker blue for focus/hover state
       },
     },
   },

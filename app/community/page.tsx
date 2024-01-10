@@ -4,14 +4,15 @@ import { communityProfiles } from "../config";
 import Image from "next/image";
 import DescriptionSection from "../components/descriptionSection";
 
-export default async function Home() {
+export default function Home() {
     return (
         <div className="container mx-auto py-10 px-10 lg:px-40">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {communityProfiles.map((profile) => (
                     <div
                         className="card cursor-pointer"
-                        onClick={() => {
+                        onClick={(e) => {
+                            e.preventDefault();
                             window.location.href = `./community/${profile.id}`;
                         }}
                         key={profile.id}
