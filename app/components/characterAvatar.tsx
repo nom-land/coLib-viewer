@@ -9,7 +9,6 @@ export default function CharacterAvatar(props: {
     size?: "s" | "m" | "l";
 }) {
     const { name, handle, size } = props;
-
     let avatar = props.avatar;
 
     let wrongAvatar = !avatar || false;
@@ -54,7 +53,7 @@ export default function CharacterAvatar(props: {
                 <div className={errImgClass}>
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                         <span className={textClass}>
-                            {name[0].toUpperCase()}
+                            {(name[0] || "U").toUpperCase()}
                         </span>
                     </div>
                 </div>
