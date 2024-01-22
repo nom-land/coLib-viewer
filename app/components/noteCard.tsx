@@ -69,7 +69,7 @@ export default function NoteCard({
                         )
                 )}
             </div>
-            <Tags cid={note.communityId} tags={note.suggestedTags}></Tags>
+            <Tags cid={note.communityId} tags={note.tags}></Tags>
 
             <div className="mt-3">{children}</div>
         </div>

@@ -3,21 +3,12 @@ import CharacterHeader from "./characterHeader";
 import LinkPreview from "./linkPreview";
 import NoteStatLine from "./noteStatLine";
 import Tags from "./tags";
-import { CharacterInfo, CurationNote, CurationStat } from "nomland.js";
+import { CharacterInfo, CurationNoteWithStat } from "nomland.js";
 import { CommunityAvatar } from "./communityAvatar";
 import { communityProfiles } from "../config";
 
-// TODO: exported from nomland.js
-interface Curation {
-    n: CurationNote;
-    record: {
-        title: string;
-    };
-    stat: CurationStat;
-}
-
 export default function CurationFeed(props: {
-    curationNotes: Curation[];
+    curationNotes: CurationNoteWithStat[];
     communities?: CharacterInfo[];
 }) {
     const { curationNotes, communities } = props;
@@ -113,10 +104,7 @@ export default function CurationFeed(props: {
                                     {cur.record.title}
                                 </div>
                             )}
-                            <Tags
-                                cid={cur.n.communityId}
-                                tags={cur.n.suggestedTags}
-                            />
+                            <Tags cid={cur.n.communityId} tags={cur.n.tags} />
 
                             <NoteStatLine
                                 replies={cur.stat.replies || 0}

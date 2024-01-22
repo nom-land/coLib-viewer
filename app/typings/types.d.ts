@@ -7,7 +7,7 @@ export interface CurationNote {
     curatorAvatars: string[];
     curatorName: string;
     curatorHandle: string;
-    suggestedTags: string[];
+    tags: string[];
     listNames: string[];
     recordId: string;
     communityId: string;

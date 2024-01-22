@@ -1,20 +1,11 @@
 "use client";
 
-import { CharacterInfo, CurationNote, CurationStat } from "nomland.js";
+import { CharacterInfo, CurationNoteWithStat } from "nomland.js";
 import CurationFeed from "./curationFeed";
 import { useEffect, useState } from "react";
 import { createNomland } from "../config/nomland";
 import { InView } from "react-intersection-observer";
 import { MetaLine } from "./metaLine";
-
-// TODO: exported from nomland.js
-interface Curation {
-    n: CurationNote;
-    record: {
-        title: string;
-    };
-    stat: CurationStat;
-}
 
 const fetchNextFeeds = async (params: {
     communityId?: string;
@@ -45,7 +36,7 @@ const fetchNextFeeds = async (params: {
 };
 
 export default function InfiniteFeed(props: {
-    initialNotes: Curation[];
+    initialNotes: CurationNoteWithStat[];
     communityId?: string;
     curatorId?: string;
     tag?: string;
@@ -53,8 +44,12 @@ export default function InfiniteFeed(props: {
 }) {
     const { initialNotes, communityId, tag, curatorId, communities } = props;
 
-    const [items, setItems] = useState<Curation[]>(initialNotes || []);
-    const [upcomingItems, setUpcomingItems] = useState<Curation[]>([]);
+    const [items, setItems] = useState<CurationNoteWithStat[]>(
+        initialNotes || []
+    );
+    const [upcomingItems, setUpcomingItems] = useState<CurationNoteWithStat[]>(
+        []
+    );
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [skip, setSkip] = useState<number>(10);
@@ -69,7 +64,7 @@ export default function InfiniteFeed(props: {
     );
 
     async function fetchMoreData(firstLoad?: boolean) {
-        const hasMoreData = (result: Curation[]) => {
+        const hasMoreData = (result: CurationNoteWithStat[]) => {
             if (result.length < 10) {
                 setHasMore(false);
                 setIsLoading(false);
@@ -166,7 +161,7 @@ export default function InfiniteFeed(props: {
             setIsLoading(true);
             const feeds = await fetchNextFeeds({ communityId, tag, curatorId });
             console.log("feeds: ", feeds);
-            const arr = [] as Curation[];
+            const arr = [] as CurationNoteWithStat[];
 
             if (feeds[0]?.n.dateString) setLastUpdated(feeds[0].n.dateString);
 
