@@ -36,8 +36,8 @@ dependencies:
     specifier: 14.0.4
     version: 14.0.4(react-dom@18.2.0)(react@18.2.0)
   nomland.js:
-    specifier: 0.3.2
-    version: 0.3.2(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(typescript@5.1.3)(utf-8-validate@6.0.3)
+    specifier: 0.3.8
+    version: 0.3.8(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(typescript@5.1.3)(utf-8-validate@6.0.3)
   postcss:
     specifier: 8.4.24
     version: 8.4.24
@@ -572,8 +572,8 @@ packages:
       fastq: 1.15.0
     dev: false
 
-  /@nomland/elephant@0.2.8(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(utf-8-validate@6.0.3):
-    resolution: {integrity: sha512-fw4WX9wmu1GmEkK4oQ4NhOH930QgMT7B//fiIz3hND8NFPmX49OfyHAE1mZJYUt3rVeIeQwVf+zXEr+RbbO6Rw==}
+  /@nomland/elephant@0.2.9(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(utf-8-validate@6.0.3):
+    resolution: {integrity: sha512-+h12A1EjJBon1x9lu3TmUqI8V1gwTGInGnpbZHhSsf3oN6fFPaEFYl028vs62/2h5Gg8hrH7m5UqAX0h4nnV5Q==}
     dependencies:
       '@azure/ai-language-text': 1.1.0
       '@mozilla/readability': 0.4.4
@@ -3282,11 +3282,11 @@ packages:
     resolution: {integrity: sha512-y10wOWt8yZpqXmOgRo77WaHEmhYQYGNA6y421PKsKYWEK8aW+cqAphborZDhqfyKrbZEN92CN1X2KbafY2s7Yw==}
     dev: false
 
-  /nomland.js@0.3.2(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(typescript@5.1.3)(utf-8-validate@6.0.3):
-    resolution: {integrity: sha512-gKEhNX5UGoK9JmXJORlZvTFNuYCf0UkFIToTc1sOfs6DPZYBSkwe+nL0huN7DjIpU/2lbksJCT7Mv3JrX3Rf9Q==}
+  /nomland.js@0.3.8(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(typescript@5.1.3)(utf-8-validate@6.0.3):
+    resolution: {integrity: sha512-yA+k6hwudPwzLXTQLS1ZqgWS/weenfCpHNIdr0Fh1Jvtjd3hrzbQVO+s4n0FphacXBaAgef8em2giBWxotP0fw==}
     dependencies:
       '@extractus/article-extractor': 7.3.1(encoding@0.1.13)
-      '@nomland/elephant': 0.2.8(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(utf-8-validate@6.0.3)
+      '@nomland/elephant': 0.2.9(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(utf-8-validate@6.0.3)
       '@urql/core': 4.2.0
       browser-bunyan: 1.8.0
       bunyan: 1.8.15

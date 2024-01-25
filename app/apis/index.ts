@@ -1,9 +1,5 @@
-import { createContract, createIndexer } from "crossbell";
-import { CurationNote } from "nomland.js";
+import { createContract } from "crossbell";
 
-interface CurationStat {
-    replies: number;
-}
 export async function getCharacterData(id: string) {
     const c = createContract();
 
@@ -11,9 +7,4 @@ export async function getCharacterData(id: string) {
         characterId: id,
     });
     return data;
-}
-
-export interface CurationListData {
-    curationList: CurationNote[];
-    curationStat: Map<string, CurationStat>; // curationId -> CurationStat
 }

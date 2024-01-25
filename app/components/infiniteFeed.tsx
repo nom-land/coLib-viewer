@@ -1,6 +1,6 @@
 "use client";
 
-import { CharacterInfo, CurationNoteWithStat } from "nomland.js";
+import { CharacterInfo, FeedNote } from "nomland.js";
 import CurationFeed from "./curationFeed";
 import { useEffect, useState } from "react";
 import { createNomland } from "../config/nomland";
@@ -36,7 +36,7 @@ const fetchNextFeeds = async (params: {
 };
 
 export default function InfiniteFeed(props: {
-    initialNotes: CurationNoteWithStat[];
+    initialNotes: FeedNote[];
     communityId?: string;
     curatorId?: string;
     tag?: string;
@@ -44,12 +44,8 @@ export default function InfiniteFeed(props: {
 }) {
     const { initialNotes, communityId, tag, curatorId, communities } = props;
 
-    const [items, setItems] = useState<CurationNoteWithStat[]>(
-        initialNotes || []
-    );
-    const [upcomingItems, setUpcomingItems] = useState<CurationNoteWithStat[]>(
-        []
-    );
+    const [items, setItems] = useState<FeedNote[]>(initialNotes || []);
+    const [upcomingItems, setUpcomingItems] = useState<FeedNote[]>([]);
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [skip, setSkip] = useState<number>(10);
@@ -64,7 +60,7 @@ export default function InfiniteFeed(props: {
     );
 
     async function fetchMoreData(firstLoad?: boolean) {
-        const hasMoreData = (result: CurationNoteWithStat[]) => {
+        const hasMoreData = (result: FeedNote[]) => {
             if (result.length < 10) {
                 setHasMore(false);
                 setIsLoading(false);
@@ -161,7 +157,7 @@ export default function InfiniteFeed(props: {
             setIsLoading(true);
             const feeds = await fetchNextFeeds({ communityId, tag, curatorId });
             console.log("feeds: ", feeds);
-            const arr = [] as CurationNoteWithStat[];
+            const arr = [] as FeedNote[];
 
             if (feeds[0]?.n.dateString) setLastUpdated(feeds[0].n.dateString);
 

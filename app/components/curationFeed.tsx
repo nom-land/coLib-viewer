@@ -3,15 +3,16 @@ import CharacterHeader from "./characterHeader";
 import LinkPreview from "./linkPreview";
 import NoteStatLine from "./noteStatLine";
 import Tags from "./tags";
-import { CharacterInfo, CurationNoteWithStat } from "nomland.js";
+import { CharacterInfo, FeedNote } from "nomland.js";
 import { CommunityAvatar } from "./communityAvatar";
 import { communityProfiles } from "../config";
 
 export default function CurationFeed(props: {
-    curationNotes: CurationNoteWithStat[];
+    curationNotes: FeedNote[];
     communities?: CharacterInfo[];
+    excludeRecord?: boolean;
 }) {
-    const { curationNotes, communities } = props;
+    const { curationNotes, communities, excludeRecord } = props;
     // TODO?
     const displayCurationNotes = curationNotes.filter((curation) => {
         if (
@@ -56,7 +57,7 @@ export default function CurationFeed(props: {
                                 {communities && (
                                     <div className="absolute right-0 top-0">
                                         <CommunityAvatar
-                                            communityId={cur.n.communityId}
+                                            communityId={cur.n.communityId.toString()}
                                             name={communityData[i].name}
                                             avatar={communityData[i].avatar}
                                             handle={communityData[i].handle}
@@ -75,36 +76,13 @@ export default function CurationFeed(props: {
                                 {/* </blockquote> */}
                             </div>
 
-                            {(cur.n.raw.toCharacter?.metadata?.content as any)
-                                .url ? (
-                                <LinkPreview
-                                    url={
-                                        (
-                                            cur.n.raw.toCharacter?.metadata
-                                                ?.content as any
-                                        ).url
-                                    }
-                                />
-                            ) : (
-                                <div className="flex gap-1 my-5">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
-                                        stroke="currentColor"
-                                        className="w-6 h-6"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
-                                        />
-                                    </svg>
-                                    {cur.record.title}
-                                </div>
+                            {!excludeRecord && cur.record && (
+                                <LinkPreview url={cur.record.metadata.url} />
                             )}
-                            <Tags cid={cur.n.communityId} tags={cur.n.tags} />
+                            <Tags
+                                cid={cur.n.communityId.toString()}
+                                tags={cur.n.tags}
+                            />
 
                             <NoteStatLine
                                 replies={cur.stat.replies || 0}

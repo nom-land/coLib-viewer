@@ -19,7 +19,7 @@ export default function Tags({ tags, cid }: { tags: string[]; cid: string }) {
                             window.open(links[i], "_blank");
                         }}
                     >
-                        <div className="hover:bg-callout-background-focused transition-background duration-200 ease-in-out tag flex justify-center items-center gap-1 mb-2 mr-2">
+                        <div className="cursor-pointer hover:bg-callout-background-focused transition-background duration-200 ease-in-out tag flex justify-center items-center gap-1 mb-2 mr-2">
                             <svg
                                 className="h-4 w-4 text-black"
                                 width="24"

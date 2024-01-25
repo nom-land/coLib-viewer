@@ -1,7 +1,12 @@
+import { FeedNote } from "nomland.js";
 import { createNomland } from "../config/nomland";
 import NoteCard from "./noteCard";
 
-export default async function RepliesList({ params }: { params: { curationId: string; noBorder?: boolean } }) {
+export default async function RepliesList({
+    params,
+}: {
+    params: { curationId: string; noBorder?: boolean };
+}) {
     // character id and note id is split by "-" in curationId
     const { curationId } = params;
     const [id, rid] = curationId.split("-");
@@ -15,15 +20,15 @@ export default async function RepliesList({ params }: { params: { curationId: st
     return (
         <>
             <div>
-                {replies.map((r: any) => (
-                    <div className={borderCss} key={r.postId}>
+                {replies.map((r: FeedNote) => (
+                    <div className={borderCss} key={r.n.postId}>
                         <div>
                             <NoteCard noteType="discussion" note={r}></NoteCard>
                         </div>
                         <div className="ml-[50px]">
                             <RepliesList
                                 params={{
-                                    curationId: r.postId,
+                                    curationId: r.n.postId,
                                     noBorder: true,
                                 }}
                             ></RepliesList>

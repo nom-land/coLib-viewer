@@ -1,7 +1,7 @@
 import RecordCard from "@/app/components/recordCard";
 import { createNomland } from "../../config/nomland";
 import CurationFeed from "@/app/components/curationFeed";
-import { CharacterInfo } from "nomland.js";
+import { CharacterInfo, RecordData } from "nomland.js";
 import { communityProfiles } from "@/app/config";
 import CommunityHeader from "@/app/components/communityHeader";
 
@@ -10,6 +10,11 @@ async function getData(id: string) {
     return await nomland.getRecordCuration(id);
 }
 
+async function getRecord(id: string) {
+    const nomland = createNomland();
+
+    return await nomland.getRecord(id);
+}
 export default async function RecordDisplay({
     params,
 }: {
@@ -18,6 +23,7 @@ export default async function RecordDisplay({
     const rid = params.id;
 
     const { notes, communities } = await getData(rid);
+    const recordData: RecordData = await getRecord(rid);
     const communityInfos = communities.map((c: CharacterInfo) => {
         c.metadata.avatars = [
             communityProfiles.find((p) => p.id === c.characterId.toString())
@@ -29,7 +35,11 @@ export default async function RecordDisplay({
     return (
         <div className="container mx-auto">
             <div className="">
-                <RecordCard id={rid} context="app"></RecordCard>
+                <RecordCard
+                    id={rid}
+                    context="app"
+                    recordData={recordData}
+                ></RecordCard>
 
                 <div className="px-3">
                     <div>
@@ -56,6 +66,7 @@ export default async function RecordDisplay({
                     <CurationFeed
                         curationNotes={notes}
                         communities={communityInfos}
+                        excludeRecord={true}
                     ></CurationFeed>
                 </div>
             </div>

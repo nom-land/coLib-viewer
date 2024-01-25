@@ -4,6 +4,7 @@ import CommunityHeader from "@/app/components/communityHeader";
 import RepliesList from "@/app/components/repliesList";
 import { site } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
+import { FeedNote } from "nomland.js";
 
 export async function generateMetadata({
     params,
@@ -14,10 +15,12 @@ export async function generateMetadata({
     const [cid, rid] = curationId.split("-");
     const note = await getData(cid, rid);
 
+    note?.record?.metadata.title;
+
     return {
-        title: note?.raw?.toCharacter?.metadata?.content?.title || site.title, // TODO:
-        description: note?.content || site.description,
-        icons: note?.curatorAvatars?.[0] || `${site.url}/favicon.ico`,
+        title: note?.record?.metadata.title || site.title, // TODO:
+        description: note?.record?.metadata.description || site.description,
+        icons: note?.n.curatorAvatars[0] || `${site.url}/favicon.ico`,
     };
 }
 
@@ -33,7 +36,7 @@ export default async function CurationPage({
     const note = await getData(cid, rid);
     const repliesCount = await getRepliesCount(cid, rid);
 
-    if (!note) return <div>This is not a valid curation.</div>;
+    if (!note || !note.record) return <div>This is not a valid curation.</div>;
     else
         return (
             <div className="container mx-auto my-5">
@@ -41,14 +44,15 @@ export default async function CurationPage({
                     <div className="lg:order-last">
                         <div className="m-3">
                             <CommunityHeader
-                                communityId={note.communityId}
+                                communityId={note.n.communityId.toString()}
                                 excludeDescription={true}
                             ></CommunityHeader>{" "}
                         </div>
 
                         <RecordCard
-                            id={note?.recordId || ""}
+                            id={note.n.recordId.toString()}
                             context="community"
+                            recordData={note.record}
                         ></RecordCard>
                     </div>
                     <div>
@@ -70,11 +74,13 @@ export default async function CurationPage({
         );
 }
 
-async function getData(characterId: string, noteId: string) {
+async function getData(
+    characterId: string,
+    noteId: string
+): Promise<FeedNote | undefined> {
     const nomland = createNomland();
     try {
         const curationNote = await nomland.getCuration(characterId, noteId);
-
         return curationNote;
     } catch (e) {
         console.log(e);

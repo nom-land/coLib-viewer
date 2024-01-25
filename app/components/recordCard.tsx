@@ -1,39 +1,19 @@
 import Link from "next/link";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { getCharacterData } from "../apis";
 import LinkPreview from "./linkPreview";
-
-interface ArticleData {
-    url?: string;
-    links?: string[];
-    title?: string;
-    description?: string;
-    image?: string;
-    author?: string;
-    content?: string;
-    source?: string;
-    published?: string;
-    ttr?: number;
-}
-
-interface ExtendedArticleData extends ArticleData {
-    authors: string[];
-    language: string;
-    copyright: string;
-    derivation: "original" | "translation" | "unknown";
-    upstream?: string; // if this is translation, then upstrem is the original record
-}
+import { RecordData } from "nomland.js";
 
 export default async function RecordCard({
     id,
     context,
+    recordData,
 }: {
     id: string;
     context: "community" | "app";
+    recordData: RecordData;
 }) {
-    const rData = await getCharacterData(id);
-    const record = { ...(rData.metadata as ExtendedArticleData) };
-    const recordType = (record as any)["record_type"] as string;
+    const record = recordData.metadata as any; // TODO
+    const recordType = record["record_type"] || "post";
     return (
         <div className="w-content md:w-[36rem] card p-5 mx-3 my-5">
             {record.url && <LinkPreview url={record.url} />}
