@@ -17,19 +17,28 @@ export default function UserHeader(props: {
     const id = user.characterId;
 
     return (
-        <div
-            className="flex gap-3 cursor-pointer"
-            onClick={(e) => {
-                e.preventDefault();
-                window.open(`/curator/${id.toString()}`, "_blank");
-            }}
-        >
-            <CharacterAvatar name={name} handle={handle} avatar={avatar} />
+        <div className="flex gap-3 cursor-pointer">
+            <div
+                onClick={(e) => {
+                    e.preventDefault();
+                    window.open(`/curator/${id.toString()}`, "_blank");
+                }}
+                className="cursor-pointer"
+            >
+                <CharacterAvatar name={name} handle={handle} avatar={avatar} />
+            </div>
+
             {!onlyAvatar && (
                 <div>
                     <div>
                         <div className="group relative flex items-center font-extralight text-sm">
-                            <div className="relative hover:bg-gray-200 rounded">
+                            <div
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    window.open(`/curator/${id}`, "_blank");
+                                }}
+                                className="relative hover:bg-gray-200 rounded"
+                            >
                                 @
                                 {handle.length > 14
                                     ? handle.slice(0, 4) +

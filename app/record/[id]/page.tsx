@@ -62,7 +62,7 @@ export default async function RecordDisplay({
 
                     <CurationFeed
                         feeds={feeds}
-                        includeCommunity={true}
+                        showCommunity={true}
                         excludeRecord={true}
                     ></CurationFeed>
                 </div>

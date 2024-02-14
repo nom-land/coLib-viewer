@@ -1,3 +1,5 @@
+"use client";
+
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import UserHeader from "./userHeader";
 import Tags from "./tags";
@@ -44,6 +46,7 @@ export default function NoteCard({
                         community={sharing.community}
                         excludeDescription={true}
                         excludeName={true}
+                        size="s" // TODO: check
                     />
                 </div>
             )}

@@ -39,11 +39,12 @@ const fetchNextFeeds = async (params: {
 
 export default function InfiniteFeed(props: {
     initialNotes: FeedNote[];
+    showCommunity: boolean;
     communityId?: string;
     curatorId?: string;
     tag?: string;
 }) {
-    const { initialNotes, communityId, tag, curatorId } = props;
+    const { initialNotes, communityId, tag, curatorId, showCommunity } = props;
 
     const [items, setItems] = useState<FeedNote[]>(initialNotes || []);
     const [upcomingItems, setUpcomingItems] = useState<FeedNote[]>([]);
@@ -205,7 +206,7 @@ export default function InfiniteFeed(props: {
             <div className="my-3">
                 <MetaLine lastUpdated={lastUpdated} l={0} />
             </div>
-            <CurationFeed feeds={items} includeCommunity={true} />
+            <CurationFeed feeds={items} showCommunity={showCommunity} />
             <InView as="div" onChange={handleInView}>
                 {isLoading && (
                     <div className="flex justify-center my-3">

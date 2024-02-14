@@ -65,6 +65,7 @@ export default async function CuratorPage({
                 </div>
             </div>
             <InfiniteFeed
+                showCommunity={true}
                 initialNotes={feeds}
                 curatorId={user.characterId.toString()}
             ></InfiniteFeed>

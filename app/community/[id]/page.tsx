@@ -69,6 +69,7 @@ export default async function CommunityPage({
                             initialNotes={feeds}
                             communityId={communityId}
                             tag={""}
+                            showCommunity={false}
                         />
                     </section>
                 </div>

@@ -11,25 +11,25 @@ export default function CommunityHeader(props: {
     excludeName?: boolean;
     size?: "s" | "m" | "l";
 }) {
-    const communityProfile = props.community;
+    const { community, size } = props;
 
     return (
         <div>
             <CommunityAvatar
-                name={communityProfile?.metadata?.name || "Unknown"}
-                handle={communityProfile.handle}
+                name={community?.metadata?.name || "Unknown"}
+                handle={community.handle}
                 avatar={
-                    communityProfile?.metadata.avatars
-                        ? communityProfile?.metadata.avatars[0]
+                    community?.metadata.avatars
+                        ? community?.metadata.avatars[0]
                         : ""
                 }
-                size="l"
+                size={size || "l"}
                 excludeName={props.excludeName}
-                communityId={communityProfile.characterId}
+                communityId={community.characterId}
             />
             {!props.excludeDescription && (
                 <DescriptionSection
-                    description={communityProfile?.metadata.bio || ""}
+                    description={community?.metadata.bio || ""}
                 />
             )}
         </div>

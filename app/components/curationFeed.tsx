@@ -10,10 +10,10 @@ import CommunityHeader from "./communityHeader";
 
 export default function CurationFeed(props: {
     feeds: FeedNote[];
-    includeCommunity?: boolean;
+    showCommunity?: boolean;
     excludeRecord?: boolean;
 }) {
-    const { feeds, includeCommunity, excludeRecord } = props;
+    const { feeds, showCommunity, excludeRecord } = props;
 
     return (
         <div className="list-items gap-4">
@@ -29,7 +29,7 @@ export default function CurationFeed(props: {
                                     user={cur.user}
                                     date={cur.note.dateString}
                                 ></UserHeader>
-                                {includeCommunity && (
+                                {showCommunity && (
                                     <div className="absolute right-0 top-0">
                                         <CommunityHeader
                                             community={cur.community}

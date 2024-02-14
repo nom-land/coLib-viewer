@@ -1,30 +1,18 @@
 import InfiniteFeed from "@/app/components/infiniteFeed";
-import { communityProfiles, site } from "@/app/config";
+import { site } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
 import { getFeeds } from "@/app/utils";
-import { UserInfo } from "nomland.js";
 
 async function getInitialData(tag: string) {
     const nomland = createNomland();
 
-    const curationNotes = await nomland.getFeeds({
+    const feedsData = await nomland.getFeeds({
         tag,
     });
 
-    const communities = curationNotes.communities.map((c: UserInfo) => {
-        const p = communityProfiles.find(
-            (p) => p.id.toString() === c.characterId.toString()
-        );
-        if (p) {
-            c.metadata.name = p.name;
-            c.metadata.avatars = [p.image];
-            return c;
-        } else return c;
-    });
+    const feeds = getFeeds(feedsData).feeds;
 
-    const feeds = getFeeds(curationNotes).feeds;
-
-    return { feeds, communities };
+    return { feeds };
 }
 
 export async function generateMetadata({
@@ -44,7 +32,7 @@ export async function generateMetadata({
 export default async function TagPage({ params }: { params: { tag: string } }) {
     const tag = decodeURIComponent(params.tag);
 
-    const { feeds, communities } = await getInitialData(tag);
+    const { feeds } = await getInitialData(tag);
     return (
         <div className="container mx-auto my-5 p-3">
             <div>
@@ -54,7 +42,11 @@ export default async function TagPage({ params }: { params: { tag: string } }) {
                             #{tag}
                         </div>
 
-                        <InfiniteFeed initialNotes={feeds} tag={tag} />
+                        <InfiniteFeed
+                            showCommunity={true}
+                            initialNotes={feeds}
+                            tag={tag}
+                        />
                     </section>
                 </div>
             </div>
