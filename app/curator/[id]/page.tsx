@@ -1,25 +1,28 @@
-import CharacterHeader from "@/app/components/characterHeader";
+import UserHeader from "@/app/components/userHeader";
 import CommunityHeader from "@/app/components/communityHeader";
 import InfiniteFeed from "@/app/components/infiniteFeed";
 import { communityProfiles } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
-import { CharacterInfo } from "nomland.js";
+import { getFeeds } from "@/app/utils";
+import { UserInfo } from "nomland.js";
 
 export default async function CuratorPage({
     params,
 }: {
     params: { id: string };
 }) {
+    const userId = params.id;
     const nomland = createNomland();
-    const { curator, communities } = await nomland.getCharacter(params.id);
+    const communities = await nomland.getUserCommunities(userId);
 
-    const displayCommunities = communities.filter((c: CharacterInfo) => {
+    // TODO: replace filter communities
+    const displayCommunities = communities.filter((c: UserInfo) => {
         if (communityProfiles.find((p) => p.id === c.characterId.toString())) {
             return true;
         }
     });
 
-    const communityInfos = displayCommunities.map((c: CharacterInfo) => {
+    const communityInfos = displayCommunities.map((c: UserInfo) => {
         c.metadata.avatars = [
             communityProfiles.find((p) => p.id === c.characterId.toString())
                 ?.image || "",
@@ -27,36 +30,32 @@ export default async function CuratorPage({
         return c;
     });
 
-    const curationNotes = await nomland.getFeeds({
-        curator: curator.characterId,
+    const feedsData = await nomland.getFeeds({
+        user: userId,
     });
 
-    const avatar = curator.metadata?.avatars
-        ? curator.metadata?.avatars[0]
-        : "";
+    const { feeds, user } = getFeeds(feedsData);
+    if (!user) return <div>NOT FOUND</div>;
+
+    const avatar = user.metadata?.avatars ? user.metadata?.avatars[0] : "";
 
     return (
         <div className="container mx-auto my-5 p-3">
             <div className="card my-3 flex gap-5">
                 <div>
-                    <CharacterHeader
-                        id={curator.characterId.toString()}
-                        name={curator.metadata?.name || "Unknown"}
-                        handle={curator.handle}
-                        avatar={avatar}
-                    ></CharacterHeader>
+                    <UserHeader user={user}></UserHeader>
                 </div>
 
                 <div>
                     <div>Communities</div>
                     <div className="flex relative">
-                        {displayCommunities.map((community: CharacterInfo) => (
+                        {communityInfos.map((community: UserInfo) => (
                             <div
                                 key={community.characterId.toString()}
                                 className="mx-1"
                             >
                                 <CommunityHeader
-                                    communityId={community.characterId.toString()}
+                                    community={community}
                                     excludeDescription={true}
                                     excludeName={true}
                                 ></CommunityHeader>
@@ -66,9 +65,8 @@ export default async function CuratorPage({
                 </div>
             </div>
             <InfiniteFeed
-                initialNotes={curationNotes}
-                curatorId={curator.characterId.toString()}
-                communities={communityInfos}
+                initialNotes={feeds}
+                curatorId={user.characterId.toString()}
             ></InfiniteFeed>
         </div>
     );

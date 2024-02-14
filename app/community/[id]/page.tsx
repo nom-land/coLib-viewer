@@ -1,16 +1,20 @@
 import React from "react";
 import CommunityHeader from "../../components/communityHeader";
-import CharacterAvatar from "../../components/characterAvatar";
 import { createNomland } from "@/app/config/nomland";
 import InfiniteFeed from "@/app/components/infiniteFeed";
 import { communityProfiles, site } from "@/app/config";
-import Link from "next/link";
+import { getFeeds } from "@/app/utils";
+import UserHeader from "@/app/components/userHeader";
+import { UserInfo } from "nomland.js";
 
 async function getInitialData(communityId: string) {
     const nomland = createNomland();
-    const curationNotes = await nomland.getFeeds({ community: communityId });
+    const feedsData = getFeeds(
+        await nomland.getFeeds({ community: communityId })
+    );
+
     const members = await nomland.getCommunityMembers(communityId);
-    return { curationNotes, members };
+    return { feeds: feedsData.feeds, members, community: feedsData.community };
 }
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
@@ -29,46 +33,40 @@ export default async function CommunityPage({
     params: { id: string };
 }) {
     const communityId = params.id;
-    const { members, curationNotes } = await getInitialData(communityId);
+    const data = await getInitialData(communityId);
+    if (!data) {
+        return <div>NOT FOUND</div>;
+    }
+
+    const { members, feeds, community } = data;
+    if (!community) return <div>NOT FOUND</div>;
 
     return (
         //TODO: if this is not a community character...
         <div className="container mx-auto my-5 p-3">
             <div>
-                <CommunityHeader communityId={communityId}></CommunityHeader>
+                <CommunityHeader community={community}></CommunityHeader>
 
                 <div className="gap-5 w-full md:flex md:my-3">
                     <section className="my-3">
                         <div className="gap-1 grid grid-cols-8 md:grid-cols-5">
-                            {members.map((member: any) => (
+                            {members.map((member: UserInfo) => (
                                 <div
                                     className="mb-1"
                                     key={member.characterId.toString()}
                                 >
-                                    <Link
-                                        href={`/curator/${member.characterId.toString()}`}
-                                        target="_blank"
-                                    >
-                                        <CharacterAvatar
-                                            name={
-                                                member.metadata?.name ||
-                                                "Unknown"
-                                            }
-                                            handle={member.handle}
-                                            avatar={
-                                                (member.metadata?.avatars ||
-                                                    [])[0]
-                                            }
-                                            size="m"
-                                        />
-                                    </Link>
+                                    <UserHeader
+                                        user={member}
+                                        size="m"
+                                        onlyAvatar={true}
+                                    ></UserHeader>
                                 </div>
                             ))}
                         </div>
                     </section>
                     <section className="md:w-2/3 md:flex-grow">
                         <InfiniteFeed
-                            initialNotes={curationNotes}
+                            initialNotes={feeds}
                             communityId={communityId}
                             tag={""}
                         />

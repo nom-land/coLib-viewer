@@ -1,39 +1,35 @@
-import { Character } from "crossbell";
-import { getCharacterData } from "../apis";
-import { communityProfiles } from "../config";
+"use client";
+
 import { CommunityAvatar } from "./communityAvatar";
 import DescriptionSection from "./descriptionSection";
+import { UserInfo } from "nomland.js";
 
 // return a component that displays the community header
-export default async function CommunityHeader(props: {
-    communityId: string;
+export default function CommunityHeader(props: {
+    community: UserInfo;
     excludeDescription?: boolean;
     excludeName?: boolean;
     size?: "s" | "m" | "l";
 }) {
-    let communityChar = {} as Character;
-    try {
-        communityChar = await getCharacterData(props.communityId);
-    } catch (e) {
-        console.log("error getting community data", e);
-    }
-    const community = communityProfiles.find(
-        (p) => p.id.toString() === props.communityId.toString()
-    );
+    const communityProfile = props.community;
 
     return (
         <div>
             <CommunityAvatar
-                name={communityChar?.metadata?.name || ""}
-                handle={communityChar?.handle}
-                avatar={community?.image!}
+                name={communityProfile?.metadata?.name || "Unknown"}
+                handle={communityProfile.handle}
+                avatar={
+                    communityProfile?.metadata.avatars
+                        ? communityProfile?.metadata.avatars[0]
+                        : ""
+                }
                 size="l"
                 excludeName={props.excludeName}
-                communityId={props.communityId}
+                communityId={communityProfile.characterId}
             />
             {!props.excludeDescription && (
                 <DescriptionSection
-                    description={community?.description || ""}
+                    description={communityProfile?.metadata.bio || ""}
                 />
             )}
         </div>

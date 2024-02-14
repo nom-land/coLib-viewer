@@ -2,15 +2,17 @@ import CommunityHeader from "@/app/components/communityHeader";
 import InfiniteFeed from "@/app/components/infiniteFeed";
 import { communityProfiles, site } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
+import { getFeeds } from "@/app/utils";
 
 async function getInitialData(communityId: string, tag: string) {
     const nomland = createNomland();
-    const curationNotes = await nomland.getFeeds({
+    const feedsData = await nomland.getFeeds({
         community: communityId,
         tag,
     });
 
-    return { curationNotes };
+    const { feeds, community } = getFeeds(feedsData);
+    return { feeds, community };
 }
 
 export async function generateMetadata({
@@ -38,13 +40,18 @@ export default async function CommunityTagPage({
     const communityId = params.id;
     const tag = decodeURIComponent(params.tag);
 
-    const { curationNotes } = await getInitialData(communityId, tag);
+    const data = await getInitialData(communityId, tag);
+
+    if (!data || !data.community) {
+        return <div>NOT FOUND</div>;
+    }
+    const { feeds, community } = data;
 
     return (
         <div className="container mx-auto my-5 p-3">
             <div>
                 <CommunityHeader
-                    communityId={communityId}
+                    community={community}
                     excludeDescription={true}
                 ></CommunityHeader>
 
@@ -55,7 +62,7 @@ export default async function CommunityTagPage({
                         </div>
 
                         <InfiniteFeed
-                            initialNotes={curationNotes}
+                            initialNotes={feeds}
                             communityId={communityId}
                             tag={tag}
                         />

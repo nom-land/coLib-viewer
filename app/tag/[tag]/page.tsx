@@ -1,30 +1,30 @@
-import { getCharacterData } from "@/app/apis";
 import InfiniteFeed from "@/app/components/infiniteFeed";
 import { communityProfiles, site } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
-import { CharacterInfo } from "nomland.js";
+import { getFeeds } from "@/app/utils";
+import { UserInfo } from "nomland.js";
 
 async function getInitialData(tag: string) {
     const nomland = createNomland();
+
     const curationNotes = await nomland.getFeeds({
         tag,
     });
 
-    const communitiesInfo: CharacterInfo[] = await Promise.all(
-        communityProfiles.map(async (p) => {
-            const char = await getCharacterData(p.id);
-            return {
-                handle: char.handle,
-                characterId: p.id,
-                metadata: {
-                    name: p.name,
-                    avatars: [p.image],
-                },
-            } as CharacterInfo;
-        })
-    );
+    const communities = curationNotes.communities.map((c: UserInfo) => {
+        const p = communityProfiles.find(
+            (p) => p.id.toString() === c.characterId.toString()
+        );
+        if (p) {
+            c.metadata.name = p.name;
+            c.metadata.avatars = [p.image];
+            return c;
+        } else return c;
+    });
 
-    return { curationNotes, communitiesInfo };
+    const feeds = getFeeds(curationNotes).feeds;
+
+    return { feeds, communities };
 }
 
 export async function generateMetadata({
@@ -44,8 +44,7 @@ export async function generateMetadata({
 export default async function TagPage({ params }: { params: { tag: string } }) {
     const tag = decodeURIComponent(params.tag);
 
-    const { curationNotes, communitiesInfo } = await getInitialData(tag);
-
+    const { feeds, communities } = await getInitialData(tag);
     return (
         <div className="container mx-auto my-5 p-3">
             <div>
@@ -55,11 +54,7 @@ export default async function TagPage({ params }: { params: { tag: string } }) {
                             #{tag}
                         </div>
 
-                        <InfiniteFeed
-                            initialNotes={curationNotes}
-                            tag={tag}
-                            communities={communitiesInfo}
-                        />
+                        <InfiniteFeed initialNotes={feeds} tag={tag} />
                     </section>
                 </div>
             </div>

@@ -1,16 +1,15 @@
-"use client";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import CharacterHeader from "./characterHeader";
+import UserHeader from "./userHeader";
 import Tags from "./tags";
-import { FeedNote } from "nomland.js";
 import Image from "next/image";
 import { NoteMetadataAttachmentBase } from "crossbell";
 import CommunityHeader from "./communityHeader";
 import LinkPreview from "./linkPreview";
+import { FeedNote } from "../utils";
 
 // return a component
 export default function NoteCard({
-    note,
+    note: sharing,
     noteType,
     showCommunity = false,
 }: {
@@ -18,7 +17,7 @@ export default function NoteCard({
     noteType: "curation" | "discussion";
     showCommunity?: boolean;
 }) {
-    const curationUrl = note.record?.metadata.url;
+    const curationUrl = sharing.entry?.metadata.url;
     let noteCss = "";
     if (noteType === "curation") {
         noteCss = "px-3 py-5 w-content";
@@ -30,38 +29,34 @@ export default function NoteCard({
     return (
         <div
             className={noteCss}
-            key={note.n.raw.transactionHash}
+            key={sharing.note.raw.transactionHash}
             onClick={(e) => {
                 if (noteType === "discussion" && curationUrl) {
                     e.preventDefault();
-                    window.open(`/curation/${note.n.postId}`, "_blank");
+                    window.open(`/curation/${sharing.note.postId}`, "_blank");
                 }
             }}
         >
-            <CharacterHeader
-                id={note.n.postId.split("-")[0]}
-                name={note.n.curatorName}
-                date={note.n.dateString}
-                handle={note.n.curatorHandle}
-                avatar={note.n.curatorAvatars[0]}
-            />
+            <UserHeader user={sharing.user} date={sharing.note.dateString} />
             {showCommunity && (
                 <div className="text-sm text-gray-500 dark:text-gray-400">
                     <CommunityHeader
-                        communityId={note.n.communityId.toString()}
+                        community={sharing.community}
                         excludeDescription={true}
                         excludeName={true}
                     />
                 </div>
             )}
-            {note.n.title.length > 0 && (
-                <div className="text-2xl font-bold my-3">{note.n.title}</div>
+            {sharing.note.title.length > 0 && (
+                <div className="text-2xl font-bold my-3">
+                    {sharing.note.title}
+                </div>
             )}
             <div className="my-3">
-                <ReactMarkdown>{note.n.content}</ReactMarkdown>
+                <ReactMarkdown>{sharing.note.content}</ReactMarkdown>
             </div>
             <div>
-                {note.n.attachments?.map(
+                {sharing.note.attachments?.map(
                     (
                         a: NoteMetadataAttachmentBase<"address" | "content">,
                         i: number
@@ -89,8 +84,8 @@ export default function NoteCard({
                 <LinkPreview url={curationUrl} />
             )}
             <Tags
-                cid={note.n.communityId?.toString()}
-                tags={note.n.tags}
+                cid={sharing.note.communityId?.toString()}
+                tags={sharing.note.tags}
             ></Tags>
         </div>
     );

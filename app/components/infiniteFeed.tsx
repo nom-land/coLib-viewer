@@ -1,11 +1,11 @@
 "use client";
 
-import { CharacterInfo, FeedNote } from "nomland.js";
 import CurationFeed from "./curationFeed";
 import { useEffect, useState } from "react";
 import { createNomland } from "../config/nomland";
 import { InView } from "react-intersection-observer";
 import { MetaLine } from "./metaLine";
+import { FeedNote, getFeeds } from "../utils";
 
 const fetchNextFeeds = async (params: {
     communityId?: string;
@@ -17,15 +17,17 @@ const fetchNextFeeds = async (params: {
     try {
         const nomland = createNomland();
         const options = cur ? { cursor: cur } : {};
-        const curationNotes = await nomland.getFeeds(
+        const feedsData = await nomland.getFeeds(
             {
                 community: communityId,
-                curator: curatorId,
+                user: curatorId,
                 tag,
             },
             options
         );
-        return curationNotes;
+
+        const { feeds } = getFeeds(feedsData);
+        return feeds;
     } catch (e) {
         console.error(
             "fetchNextFeeds(" + communityId + ", " + cur + ") fails: ",
@@ -40,9 +42,8 @@ export default function InfiniteFeed(props: {
     communityId?: string;
     curatorId?: string;
     tag?: string;
-    communities?: CharacterInfo[];
 }) {
-    const { initialNotes, communityId, tag, curatorId, communities } = props;
+    const { initialNotes, communityId, tag, curatorId } = props;
 
     const [items, setItems] = useState<FeedNote[]>(initialNotes || []);
     const [upcomingItems, setUpcomingItems] = useState<FeedNote[]>([]);
@@ -56,7 +57,7 @@ export default function InfiniteFeed(props: {
     const [inView, setInView] = useState(false);
 
     const [lastUpdated, setLastUpdated] = useState<string>(
-        initialNotes[0]?.n.dateString || ""
+        initialNotes[0]?.note.dateString || ""
     );
 
     async function fetchMoreData(firstLoad?: boolean) {
@@ -77,7 +78,7 @@ export default function InfiniteFeed(props: {
                 return;
             }
 
-            const cur = upcomingItems[upcomingItems.length - 1].n.postId;
+            const cur = upcomingItems[upcomingItems.length - 1].note.postId;
 
             setItems((prevItems) => [...prevItems, ...upcomingItems]);
             setUpcomingItems([]);
@@ -102,7 +103,7 @@ export default function InfiniteFeed(props: {
                 return;
             }
 
-            let cur = initialNotes[initialNotes.length - 1].n.postId;
+            let cur = initialNotes[initialNotes.length - 1].note.postId;
 
             const curationNotes = await fetchNextFeeds({
                 communityId,
@@ -117,7 +118,7 @@ export default function InfiniteFeed(props: {
                 return;
             }
 
-            cur = curationNotes[curationNotes.length - 1].n.postId;
+            cur = curationNotes[curationNotes.length - 1].note.postId;
             const upcomingNotes = await fetchNextFeeds({
                 communityId,
                 tag,
@@ -156,14 +157,15 @@ export default function InfiniteFeed(props: {
             // check if the current feed is newest, if not add it to the top
             setIsLoading(true);
             const feeds = await fetchNextFeeds({ communityId, tag, curatorId });
-            console.log("feeds: ", feeds);
+
             const arr = [] as FeedNote[];
 
-            if (feeds[0]?.n.dateString) setLastUpdated(feeds[0].n.dateString);
+            if (feeds[0]?.note.dateString)
+                setLastUpdated(feeds[0].note.dateString);
 
             for (let i = 0; i < feeds.length; i++) {
                 if (initialNotes[0])
-                    if (feeds[i].n.postId === initialNotes[0].n.postId) {
+                    if (feeds[i].note.postId === initialNotes[0].note.postId) {
                         break;
                     } else {
                         arr.push(feeds[i]);
@@ -203,7 +205,7 @@ export default function InfiniteFeed(props: {
             <div className="my-3">
                 <MetaLine lastUpdated={lastUpdated} l={0} />
             </div>
-            <CurationFeed curationNotes={items} communities={communities} />
+            <CurationFeed feeds={items} includeCommunity={true} />
             <InView as="div" onChange={handleInView}>
                 {isLoading && (
                     <div className="flex justify-center my-3">

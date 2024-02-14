@@ -1,20 +1,21 @@
 import RecordCard from "@/app/components/recordCard";
 import { createNomland } from "../../config/nomland";
 import CurationFeed from "@/app/components/curationFeed";
-import { CharacterInfo, RecordData } from "nomland.js";
-import { communityProfiles } from "@/app/config";
-import CommunityHeader from "@/app/components/communityHeader";
+import { getFeeds } from "@/app/utils";
 
 async function getData(id: string) {
     const nomland = createNomland();
-    return await nomland.getRecordCuration(id);
+
+    const data = await nomland.getEntrySharings(id);
+
+    const { feeds, entry } = getFeeds(data);
+
+    return {
+        feeds,
+        entry,
+    };
 }
 
-async function getRecord(id: string) {
-    const nomland = createNomland();
-
-    return await nomland.getRecord(id);
-}
 export default async function RecordDisplay({
     params,
 }: {
@@ -22,15 +23,9 @@ export default async function RecordDisplay({
 }) {
     const rid = params.id;
 
-    const { notes, communities } = await getData(rid);
-    const recordData: RecordData = await getRecord(rid);
-    const communityInfos = communities.map((c: CharacterInfo) => {
-        c.metadata.avatars = [
-            communityProfiles.find((p) => p.id === c.characterId.toString())
-                ?.image || "",
-        ];
-        return c;
-    });
+    const { feeds, entry } = await getData(rid);
+
+    if (!entry) return <div>NOT FOUND</div>;
 
     return (
         <div className="container mx-auto">
@@ -38,19 +33,21 @@ export default async function RecordDisplay({
                 <RecordCard
                     id={rid}
                     context="app"
-                    recordData={recordData}
+                    recordData={entry}
                 ></RecordCard>
 
-                <div className="px-3">
+                {/* TODO: get related communities from sdk */}
+                {/* <div className="px-3">
                     <div>
                         <div>Related Communities:</div>
                         <div className="flex relative">
-                            {communityInfos.map((community: CharacterInfo) => (
+                            {communityInfos.map((community: UserInfo) => (
                                 <div
                                     key={community.characterId.toString()}
                                     className="mx-1"
                                 >
                                     <CommunityHeader
+                                        community={community}
                                         communityId={community.characterId.toString()}
                                         excludeDescription={true}
                                         excludeName={true}
@@ -59,13 +56,13 @@ export default async function RecordDisplay({
                             ))}
                         </div>
                     </div>
-                </div>
+                </div> */}
                 <div className="px-3">
                     <div>Curated by:</div>
 
                     <CurationFeed
-                        curationNotes={notes}
-                        communities={communityInfos}
+                        feeds={feeds}
+                        includeCommunity={true}
                         excludeRecord={true}
                     ></CurationFeed>
                 </div>

@@ -1,67 +1,40 @@
+"use client";
+
 import Link from "next/link";
-import CharacterHeader from "./characterHeader";
+import UserHeader from "./userHeader";
 import LinkPreview from "./linkPreview";
 import NoteStatLine from "./noteStatLine";
 import Tags from "./tags";
-import { CharacterInfo, FeedNote } from "nomland.js";
-import { CommunityAvatar } from "./communityAvatar";
-import { communityProfiles } from "../config";
+import { FeedNote } from "../utils";
+import CommunityHeader from "./communityHeader";
 
 export default function CurationFeed(props: {
-    curationNotes: FeedNote[];
-    communities?: CharacterInfo[];
+    feeds: FeedNote[];
+    includeCommunity?: boolean;
     excludeRecord?: boolean;
 }) {
-    const { curationNotes, communities, excludeRecord } = props;
-    // TODO?
-    const displayCurationNotes = curationNotes.filter((curation) => {
-        if (
-            communityProfiles.find(
-                (p) => p.id === curation.n.communityId.toString()
-            )
-        ) {
-            return curation;
-        }
-    });
-    // TODO END
-    let communityData = [] as any[];
-    if (communities)
-        communityData = displayCurationNotes.map((curation) => {
-            const c = communities.find(
-                (c) =>
-                    c.characterId.toString() ===
-                    curation.n.communityId.toString()
-            );
-            return {
-                name: c?.metadata?.name || "Unknown",
-                avatar: c?.metadata?.avatars ? c?.metadata?.avatars[0] : "",
-                handle: c?.handle || "",
-            };
-        });
+    const { feeds, includeCommunity, excludeRecord } = props;
 
     return (
         <div className="list-items gap-4">
-            {displayCurationNotes.map((cur, i) => (
+            {feeds.map((cur, i) => (
                 <div className="card my-3" key={i}>
-                    <Link key={cur.n.postId} href={`/curation/${cur.n.postId}`}>
+                    <Link
+                        key={cur.note.postId}
+                        href={`/curation/${cur.note.postId}`}
+                    >
                         <div>
                             <div className="relative">
-                                <CharacterHeader
-                                    id={cur.n.postId.split("-")[0]}
-                                    name={cur.n.curatorName}
-                                    handle={cur.n.curatorHandle}
-                                    avatar={cur.n.curatorAvatars[0]}
-                                    date={cur.n.dateString}
-                                ></CharacterHeader>
-
-                                {communities && (
+                                <UserHeader
+                                    user={cur.user}
+                                    date={cur.note.dateString}
+                                ></UserHeader>
+                                {includeCommunity && (
                                     <div className="absolute right-0 top-0">
-                                        <CommunityAvatar
-                                            communityId={cur.n.communityId.toString()}
-                                            name={communityData[i].name}
-                                            avatar={communityData[i].avatar}
-                                            handle={communityData[i].handle}
+                                        <CommunityHeader
+                                            community={cur.community}
                                             excludeName={true}
+                                            excludeDescription={true}
                                             size="s"
                                         />
                                     </div>
@@ -71,21 +44,21 @@ export default function CurationFeed(props: {
                             <div className="my-3">
                                 {/* <blockquote className="py-2 px-3 my-4 border-l-4 border-gray-300 dark:border-gray-500"> */}
                                 <div className="leading-relaxed text-gray-900 whitespace-pre-line">
-                                    {cur.n.content}
+                                    {cur.note.content}
                                 </div>
                                 {/* </blockquote> */}
                             </div>
 
-                            {!excludeRecord && cur.record && (
-                                <LinkPreview url={cur.record.metadata.url} />
+                            {!excludeRecord && cur.entry && (
+                                <LinkPreview url={cur.entry.metadata.url} />
                             )}
                             <Tags
-                                cid={cur.n.communityId.toString()}
-                                tags={cur.n.tags}
+                                cid={cur.note.communityId.toString()}
+                                tags={cur.note.tags}
                             />
 
                             <NoteStatLine
-                                replies={cur.stat.replies || 0}
+                                replies={cur.note.repliesCount || 0}
                             ></NoteStatLine>
                         </div>
                     </Link>
