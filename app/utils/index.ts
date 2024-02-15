@@ -1,5 +1,5 @@
 import { EntryInfo, UserInfo, UserNote } from "nomland.js";
-import { communityProfiles } from "../config";
+import { blacklistCommunities, communityProfiles } from "../config";
 
 export interface FeedNote {
     note: UserNote;
@@ -16,10 +16,12 @@ export function shortenUrl(url: string, length?: number) {
         : url;
 }
 
-export function getCommunity(community: UserInfo) {
-    const c = communityProfiles.find(
-        (p) => p.id === community.characterId.toString()
-    );
+export function getCommunity(community: UserInfo, noBl?: boolean) {
+    const useBl = !noBl;
+    if (useBl) {
+        if (blacklistCommunities.includes(community.characterId)) return null;
+    }
+    const c = communityProfiles.find((p) => p.id === community.characterId);
     if (!c) return community;
 
     community.metadata.name = c.name;
@@ -41,15 +43,18 @@ function getFeedsData(data: {
             const [userId] = note.postId.split("-");
 
             const community = communities.find(
-                (c) => c.characterId === note.communityId?.toString()
+                (c) => c.characterId === note.contextId
             );
-            const entry = entries.find(
-                (e) => e.characterId === note.entryId?.toString()
-            );
+
+            if (!community) {
+                console.log(communities, note);
+            }
+            const entry = entries.find((e) => e.characterId === note.entryId);
             const user = users.find((u) => u.characterId === userId);
 
-            // community and entry can be null if it's a discussion note
-            if (!user) {
+            // entry can be null if it's a discussion note
+            // p.s. for discussion note, community id will be the same as the original one
+            if (!user || !community) {
                 return null;
             } else {
                 return {
@@ -60,7 +65,7 @@ function getFeedsData(data: {
                 };
             }
         })
-        .filter((f) => !!f);
+        .filter((f) => f !== null);
     return feeds as FeedNote[];
 }
 
@@ -72,7 +77,8 @@ export function getFeeds(
               entries: EntryInfo[];
               users: UserInfo[];
           }
-        | undefined
+        | undefined,
+    noBl?: boolean
 ) {
     if (!data) {
         return {
@@ -84,7 +90,9 @@ export function getFeeds(
         };
     }
     const { notes, users, entries, communities } = data;
-    const detailedCommunities = communities.map((c) => getCommunity(c));
+    const detailedCommunities = communities
+        .map((c) => getCommunity(c, noBl))
+        .filter((c) => !!c) as UserInfo[];
 
     return {
         feeds: getFeedsData({

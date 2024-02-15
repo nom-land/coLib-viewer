@@ -36,8 +36,8 @@ dependencies:
     specifier: 14.0.4
     version: 14.0.4(react-dom@18.2.0)(react@18.2.0)
   nomland.js:
-    specifier: 0.4.4
-    version: 0.4.4(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(typescript@5.1.3)(utf-8-validate@6.0.3)
+    specifier: 0.4.5
+    version: 0.4.5(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(typescript@5.1.3)(utf-8-validate@6.0.3)
   postcss:
     specifier: 8.4.24
     version: 8.4.24
@@ -3356,8 +3356,8 @@ packages:
     resolution: {integrity: sha512-y10wOWt8yZpqXmOgRo77WaHEmhYQYGNA6y421PKsKYWEK8aW+cqAphborZDhqfyKrbZEN92CN1X2KbafY2s7Yw==}
     dev: false
 
-  /nomland.js@0.4.4(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(typescript@5.1.3)(utf-8-validate@6.0.3):
-    resolution: {integrity: sha512-UxafSheAmbt+1Y3PD5uUsQqa0TRoSEDt8hzcI1Ge8DkbG7zF0GkHGniGyjXQxXbsncXqmPzW+ufgKPmkW7M7zw==}
+  /nomland.js@0.4.5(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(typescript@5.1.3)(utf-8-validate@6.0.3):
+    resolution: {integrity: sha512-akJf6R/JLI+AHBdqjLblMX8xP8zI0GIuWGSybrNb9E4smBuWuJ7Nkc4bqX8ePG4d09sbHxGS6V08xxLz67pMbQ==}
     dependencies:
       '@extractus/article-extractor': 7.3.1(encoding@0.1.13)
       '@nomland/elephant': 0.2.9(bufferutil@4.0.8)(canvas@2.11.2)(encoding@0.1.13)(utf-8-validate@6.0.3)

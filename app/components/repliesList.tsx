@@ -43,5 +43,5 @@ async function getReplies(characterId: string, noteId: string) {
     const nomland = createNomland();
     const replies = await nomland.getDiscussions(characterId, noteId);
 
-    return getFeeds(replies);
+    return getFeeds(replies, true);
 }

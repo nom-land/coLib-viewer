@@ -62,6 +62,8 @@ export const communityProfiles = [
     },
 ];
 
+export const blacklistCommunities = ["59718", "59909", "60547", "60016"];
+
 export const site = {
     title: "CoLib: Community Library",
     description: "Library collectively maintained by community",

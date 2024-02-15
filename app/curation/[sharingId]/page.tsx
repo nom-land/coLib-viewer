@@ -38,7 +38,7 @@ export default async function CurationPage({
 
     if (!sharing) return <div>This is not a valid curation.</div>;
 
-    const c = getCommunity(sharing.community);
+    const c = getCommunity(sharing.community, true)!;
 
     sharing.community = c;
 

@@ -1,9 +1,8 @@
 import UserHeader from "@/app/components/userHeader";
 import CommunityHeader from "@/app/components/communityHeader";
 import InfiniteFeed from "@/app/components/infiniteFeed";
-import { communityProfiles } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
-import { getFeeds } from "@/app/utils";
+import { getCommunity, getFeeds } from "@/app/utils";
 import { UserInfo } from "nomland.js";
 
 export default async function CuratorPage({
@@ -13,22 +12,9 @@ export default async function CuratorPage({
 }) {
     const userId = params.id;
     const nomland = createNomland();
-    const communities = await nomland.getUserCommunities(userId);
-
-    // TODO: replace filter communities
-    const displayCommunities = communities.filter((c: UserInfo) => {
-        if (communityProfiles.find((p) => p.id === c.characterId.toString())) {
-            return true;
-        }
-    });
-
-    const communityInfos = displayCommunities.map((c: UserInfo) => {
-        c.metadata.avatars = [
-            communityProfiles.find((p) => p.id === c.characterId.toString())
-                ?.image || "",
-        ];
-        return c;
-    });
+    const communities = (await nomland.getUserCommunities(userId))
+        .map((c: UserInfo) => getCommunity(c))
+        .filter((c: UserInfo | null) => !!c) as UserInfo[];
 
     const feedsData = await nomland.getFeeds({
         user: userId,
@@ -36,8 +22,6 @@ export default async function CuratorPage({
 
     const { feeds, user } = getFeeds(feedsData);
     if (!user) return <div>NOT FOUND</div>;
-
-    const avatar = user.metadata?.avatars ? user.metadata?.avatars[0] : "";
 
     return (
         <div className="container mx-auto my-5 p-3">
@@ -49,11 +33,8 @@ export default async function CuratorPage({
                 <div>
                     <div>Communities</div>
                     <div className="flex relative">
-                        {communityInfos.map((community: UserInfo) => (
-                            <div
-                                key={community.characterId.toString()}
-                                className="mx-1"
-                            >
+                        {communities.map((community: UserInfo) => (
+                            <div key={community.characterId} className="mx-1">
                                 <CommunityHeader
                                     community={community}
                                     excludeDescription={true}

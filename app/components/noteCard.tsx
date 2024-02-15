@@ -87,7 +87,7 @@ export default function NoteCard({
                 <LinkPreview url={curationUrl} />
             )}
             <Tags
-                cid={sharing.note.communityId?.toString()}
+                cid={sharing.note.contextId?.toString()}
                 tags={sharing.note.tags}
             ></Tags>
         </div>

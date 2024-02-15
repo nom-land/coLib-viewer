@@ -53,7 +53,7 @@ export default function CurationFeed(props: {
                                 <LinkPreview url={cur.entry.metadata.url} />
                             )}
                             <Tags
-                                cid={cur.note.communityId.toString()}
+                                cid={cur.note.contextId.toString()}
                                 tags={cur.note.tags}
                             />
 
