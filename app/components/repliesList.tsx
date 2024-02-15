@@ -1,6 +1,7 @@
 import { createNomland } from "../config/nomland";
 import NoteCard from "./noteCard";
 import { getFeeds, FeedNote } from "../utils";
+import SharingCard from "./sharingCard";
 
 export default async function RepliesList({
     params,
@@ -22,7 +23,19 @@ export default async function RepliesList({
                 {replies.map((r: FeedNote) => (
                     <div className={borderCss} key={r.note.postId}>
                         <div>
-                            <NoteCard noteType="discussion" note={r}></NoteCard>
+                            {r.entry ? (
+                                <SharingCard
+                                    note={r.note}
+                                    user={r.user}
+                                    entry={r.entry}
+                                    community={r.community}
+                                ></SharingCard>
+                            ) : (
+                                <NoteCard
+                                    noteType="discussion"
+                                    note={r}
+                                ></NoteCard>
+                            )}
                         </div>
                         <div className="ml-[50px]">
                             <RepliesList
