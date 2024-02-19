@@ -2,7 +2,7 @@ import { NoteMetadataAttachmentBase } from "crossbell";
 import { UserNote } from "nomland.js";
 import Image from "next/image";
 
-export function Attachments(props: { note: UserNote }) {
+export default function Attachments(props: { note: UserNote }) {
     const { note } = props;
     return (
         <div>

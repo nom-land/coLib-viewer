@@ -4,7 +4,8 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import UserHeader from "./userHeader";
 import CommunityHeader from "./communityHeader";
 import { FeedNote } from "../utils";
-import { Attachments } from "./attachments";
+import Attachments from "./attachments";
+import Tags from "./tags";
 
 // return a component
 export default function NoteCard({
@@ -44,6 +45,10 @@ export default function NoteCard({
                 <ReactMarkdown>{sharing.note.content}</ReactMarkdown>
             </div>
             <Attachments note={sharing.note} />
+            <Tags
+                cid={sharing.community.characterId}
+                tags={sharing.note.tags}
+            />
         </div>
     );
 }
