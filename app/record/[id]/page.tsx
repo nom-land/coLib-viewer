@@ -6,7 +6,7 @@ import { getFeeds } from "@/app/utils";
 async function getData(id: string) {
     const nomland = createNomland();
 
-    const data = await nomland.getEntrySharings(id);
+    const data = await nomland.getEntityShares(id);
 
     const { feeds, entry } = getFeeds(data);
 

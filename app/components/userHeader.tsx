@@ -1,10 +1,10 @@
 "use client";
 import TimeAgo from "react-timeago";
 import CharacterAvatar from "./characterAvatar";
-import { UserInfo } from "nomland.js";
+import { CharacterInfo } from "nomland.js";
 
 export default function UserHeader(props: {
-    user: UserInfo;
+    user: CharacterInfo;
     date?: string;
     size?: "s" | "m" | "l";
     onlyAvatar?: boolean;
@@ -14,7 +14,7 @@ export default function UserHeader(props: {
     const name = user.metadata.name || "Unknown";
     const handle = user.handle;
     const avatar = user.metadata.avatars ? user.metadata.avatars[0] : "";
-    const id = user.characterId;
+    const id = user.id;
 
     return (
         <div className="flex gap-3 cursor-pointer">

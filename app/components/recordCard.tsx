@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import LinkPreview from "./linkPreview";
-import { EntryInfo } from "nomland.js";
+import { EntityInfo } from "nomland.js";
 
 export default async function RecordCard({
     id,
@@ -10,7 +10,7 @@ export default async function RecordCard({
 }: {
     id: string;
     context: "community" | "app";
-    recordData: EntryInfo;
+    recordData: EntityInfo;
 }) {
     const record = recordData.metadata as any; // TODO: import Entity
     const recordType = record["record_type"] || "post";

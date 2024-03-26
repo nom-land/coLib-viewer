@@ -3,7 +3,7 @@ import CommunityHeader from "@/app/components/communityHeader";
 import InfiniteFeed from "@/app/components/infiniteFeed";
 import { createNomland } from "@/app/config/nomland";
 import { getCommunity, getFeeds } from "@/app/utils";
-import { UserInfo } from "nomland.js";
+import { CharacterInfo } from "nomland.js";
 
 export default async function CuratorPage({
     params,
@@ -12,12 +12,12 @@ export default async function CuratorPage({
 }) {
     const userId = params.id;
     const nomland = createNomland();
-    const communities = (await nomland.getUserCommunities(userId))
-        .map((c: UserInfo) => getCommunity(c))
-        .filter((c: UserInfo | null) => !!c) as UserInfo[];
+    const communities = (await nomland.getCharacterContexts(userId))
+        .map((c: CharacterInfo) => getCommunity(c))
+        .filter((c: CharacterInfo | null) => !!c) as CharacterInfo[];
 
     const feedsData = await nomland.getFeeds({
-        user: userId,
+        character: userId,
     });
 
     const { feeds, user } = getFeeds(feedsData);
@@ -33,8 +33,8 @@ export default async function CuratorPage({
                 <div>
                     <div>Communities</div>
                     <div className="flex relative">
-                        {communities.map((community: UserInfo) => (
-                            <div key={community.characterId} className="mx-1">
+                        {communities.map((community: CharacterInfo) => (
+                            <div key={community.id} className="mx-1">
                                 <CommunityHeader
                                     community={community}
                                     excludeDescription={true}
@@ -48,7 +48,7 @@ export default async function CuratorPage({
             <InfiniteFeed
                 showCommunity={true}
                 initialNotes={feeds}
-                curatorId={user.characterId.toString()}
+                curatorId={user.id.toString()}
             ></InfiniteFeed>
         </div>
     );

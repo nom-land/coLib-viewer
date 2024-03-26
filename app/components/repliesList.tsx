@@ -1,7 +1,8 @@
 import { createNomland } from "../config/nomland";
 import NoteCard from "./noteCard";
-import { getFeeds, FeedNote } from "../utils";
+import { getFeeds, getId } from "../utils";
 import SharingCard from "./sharingCard";
+import { NotePack } from "nomland.js";
 
 export default async function RepliesList({
     params,
@@ -20,15 +21,15 @@ export default async function RepliesList({
     return (
         <>
             <div>
-                {replies.map((r: FeedNote) => (
-                    <div className={borderCss} key={r.note.postId}>
+                {replies.map((r: NotePack) => (
+                    <div className={borderCss} key={getId(r.note.key)}>
                         <div>
-                            {r.entry ? (
+                            {r.entity ? (
                                 <SharingCard
                                     note={r.note}
-                                    user={r.user}
-                                    entry={r.entry}
-                                    community={r.community}
+                                    user={r.author}
+                                    entry={r.entity}
+                                    community={r.context}
                                 ></SharingCard>
                             ) : (
                                 <NoteCard
@@ -40,7 +41,7 @@ export default async function RepliesList({
                         <div className="ml-[50px]">
                             <RepliesList
                                 params={{
-                                    curationId: r.note.postId,
+                                    curationId: getId(r.note.key),
                                     noBorder: true,
                                 }}
                             ></RepliesList>
@@ -54,7 +55,7 @@ export default async function RepliesList({
 
 async function getReplies(characterId: string, noteId: string) {
     const nomland = createNomland();
-    const replies = await nomland.getDiscussions(characterId, noteId);
+    const replies = await nomland.getReplies({ characterId, noteId });
 
     return getFeeds(replies, true);
 }

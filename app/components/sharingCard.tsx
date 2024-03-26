@@ -4,15 +4,16 @@ import LinkPreview from "./linkPreview";
 import NoteStatLine from "./noteStatLine";
 import Tags from "./tags";
 import UserHeader from "./userHeader";
-import { EntryInfo, UserInfo, UserNote } from "nomland.js";
+import { EntityInfo, CharacterInfo, NoteInfo } from "nomland.js";
 import Attachments from "./attachments";
+import { getId } from "../utils";
 
 export default function SharingCard(props: {
-    note: UserNote;
-    user: UserInfo;
-    entry?: EntryInfo;
+    note: NoteInfo;
+    user: CharacterInfo;
+    entry?: EntityInfo;
     showCommunity?: boolean;
-    community: UserInfo;
+    community: CharacterInfo;
     excludeRecord?: boolean;
 }) {
     const { note, user, showCommunity, community, entry, excludeRecord } =
@@ -20,12 +21,12 @@ export default function SharingCard(props: {
 
     return (
         <div className="card my-3">
-            <Link key={note.postId} href={`/curation/${note.postId}`}>
+            <Link key={getId(note.key)} href={`/curation/${getId(note.key)}`}>
                 <div>
                     <div className="relative">
                         <UserHeader
                             user={user}
-                            date={note.dateString}
+                            date={note.details.date_published}
                         ></UserHeader>
                         {showCommunity && (
                             <div className="absolute right-0 top-0">
@@ -42,7 +43,7 @@ export default function SharingCard(props: {
                     <div className="my-3">
                         {/* <blockquote className="py-2 px-3 my-4 border-l-4 border-gray-300 dark:border-gray-500"> */}
                         <div className="leading-relaxed text-gray-900 whitespace-pre-line">
-                            {note.content}
+                            {note.details.content}
                         </div>
                         {/* </blockquote> */}
                     </div>
@@ -52,7 +53,10 @@ export default function SharingCard(props: {
                     {!excludeRecord && entry && (
                         <LinkPreview url={entry.metadata.url} />
                     )}
-                    <Tags cid={note.contextId.toString()} tags={note.tags} />
+                    <Tags
+                        cid={note.contextId.toString()}
+                        tags={note.details.tags || []}
+                    />
 
                     <NoteStatLine
                         replies={note.repliesCount || 0}

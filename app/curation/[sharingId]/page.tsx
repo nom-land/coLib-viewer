@@ -4,7 +4,8 @@ import CommunityHeader from "@/app/components/communityHeader";
 import RepliesList from "@/app/components/repliesList";
 import { site } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
-import { FeedNote, getCommunity } from "@/app/utils";
+import { getCommunity } from "@/app/utils";
+import { NotePack } from "nomland.js";
 
 export async function generateMetadata({
     params,
@@ -16,10 +17,10 @@ export async function generateMetadata({
     const note = await getData(cid, rid);
 
     return {
-        title: note?.entry.metadata.title || site.title, // TODO:
-        description: note?.entry.metadata.description || site.description,
-        icons: note?.user.metadata.avatars
-            ? note?.user.metadata.avatars[0]
+        title: note?.entity.metadata.title || site.title, // TODO:
+        description: note?.entity.metadata.description || site.description,
+        icons: note?.author.metadata.avatars
+            ? note?.author.metadata.avatars[0]
             : `${site.url}/favicon.ico`,
     };
 }
@@ -38,9 +39,9 @@ export default async function CurationPage({
 
     if (!sharing) return <div>This is not a valid curation.</div>;
 
-    const c = getCommunity(sharing.community, true)!;
+    const c = getCommunity(sharing.context, true)!;
 
-    sharing.community = c;
+    sharing.context = c;
 
     return (
         <div className="container mx-auto my-5">
@@ -48,15 +49,15 @@ export default async function CurationPage({
                 <div className="lg:order-last">
                     <div className="m-3">
                         <CommunityHeader
-                            community={sharing.community}
+                            community={sharing.context}
                             excludeDescription={true}
                         ></CommunityHeader>{" "}
                     </div>
 
                     <RecordCard
-                        id={sharing.entry.characterId.toString()}
+                        id={sharing.entity.id.toString()}
                         context="community"
-                        recordData={sharing.entry}
+                        recordData={sharing.entity}
                     ></RecordCard>
                 </div>
                 <div>
@@ -64,7 +65,7 @@ export default async function CurationPage({
                         <NoteCard noteType="curation" note={sharing}></NoteCard>
                     </div>
                     <div className="mx-3 my-2">
-                        {sharing.note.repliesCount}{" "}
+                        {sharing.note.repliesCount} {/* // TODO */}
                         {sharing.note.repliesCount > 1
                             ? "discussions"
                             : "discussion"}
@@ -82,10 +83,10 @@ export default async function CurationPage({
 async function getData(
     characterId: string,
     noteId: string
-): Promise<FeedNote | undefined> {
+): Promise<NotePack | undefined> {
     const nomland = createNomland();
     try {
-        return await nomland.getSharing(characterId, noteId);
+        return await nomland.getShare({ characterId, noteId });
     } catch (e) {
         console.log(e);
     }

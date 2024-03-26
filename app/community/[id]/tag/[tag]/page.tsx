@@ -7,7 +7,7 @@ import { getFeeds } from "@/app/utils";
 async function getInitialData(communityId: string, tag: string) {
     const nomland = createNomland();
     const feedsData = await nomland.getFeeds({
-        community: communityId,
+        context: communityId,
         tag,
     });
 

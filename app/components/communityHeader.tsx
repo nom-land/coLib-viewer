@@ -2,11 +2,11 @@
 
 import { CommunityAvatar } from "./communityAvatar";
 import DescriptionSection from "./descriptionSection";
-import { UserInfo } from "nomland.js";
+import { CharacterInfo } from "nomland.js";
 
 // return a component that displays the community header
 export default function CommunityHeader(props: {
-    community: UserInfo;
+    community: CharacterInfo;
     excludeDescription?: boolean;
     excludeName?: boolean;
     size?: "s" | "m" | "l";
@@ -25,7 +25,7 @@ export default function CommunityHeader(props: {
                 }
                 size={size || "l"}
                 excludeName={props.excludeName}
-                communityId={community.characterId}
+                communityId={community.id}
             />
             {!props.excludeDescription && (
                 <DescriptionSection

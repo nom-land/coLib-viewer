@@ -1,10 +1,10 @@
 "use client";
 
-import { FeedNote } from "../utils";
+import { NotePack } from "nomland.js";
 import SharingCard from "./sharingCard";
 
 export default function CurationFeed(props: {
-    feeds: FeedNote[];
+    feeds: NotePack[];
     showCommunity?: boolean;
     excludeRecord?: boolean;
 }) {
@@ -17,9 +17,9 @@ export default function CurationFeed(props: {
                     key={i}
                     showCommunity={showCommunity}
                     note={cur.note}
-                    user={cur.user}
-                    community={cur.community}
-                    entry={cur.entry}
+                    user={cur.author}
+                    community={cur.context}
+                    entry={cur.entity}
                     excludeRecord={excludeRecord}
                 ></SharingCard>
             ))}

@@ -5,12 +5,12 @@ import InfiniteFeed from "@/app/components/infiniteFeed";
 import { communityProfiles, site } from "@/app/config";
 import { getFeeds } from "@/app/utils";
 import UserHeader from "@/app/components/userHeader";
-import { UserInfo } from "nomland.js";
+import { CharacterInfo } from "nomland.js";
 
 async function getInitialData(communityId: string) {
     const nomland = createNomland();
     const feedsData = getFeeds(
-        await nomland.getFeeds({ community: communityId })
+        await nomland.getFeeds({ context: communityId })
     );
 
     const members = await nomland.getCommunityMembers(communityId);
@@ -50,10 +50,10 @@ export default async function CommunityPage({
                 <div className="gap-5 w-full md:flex md:my-3">
                     <section className="my-3">
                         <div className="gap-1 grid grid-cols-8 md:grid-cols-5">
-                            {members.map((member: UserInfo) => (
+                            {members.map((member: CharacterInfo) => (
                                 <div
                                     className="mb-1"
-                                    key={member.characterId.toString()}
+                                    key={member.id.toString()}
                                 >
                                     <UserHeader
                                         user={member}

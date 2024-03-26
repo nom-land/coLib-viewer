@@ -1,12 +1,5 @@
-import { EntryInfo, UserInfo, UserNote } from "nomland.js";
+import { CharacterInfo, Feeds, NoteKey, NotePack } from "nomland.js";
 import { blacklistCommunities, communityProfiles } from "../config";
-
-export interface FeedNote {
-    note: UserNote;
-    community: UserInfo;
-    entry: EntryInfo;
-    user: UserInfo;
-}
 
 export function shortenUrl(url: string, length?: number) {
     length = length || 60;
@@ -16,12 +9,12 @@ export function shortenUrl(url: string, length?: number) {
         : url;
 }
 
-export function getCommunity(community: UserInfo, noBl?: boolean) {
+export function getCommunity(community: CharacterInfo, noBl?: boolean) {
     const useBl = !noBl;
     if (useBl) {
-        if (blacklistCommunities.includes(community.characterId)) return null;
+        if (blacklistCommunities.includes(community.id)) return null;
     }
-    const c = communityProfiles.find((p) => p.id === community.characterId);
+    const c = communityProfiles.find((p) => p.id === community.id);
     if (!c) return community;
 
     community.metadata.name = c.name;
@@ -31,55 +24,40 @@ export function getCommunity(community: UserInfo, noBl?: boolean) {
     return community;
 }
 
-function getFeedsData(data: {
-    notes: UserNote[];
-    communities: UserInfo[];
-    entries: EntryInfo[];
-    users: UserInfo[];
-}) {
-    const { notes, communities, entries, users } = data;
+function getFeedsData(data: Feeds) {
+    const { notes, contexts, entities, authors } = data;
+    console.log("getFeedsData(input)", data);
     const feeds = notes
         .map((note) => {
-            const [userId] = note.postId.split("-");
+            const userId = note.key.characterId;
 
-            const community = communities.find(
-                (c) => c.characterId === note.contextId
-            );
+            const context = contexts.find((c) => c.id === note.contextId);
 
-            if (!community) {
-                console.log(communities, note);
+            if (!context) {
+                console.log(contexts, note);
             }
-            const entry = entries.find((e) => e.characterId === note.entryId);
-            const user = users.find((u) => u.characterId === userId);
+            const entity = entities.find((e) => e.id === note.entityId);
+            const author = authors.find((u) => u.id === userId);
 
             // entry can be null if it's a discussion note
             // p.s. for discussion note, community id will be the same as the original one
-            if (!user || !community) {
+            if (!author || !context) {
                 return null;
             } else {
                 return {
                     note,
-                    community,
-                    entry,
-                    user,
+                    context,
+                    entity,
+                    author,
                 };
             }
         })
         .filter((f) => f !== null);
-    return feeds as FeedNote[];
+    console.log("getFeedsData", feeds);
+    return feeds as NotePack[];
 }
 
-export function getFeeds(
-    data:
-        | {
-              notes: UserNote[];
-              communities: UserInfo[];
-              entries: EntryInfo[];
-              users: UserInfo[];
-          }
-        | undefined,
-    noBl?: boolean
-) {
+export function getFeeds(data: Feeds | undefined, noBl?: boolean) {
     if (!data) {
         return {
             feeds: [],
@@ -89,17 +67,22 @@ export function getFeeds(
             community: null,
         };
     }
-    const { notes, users, entries, communities } = data;
+    const {
+        notes,
+        authors: users,
+        entities: entries,
+        contexts: communities,
+    } = data;
     const detailedCommunities = communities
         .map((c) => getCommunity(c, noBl))
-        .filter((c) => !!c) as UserInfo[];
+        .filter((c) => !!c) as CharacterInfo[];
 
     return {
         feeds: getFeedsData({
-            communities: detailedCommunities,
+            contexts: detailedCommunities,
             notes,
-            users,
-            entries,
+            authors: users,
+            entities: entries,
         }),
         community:
             detailedCommunities.length > 0 ? detailedCommunities[0] : null,
@@ -107,4 +90,8 @@ export function getFeeds(
         entry: entries.length > 0 ? entries[0] : null,
         note: notes.length > 0 ? notes[0] : null,
     };
+}
+
+export function getId(key: NoteKey) {
+    return key.characterId + "-" + key.noteId;
 }

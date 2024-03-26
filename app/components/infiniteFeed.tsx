@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import { createNomland } from "../config/nomland";
 import { InView } from "react-intersection-observer";
 import { MetaLine } from "./metaLine";
-import { FeedNote, getFeeds } from "../utils";
+import { getFeeds, getId } from "../utils";
+import { NotePack } from "nomland.js";
 
 const fetchNextFeeds = async (params: {
     communityId?: string;
@@ -19,8 +20,8 @@ const fetchNextFeeds = async (params: {
         const options = cur ? { cursor: cur } : {};
         const feedsData = await nomland.getFeeds(
             {
-                community: communityId,
-                user: curatorId,
+                context: communityId,
+                character: curatorId,
                 tag,
             },
             options
@@ -38,7 +39,7 @@ const fetchNextFeeds = async (params: {
 };
 
 export default function InfiniteFeed(props: {
-    initialNotes: FeedNote[];
+    initialNotes: NotePack[];
     showCommunity: boolean;
     communityId?: string;
     curatorId?: string;
@@ -46,8 +47,8 @@ export default function InfiniteFeed(props: {
 }) {
     const { initialNotes, communityId, tag, curatorId, showCommunity } = props;
 
-    const [items, setItems] = useState<FeedNote[]>(initialNotes || []);
-    const [upcomingItems, setUpcomingItems] = useState<FeedNote[]>([]);
+    const [items, setItems] = useState<NotePack[]>(initialNotes || []);
+    const [upcomingItems, setUpcomingItems] = useState<NotePack[]>([]);
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [skip, setSkip] = useState<number>(10);
@@ -58,11 +59,11 @@ export default function InfiniteFeed(props: {
     const [inView, setInView] = useState(false);
 
     const [lastUpdated, setLastUpdated] = useState<string>(
-        initialNotes[0]?.note.dateString || ""
+        initialNotes[0]?.note.details.date_published || ""
     );
 
     async function fetchMoreData(firstLoad?: boolean) {
-        const hasMoreData = (result: FeedNote[]) => {
+        const hasMoreData = (result: NotePack[]) => {
             if (result.length < 10) {
                 setHasMore(false);
                 setIsLoading(false);
@@ -79,7 +80,7 @@ export default function InfiniteFeed(props: {
                 return;
             }
 
-            const cur = upcomingItems[upcomingItems.length - 1].note.postId;
+            const cur = getId(upcomingItems[upcomingItems.length - 1].note.key);
 
             setItems((prevItems) => [...prevItems, ...upcomingItems]);
             setUpcomingItems([]);
@@ -104,7 +105,7 @@ export default function InfiniteFeed(props: {
                 return;
             }
 
-            let cur = initialNotes[initialNotes.length - 1].note.postId;
+            let cur = getId(initialNotes[initialNotes.length - 1].note.key);
 
             const curationNotes = await fetchNextFeeds({
                 communityId,
@@ -119,7 +120,7 @@ export default function InfiniteFeed(props: {
                 return;
             }
 
-            cur = curationNotes[curationNotes.length - 1].note.postId;
+            cur = getId(curationNotes[curationNotes.length - 1].note.key);
             const upcomingNotes = await fetchNextFeeds({
                 communityId,
                 tag,
@@ -159,14 +160,17 @@ export default function InfiniteFeed(props: {
             setIsLoading(true);
             const feeds = await fetchNextFeeds({ communityId, tag, curatorId });
 
-            const arr = [] as FeedNote[];
+            const arr = [] as NotePack[];
 
-            if (feeds[0]?.note.dateString)
-                setLastUpdated(feeds[0].note.dateString);
+            if (feeds[0]?.note.details.date_published)
+                setLastUpdated(feeds[0].note.details.date_published);
 
             for (let i = 0; i < feeds.length; i++) {
                 if (initialNotes[0])
-                    if (feeds[i].note.postId === initialNotes[0].note.postId) {
+                    if (
+                        getId(feeds[i].note.key) ===
+                        getId(initialNotes[0].note.key)
+                    ) {
                         break;
                     } else {
                         arr.push(feeds[i]);
