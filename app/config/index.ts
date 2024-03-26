@@ -62,7 +62,12 @@ export const communityProfiles = [
     },
 ];
 
-export const blacklistCommunities = ["59718", "59909", "60547", "60016"];
+export const blacklistCommunities = [
+    "59718",
+    // "59909", // nom.bulder
+    "60547",
+    "60016",
+];
 
 export const site = {
     title: "CoLib: Community Library",

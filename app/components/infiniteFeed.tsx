@@ -165,6 +165,10 @@ export default function InfiniteFeed(props: {
             if (feeds[0]?.note.details.date_published)
                 setLastUpdated(feeds[0].note.details.date_published);
 
+            console.log(
+                "fetch recent notes, initialNotes[0]: ",
+                initialNotes[0]
+            );
             for (let i = 0; i < feeds.length; i++) {
                 if (initialNotes[0])
                     if (
