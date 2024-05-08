@@ -26,16 +26,12 @@ export function getCommunity(community: CharacterInfo, noBl?: boolean) {
 
 function getFeedsData(data: Feeds) {
     const { notes, contexts, entities, authors } = data;
-    console.log("getFeedsData(input)", data);
     const feeds = notes
         .map((note) => {
             const userId = note.key.characterId;
 
             const context = contexts.find((c) => c.id === note.contextId);
 
-            if (!context) {
-                console.log(contexts, note);
-            }
             const entity = entities.find((e) => e.id === note.entityId);
             const author = authors.find((u) => u.id === userId);
 
@@ -53,7 +49,6 @@ function getFeedsData(data: Feeds) {
             }
         })
         .filter((f) => f !== null);
-    console.log("getFeedsData", feeds);
     return feeds as NotePack[];
 }
 
