@@ -25,14 +25,16 @@ export function getCommunity(community: CharacterInfo, noBl?: boolean) {
 }
 
 function getFeedsData(data: Feeds) {
-    const { notes, contexts, entities, authors } = data;
+    const { notes, contexts, entities, authors, entityIdMaps } = data;
     const feeds = notes
         .map((note) => {
             const userId = note.key.characterId;
 
             const context = contexts.find((c) => c.id === note.contextId);
 
-            const entity = entities.find((e) => e.id === note.entityId);
+            const entityId = entityIdMaps.get(note.entityId) || note.entityId;
+
+            const entity = entities.find((e) => e.id === entityId);
             const author = authors.find((u) => u.id === userId);
 
             // entry can be null if it's a discussion note
@@ -67,6 +69,7 @@ export function getFeeds(data: Feeds | undefined, noBl?: boolean) {
         authors: users,
         entities: entries,
         contexts: communities,
+        entityIdMaps,
     } = data;
     const detailedCommunities = communities
         .map((c) => getCommunity(c, noBl))
@@ -78,6 +81,7 @@ export function getFeeds(data: Feeds | undefined, noBl?: boolean) {
             notes,
             authors: users,
             entities: entries,
+            entityIdMaps,
         }),
         community:
             detailedCommunities.length > 0 ? detailedCommunities[0] : null,
