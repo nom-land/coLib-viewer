@@ -1,4 +1,4 @@
-import InfiniteFeed from "@/app/components/infiniteFeed";
+import InfiniteFeed from "@/components/infiniteFeed";
 import { site } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
 import { getFeeds } from "@/app/utils";

@@ -1,5 +1,5 @@
-import CommunityHeader from "@/app/components/communityHeader";
-import InfiniteFeed from "@/app/components/infiniteFeed";
+import CommunityHeader from "@/components/communityHeader";
+import InfiniteFeed from "@/components/infiniteFeed";
 import { communityProfiles, site } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
 import { getFeeds } from "@/app/utils";

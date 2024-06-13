@@ -1,6 +1,6 @@
-import UserHeader from "@/app/components/userHeader";
-import CommunityHeader from "@/app/components/communityHeader";
-import InfiniteFeed from "@/app/components/infiniteFeed";
+import UserHeader from "@/components/userHeader";
+import CommunityHeader from "@/components/communityHeader";
+import InfiniteFeed from "@/components/infiniteFeed";
 import { createNomland } from "@/app/config/nomland";
 import { getCommunity, getFeeds } from "@/app/utils";
 import { CharacterInfo } from "nomland.js";

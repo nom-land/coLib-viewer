@@ -6,7 +6,7 @@ import Tags from "./tags";
 import UserHeader from "./userHeader";
 import { EntityInfo, CharacterInfo, NoteInfo } from "nomland.js";
 import Attachments from "./attachments";
-import { getId } from "../utils";
+import { getId } from "../app/utils";
 
 export default function SharingCard(props: {
     note: NoteInfo;

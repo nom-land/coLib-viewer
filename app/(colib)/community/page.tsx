@@ -1,8 +1,8 @@
 "use client";
 
-import { communityProfiles } from "../config";
+import { communityProfiles } from "../../config";
 import Image from "next/image";
-import DescriptionSection from "../components/descriptionSection";
+import DescriptionSection from "@/components/descriptionSection";
 
 export default function Home() {
     return (

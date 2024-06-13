@@ -1,6 +1,6 @@
 "use client";
 import { forwardRef, useEffect, useRef, useState } from "react";
-import useHasBeenInViewport from "../utils/useHasBeenInViewport";
+import useHasBeenInViewport from "../app/utils/useHasBeenInViewport";
 import Image from "next/image";
 
 type RequestStatus = "idle" | "loading" | "success" | "error";

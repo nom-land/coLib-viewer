@@ -2,10 +2,10 @@
 
 import CurationFeed from "./curationFeed";
 import { useEffect, useState } from "react";
-import { createNomland } from "../config/nomland";
+import { createNomland } from "../app/config/nomland";
 import { InView } from "react-intersection-observer";
 import { MetaLine } from "./metaLine";
-import { getFeeds, getId } from "../utils";
+import { getFeeds, getId } from "../app/utils";
 import { NotePack } from "nomland.js";
 
 const fetchNextFeeds = async (params: {

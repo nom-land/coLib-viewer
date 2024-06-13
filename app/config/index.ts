@@ -5,6 +5,8 @@ export const homeName = "Community Library";
 
 const appPrefix = sourceName.slice(0, 2);
 
+export const serviceEndpoint = "https://api.colib.app";
+
 export function makeListLinkType(list: string) {
     return `${appPrefix}-ls-${list}`;
 }

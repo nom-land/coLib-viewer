@@ -1,6 +1,6 @@
-import { site } from "./config";
-import { Inter } from "next/font/google";
+import { site } from "../config";
 import "@/app/globals.css";
+import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,10 +16,10 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en">
-            <body>
+        <div className="flex flex-col min-h-screen">
+            <div className="flex-grow">
                 <div className={inter.className}>{children}</div>
-            </body>
-        </html>
+            </div>
+        </div>
     );
 }

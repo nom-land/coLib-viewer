@@ -1,10 +1,10 @@
 import React from "react";
-import CommunityHeader from "../../components/communityHeader";
+import CommunityHeader from "@/components/communityHeader";
 import { createNomland } from "@/app/config/nomland";
-import InfiniteFeed from "@/app/components/infiniteFeed";
+import InfiniteFeed from "@/components/infiniteFeed";
 import { communityProfiles, site } from "@/app/config";
 import { getFeeds } from "@/app/utils";
-import UserHeader from "@/app/components/userHeader";
+import UserHeader from "@/components/userHeader";
 import { CharacterInfo } from "nomland.js";
 
 async function getInitialData(communityId: string) {

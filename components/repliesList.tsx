@@ -1,6 +1,6 @@
-import { createNomland } from "../config/nomland";
+import { createNomland } from "../app/config/nomland";
 import NoteCard from "./noteCard";
-import { getFeeds, getId } from "../utils";
+import { getFeeds, getId } from "../app/utils";
 import SharingCard from "./sharingCard";
 import { NotePack } from "nomland.js";
 

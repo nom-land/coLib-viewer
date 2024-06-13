@@ -1,6 +1,6 @@
-import RecordCard from "@/app/components/recordCard";
-import { createNomland } from "../../config/nomland";
-import CurationFeed from "@/app/components/curationFeed";
+import RecordCard from "@/components/recordCard";
+import { createNomland } from "../../../config/nomland";
+import CurationFeed from "@/components/curationFeed";
 import { getFeeds } from "@/app/utils";
 
 async function getData(id: string) {

@@ -1,7 +1,7 @@
-import NoteCard from "../../components/noteCard";
-import RecordCard from "@/app/components/recordCard";
-import CommunityHeader from "@/app/components/communityHeader";
-import RepliesList from "@/app/components/repliesList";
+import NoteCard from "@/components/noteCard";
+import RecordCard from "@/components/recordCard";
+import CommunityHeader from "@/components/communityHeader";
+import RepliesList from "@/components/repliesList";
 import { site } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
 import { getCommunity } from "@/app/utils";
