@@ -89,7 +89,7 @@ export default async function Magazine(props: { params: { slug: string } }) {
                         </p>
                         <div className="space-y-2">
                             <p className="text-gray-500 dark:text-gray-400">
-                                {magazine.curator}
+                                by {magazine.curator}
                             </p>
                         </div>
                     </div>
