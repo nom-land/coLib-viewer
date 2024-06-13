@@ -28,10 +28,8 @@ async function getData(slug: string) {
     };
 }
 
-export default async function Magazine(props: {
-    params: { id: string; slug: string };
-}) {
-    const { id, slug } = props.params;
+export default async function Magazine(props: { params: { slug: string } }) {
+    const { slug } = props.params;
     const magazineContents = await getData(slug);
     // TODO: change to record
     const entityIdRecords = magazineContents.feeds
@@ -183,7 +181,9 @@ export default async function Magazine(props: {
                                             {feed.entity.metadata.covers &&
                                             feed.entity.metadata ? (
                                                 <Link
-                                                    href="#"
+                                                    href={
+                                                        feed.entity.metadata.url
+                                                    }
                                                     className="block"
                                                     prefetch={false}
                                                 >
@@ -235,14 +235,7 @@ export default async function Magazine(props: {
                                 </div>
                                 <div className="space-y-2 px-6 md:px-12" />
                                 <div className="flex gap-2 px-2.5 justify-end">
-                                    <Link
-                                        href={
-                                            "/curation/" +
-                                            feed.note.key.characterId +
-                                            "-" +
-                                            feed.note.key.noteId
-                                        }
-                                    >
+                                    <Link href={feed.entity.metadata.url}>
                                         <Button variant="outline">
                                             <EyeIcon className="mr-2 h-4 w-4" />
                                             Go to view
@@ -275,8 +268,8 @@ export default async function Magazine(props: {
                 <p>
                     Produced with ❤️ by{" "}
                     <a
-                        href="#"
-                        target="https://colib.app"
+                        href="https://colib.app"
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="underline"
                     >
@@ -284,8 +277,8 @@ export default async function Magazine(props: {
                     </a>{" "}
                     and{" "}
                     <a
-                        href="#"
-                        target="https://uncommons.cc"
+                        href="https://uncommons.cc"
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="underline"
                     >

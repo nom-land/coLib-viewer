@@ -1,25 +1,27 @@
-import { site } from "../config";
+// This is the root layout component for your Next.js app.
+// Learn more: https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts#root-layout-required
+
+import { Prata } from "next/font/google";
+import { Yeseva_One } from "next/font/google";
 import "@/app/globals.css";
-import { Inter } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+const prata = Prata({
+    subsets: ["latin"],
+    display: "swap",
+    variable: "--font-prata",
+    weight: "400",
+});
+const yeseva_one = Yeseva_One({
+    subsets: ["latin"],
+    display: "swap",
+    variable: "--font-yeseva_one",
+    weight: "400",
+});
 
-export const metadata = {
-    title: site.title,
-    description: site.description,
-    icons: `${site.url}/favicon.ico`,
-};
-
-export default function RootLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="flex flex-col min-h-screen">
-            <div className="flex-grow">
-                <div className={inter.className}>{children}</div>
-            </div>
+        <div className={prata.variable + " " + yeseva_one.variable}>
+            {children}
         </div>
     );
 }
