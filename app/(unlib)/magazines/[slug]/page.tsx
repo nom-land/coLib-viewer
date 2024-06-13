@@ -20,7 +20,9 @@ export interface Magazine {
 
 async function getData(slug: string) {
     // fetch data from endpoint
-    const data = await fetch(serviceEndpoint + "/magazine/" + slug);
+    const data = await fetch(serviceEndpoint + "/magazine/" + slug, {
+        next: { revalidate: 60 }, // 60 seconds = 1 minutes
+    });
     const magazineContents = await data.json();
     return magazineContents as {
         feeds: Feeds;
@@ -46,8 +48,6 @@ export default async function Magazine(props: { params: { slug: string } }) {
 
     const feedsData = getFeeds(magazineContents.feeds);
     const magazine = magazineContents.magazine;
-
-    console.log(magazine.banner);
 
     return (
         <div className="w-full max-w-5xl mx-auto px-4 md:px-6 py-12 md:py-20">
@@ -213,7 +213,17 @@ export default async function Magazine(props: { params: { slug: string } }) {
                                                                         .title
                                                                 }
                                                             </p>
-                                                            <p>
+                                                            <p
+                                                                className="invisible md:visible text-sm overflow-hidden text-gray-500 font-normal text-sm"
+                                                                style={{
+                                                                    display:
+                                                                        "-webkit-box",
+                                                                    WebkitBoxOrient:
+                                                                        "vertical",
+                                                                    WebkitLineClamp:
+                                                                        "2",
+                                                                }}
+                                                            >
                                                                 {
                                                                     feed.entity
                                                                         .metadata
