@@ -206,7 +206,17 @@ export default async function Magazine(props: { params: { slug: string } }) {
                                                             className="rounded-lg w-20 aspect-[1] object-cover"
                                                         />
                                                         <div>
-                                                            <p className="text-lg font-semibold">
+                                                            <p
+                                                                className="text-lg font-semibold invisible md:visible overflow-hidden"
+                                                                style={{
+                                                                    display:
+                                                                        "-webkit-box",
+                                                                    WebkitBoxOrient:
+                                                                        "vertical",
+                                                                    WebkitLineClamp:
+                                                                        "1",
+                                                                }}
+                                                            >
                                                                 {
                                                                     feed.entity
                                                                         .metadata
@@ -214,7 +224,7 @@ export default async function Magazine(props: { params: { slug: string } }) {
                                                                 }
                                                             </p>
                                                             <p
-                                                                className="invisible md:visible text-sm overflow-hidden text-gray-500 font-normal text-sm"
+                                                                className="invisible md:visible text-sm overflow-hidden text-gray-500 font-normal"
                                                                 style={{
                                                                     display:
                                                                         "-webkit-box",
