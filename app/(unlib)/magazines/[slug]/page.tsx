@@ -55,24 +55,24 @@ export default async function Magazine(props: {
         <div className="w-full max-w-5xl mx-auto px-4 md:px-6 py-12 md:py-20">
             <div className="grid gap-8 md:gap-12">
                 <div className="text-center space-y-4">
-                    {/* <img
+                    <img
                         src={magazine.banner}
                         alt="Banner"
                         className="w-full max-h-60 object-cover"
-                    /> */}
-                    <Image
+                    />
+                    {/* <Image
                         src={magazine.banner}
                         alt="Banner"
                         className="w-full "
                         objectFit="cover"
-                        height={60}
+                        height={12}
                         width={800}
                         // sizes="100vw"
                         // style={{
                         //     width: "100%",
                         //     height: "auto",
                         // }}
-                    />
+                    /> */}
 
                     <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
                         {magazine.title}
@@ -235,24 +235,35 @@ export default async function Magazine(props: {
                                 </div>
                                 <div className="space-y-2 px-6 md:px-12" />
                                 <div className="flex gap-2 px-2.5 justify-end">
-                                    <Button variant="outline">
-                                        <EyeIcon className="mr-2 h-4 w-4" />
-                                        Go to view
-                                    </Button>
-                                    <Button variant="outline">
-                                        <MessageCircleIcon className="mr-2 h-4 w-4" />
-                                        Join the discussion
-                                    </Button>
+                                    <Link
+                                        href={
+                                            "/curation/" +
+                                            feed.note.key.characterId +
+                                            "-" +
+                                            feed.note.key.noteId
+                                        }
+                                    >
+                                        <Button variant="outline">
+                                            <EyeIcon className="mr-2 h-4 w-4" />
+                                            Go to view
+                                        </Button>
+                                    </Link>
+                                    {feed.note.details.external_url && (
+                                        <Link
+                                            href={
+                                                feed.note.details.external_url
+                                            }
+                                        >
+                                            <Button variant="outline">
+                                                <MessageCircleIcon className="mr-2 h-4 w-4" />
+                                                Join the discussion
+                                            </Button>
+                                        </Link>
+                                    )}
                                 </div>
                                 <div className="space-y-2 px-[55px] py-4 text-gray-500">
                                     <p className="mb-4">
-                                        {/* Jane Doe: "This webpage is a
-                                        game-changer for anyone looking to tap
-                                        into their creative potential.\n Highly
-                                        recommended!" */}
-                                    </p>
-                                    <p className="mb-4">
-                                        {/* Nicholas："Nicholashttps://vitalik.ca/general/2023/11/27/techno_optimism.html" */}
+                                        {(feed.note as any).replies}
                                     </p>
                                 </div>
                             </div>
@@ -265,7 +276,7 @@ export default async function Magazine(props: {
                     Produced with ❤️ by{" "}
                     <a
                         href="#"
-                        target="_blank"
+                        target="https://colib.app"
                         rel="noopener noreferrer"
                         className="underline"
                     >
@@ -274,7 +285,7 @@ export default async function Magazine(props: {
                     and{" "}
                     <a
                         href="#"
-                        target="_blank"
+                        target="https://uncommons.cc"
                         rel="noopener noreferrer"
                         className="underline"
                     >
