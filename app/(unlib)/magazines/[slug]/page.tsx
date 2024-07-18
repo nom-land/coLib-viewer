@@ -5,8 +5,24 @@ import { JSX, SVGProps } from "react";
 import { serviceEndpoint } from "@/app/config";
 import { Feeds } from "nomland.js";
 import { getFeeds } from "@/app/utils";
-import Image from "next/image";
 import LinkPreview from "@/components/linkPreview";
+
+export async function generateMetadata({
+    params,
+}: {
+    params: { slug: string };
+}) {
+    const { slug } = params;
+
+    const data = await getData(slug);
+
+    const title = data.magazine.title;
+    const description = data.magazine.subTitle;
+    return {
+        title,
+        description,
+    };
+}
 
 export interface Magazine {
     title: string;
@@ -50,14 +66,24 @@ export default async function Magazine(props: { params: { slug: string } }) {
     const magazine = magazineContents.magazine;
 
     return (
-        <div className="w-full max-w-5xl mx-auto px-4 md:px-6 py-12 md:py-20">
-            <div className="grid gap-8 md:gap-12">
-                <div className="text-center space-y-4">
-                    <img
-                        src={magazine.banner}
-                        alt="Banner"
-                        className="w-full max-h-60 object-cover"
-                    />
+        <div className="w-full max-w-5xl mx-auto px-4 md:px-6 py-4 md:py-12">
+            <div className="w-full flex flex-col gap-8 md:gap-12">
+                <div className="max-w-full text-center space-y-4">
+                    <div className="w-full aspect-w-3 aspect-h-2 md:aspect-w-2 md:aspect-h-1">
+                        <img
+                            src={magazine.banner}
+                            alt="description"
+                            className="w-full object-cover"
+                        />
+                    </div>
+                    {/* <div className="max-w-full aspect-w-3 aspect-h-2">
+                        <img
+                            src={magazine.banner}
+                            alt="Banner"
+                            // className="w-full max-h-60 object-cover"
+                            className="object-cover"
+                        />
+                    </div> */}
                     {/* <Image
                         src={magazine.banner}
                         alt="Banner"
@@ -79,12 +105,12 @@ export default async function Magazine(props: { params: { slug: string } }) {
                         </div>
                     </h1>
                 </div>
-                <div className="grid gap-6 md:gap-8">
+                <div className="flex flex-col gap-6 md:gap-8">
                     <div className="space-y-4">
                         <h2 className="text-2xl md:text-3xl font-bold text-left">
                             Curator&apos;s Introduction
                         </h2>
-                        <p className="whitespace-pre-line text-left ">
+                        <p className="whitespace-pre-line text-left">
                             {magazine.preface}
                         </p>
                         <div className="space-y-2">
@@ -94,13 +120,13 @@ export default async function Magazine(props: { params: { slug: string } }) {
                         </div>
                     </div>
                 </div>
-                <div className="grid gap-6 md:gap-8">
-                    <div className="grid gap-2">
+                <div className="flex flex-col gap-6 md:gap-8">
+                    <div className="flex flex-col gap-2">
                         <h2 className="text-2xl md:text-3xl font-bold">
                             Curation List
                         </h2>
                     </div>
-                    <div className="grid gap-4 md:gap-8 p-2 rounded-lg">
+                    <div className="flex flex-col gap-4 md:gap-8 p-2 rounded-lg">
                         {feedsData.feeds.map((feed, index) => (
                             <div className="space-y-2" key={index}>
                                 <div className="flex">
@@ -177,7 +203,7 @@ export default async function Magazine(props: { params: { slug: string } }) {
                                         <div className="space-y-2 whitespace-pre-line">
                                             <p>{feed.note.details.content}</p>
                                         </div>
-                                        <div className="space-y-2 p-4  bg-gray-100 rounded-lg">
+                                        <div className="space-y-2 p-4 bg-gray-100 rounded-lg">
                                             {feed.entity.metadata.covers &&
                                             feed.entity.metadata ? (
                                                 <Link
