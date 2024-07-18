@@ -195,7 +195,7 @@ export default async function Magazine(props: { params: { slug: string } }) {
                                             </AvatarFallback> */}
                                         </Avatar>
                                     </div>
-                                    <div className="space-y-2 p-2">
+                                    <div className="space-y-2 p-2 break-all">
                                         <h3 className="text-0.75xl font-semibold">
                                             {" "}
                                             {feed.author.metadata.name}
