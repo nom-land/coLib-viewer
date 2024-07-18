@@ -21,6 +21,7 @@ export async function generateMetadata({
     return {
         title,
         description,
+        referrer: "never",
     };
 }
 
@@ -203,7 +204,7 @@ export default async function Magazine(props: { params: { slug: string } }) {
                                         <div className="space-y-2 whitespace-pre-line">
                                             <p>{feed.note.details.content}</p>
                                         </div>
-                                        <div className="space-y-2 p-4 bg-gray-100 rounded-lg">
+                                        <div className="space-y-2 p-0 md:p-4 bg-gray-100 rounded-lg">
                                             {feed.entity.metadata.covers &&
                                             feed.entity.metadata ? (
                                                 <Link
@@ -233,7 +234,7 @@ export default async function Magazine(props: { params: { slug: string } }) {
                                                         />
                                                         <div>
                                                             <p
-                                                                className="text-lg font-semibold invisible md:visible overflow-hidden"
+                                                                className="text-lg font-semibold overflow-hidden"
                                                                 style={{
                                                                     display:
                                                                         "-webkit-box",
@@ -250,7 +251,7 @@ export default async function Magazine(props: { params: { slug: string } }) {
                                                                 }
                                                             </p>
                                                             <p
-                                                                className="invisible md:visible text-sm overflow-hidden text-gray-500 font-normal"
+                                                                className=" text-sm overflow-hidden text-gray-500 font-normal"
                                                                 style={{
                                                                     display:
                                                                         "-webkit-box",
