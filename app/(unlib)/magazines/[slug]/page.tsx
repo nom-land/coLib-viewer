@@ -301,7 +301,7 @@ export default async function Magazine(props: { params: { slug: string } }) {
                                     )}
                                 </div>
                                 <div className="space-y-2 px-[55px] py-4 text-gray-500">
-                                    <p className="mb-4">
+                                    <p className="mb-4 break-all">
                                         {(feed.note as any).replies}
                                     </p>
                                 </div>
