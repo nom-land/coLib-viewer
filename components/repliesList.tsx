@@ -28,7 +28,7 @@ export default async function RepliesList({
     // Cache the getReplies function with a 60-second revalidation period
     const getCachedReplies = unstable_cache(
       async (characterId: string, noteId: string) => {
-          console.log(`Fetching replies for character ${characterId} and note ${noteId}`);
+        //   console.log(`Fetching replies for character ${characterId} and note ${noteId}`);
           return await getReplies(characterId, noteId);
       },
       ['replies'],
@@ -38,7 +38,7 @@ export default async function RepliesList({
     try {
         const { feeds } = await getCachedReplies(id, rid);
         replies = feeds;
-        console.log(`RepliesList: Received ${replies.length} replies at depth ${depth}`);
+        // console.log(`RepliesList: Received ${replies.length} replies at depth ${depth}`);
     } catch (e) {
         error = e;
         console.error('Error in RepliesList:', e);

@@ -5,7 +5,20 @@ import RepliesList from "@/components/repliesList";
 import { site } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
 import { getCommunity } from "@/app/utils";
-import { NotePack } from "nomland.js";
+import { unstable_cache } from 'next/cache';
+
+const getCachedData = unstable_cache(
+  async (characterId: string, noteId: string) => {
+    const nomland = createNomland();
+    try {
+      return await nomland.getShare({ characterId, noteId });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  ['getData'],
+  { revalidate: 60 } // Adjust the revalidation period as needed
+);
 
 export async function generateMetadata({
     params,
@@ -14,7 +27,7 @@ export async function generateMetadata({
 }) {
     const { sharingId } = params;
     const [cid, rid] = sharingId.split("-");
-    const note = await getData(cid, rid);
+    const note = await getCachedData(cid, rid);
 
     return {
         title: note?.entity.metadata.title || site.title, // TODO:
@@ -34,7 +47,8 @@ export default async function CurationPage({
     const { sharingId } = params;
 
     const [cid, rid] = sharingId.split("-");
-    const sharing = await getData(cid, rid);
+    const sharing = await getCachedData(cid, rid);
+    console.log({sharing});
     // const repliesCount = await getRepliesCount(cid, rid);
 
     if (!sharing) return <div>This is not a valid curation.</div>;
@@ -78,18 +92,6 @@ export default async function CurationPage({
             </div>
         </div>
     );
-}
-
-async function getData(
-    characterId: string,
-    noteId: string
-): Promise<NotePack | undefined> {
-    const nomland = createNomland();
-    try {
-        return await nomland.getShare({ characterId, noteId });
-    } catch (e) {
-        console.log(e);
-    }
 }
 
 export const revalidate = 60; // revalidate this page every 60 seconds
