@@ -10,7 +10,6 @@ type SuccessResponse = {
 };
 
 const CACHE_RESULT_SECONDS = 60 * 60 * 24; // 1 day
-export const revalidate = 60 * 60 * 24; // 1 day
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);

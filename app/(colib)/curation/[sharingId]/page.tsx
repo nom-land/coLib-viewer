@@ -5,29 +5,24 @@ import RepliesList from "@/components/repliesList";
 import { site } from "@/app/config";
 import { createNomland } from "@/app/config/nomland";
 import { getCommunity } from "@/app/utils";
-import { unstable_cache } from 'next/cache';
+import { unstable_cache } from "next/cache";
 
-const getCachedData = unstable_cache(
-  async (characterId: string, noteId: string) => {
+const getNote = async (characterId: string, noteId: string) => {
     const nomland = createNomland();
     try {
-      return await nomland.getShare({ characterId, noteId });
+        return await nomland.getShare({ characterId, noteId });
     } catch (e) {
-      console.log(e);
+        console.log(e);
     }
-  },
-  ['getData'],
-  { revalidate: 60 } // Adjust the revalidation period as needed
-);
+};
 
-export async function generateMetadata({
-    params,
-}: {
-    params: { sharingId: string };
+export async function generateMetadata(props: {
+    params: Promise<{ sharingId: string }>;
 }) {
+    const params = await props.params;
     const { sharingId } = params;
     const [cid, rid] = sharingId.split("-");
-    const note = await getCachedData(cid, rid);
+    const note = await getNote(cid, rid);
 
     return {
         title: note?.entity.metadata.title || site.title, // TODO:
@@ -38,17 +33,16 @@ export async function generateMetadata({
     };
 }
 
-export default async function CurationPage({
-    params,
-}: {
-    params: { sharingId: string };
+export default async function CurationPage(props: {
+    params: Promise<{ sharingId: string }>;
 }) {
+    const params = await props.params;
     // character id and note id is split by "-" in curationId
     const { sharingId } = params;
 
     const [cid, rid] = sharingId.split("-");
-    const sharing = await getCachedData(cid, rid);
-    console.log({sharing});
+    const sharing = await getNote(cid, rid);
+    console.log({ sharing });
     // const repliesCount = await getRepliesCount(cid, rid);
 
     if (!sharing) return <div>This is not a valid curation.</div>;
@@ -93,5 +87,3 @@ export default async function CurationPage({
         </div>
     );
 }
-
-export const revalidate = 60; // revalidate this page every 60 seconds

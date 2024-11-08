@@ -5,11 +5,12 @@ import { createNomland } from "@/app/config/nomland";
 import { getCommunity, getFeeds } from "@/app/utils";
 import { CharacterInfo } from "nomland.js";
 
-export default async function CuratorPage({
-    params,
-}: {
-    params: { id: string };
-}) {
+export default async function CuratorPage(
+    props: {
+        params: Promise<{ id: string }>;
+    }
+) {
+    const params = await props.params;
     const userId = params.id;
     const nomland = createNomland();
     const communities = (await nomland.getCharacterContexts(userId))

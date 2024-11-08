@@ -15,11 +15,12 @@ async function getInitialData(tag: string) {
     return { feeds };
 }
 
-export async function generateMetadata({
-    params,
-}: {
-    params: { tag: string };
-}) {
+export async function generateMetadata(
+    props: {
+        params: Promise<{ tag: string }>;
+    }
+) {
+    const params = await props.params;
     const tag = decodeURIComponent(params.tag);
 
     return {
@@ -29,7 +30,8 @@ export async function generateMetadata({
     };
 }
 
-export default async function TagPage({ params }: { params: { tag: string } }) {
+export default async function TagPage(props: { params: Promise<{ tag: string }> }) {
+    const params = await props.params;
     const tag = decodeURIComponent(params.tag);
 
     const { feeds } = await getInitialData(tag);

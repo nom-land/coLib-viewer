@@ -15,11 +15,12 @@ async function getInitialData(communityId: string, tag: string) {
     return { feeds, community };
 }
 
-export async function generateMetadata({
-    params,
-}: {
-    params: { tag: string; id: string };
-}) {
+export async function generateMetadata(
+    props: {
+        params: Promise<{ tag: string; id: string }>;
+    }
+) {
+    const params = await props.params;
     const tag = decodeURIComponent(params.tag);
     const community = communityProfiles.find((c) => c.id === params.id);
 
@@ -32,11 +33,12 @@ export async function generateMetadata({
     };
 }
 
-export default async function CommunityTagPage({
-    params,
-}: {
-    params: { tag: string; id: string };
-}) {
+export default async function CommunityTagPage(
+    props: {
+        params: Promise<{ tag: string; id: string }>;
+    }
+) {
+    const params = await props.params;
     const communityId = params.id;
     const tag = decodeURIComponent(params.tag);
 

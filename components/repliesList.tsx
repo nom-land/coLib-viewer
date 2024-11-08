@@ -2,7 +2,7 @@ import { createNomland } from "../app/config/nomland";
 import NoteCard from "./noteCard";
 import { getFeeds, getId } from "../app/utils";
 import SharingCard from "./sharingCard";
-import { unstable_cache } from 'next/cache';
+import { unstable_cache } from "next/cache";
 
 const getReplies = async (characterId: string, noteId: string) => {
     const nomland = createNomland();
@@ -20,28 +20,30 @@ export default async function RepliesList({
     // character id and note id is split by "-" in curationId
     const { curationId } = params;
     const [id, rid] = curationId.split("-");
-    console.log(`RepliesList: Fetching replies for curation ${curationId} at depth ${depth}`);
+    console.log(
+        `RepliesList: Fetching replies for curation ${curationId} at depth ${depth}`
+    );
 
-    let replies: Awaited<ReturnType<typeof getReplies>>['feeds'] = [];
+    let replies: Awaited<ReturnType<typeof getReplies>>["feeds"] = [];
     let error = null;
 
     // Cache the getReplies function with a 60-second revalidation period
-    const getCachedReplies = unstable_cache(
-      async (characterId: string, noteId: string) => {
-        //   console.log(`Fetching replies for character ${characterId} and note ${noteId}`);
-          return await getReplies(characterId, noteId);
-      },
-      ['replies'],
-      { revalidate: 60 } // Revalidate every 60 seconds
-    );
+    // const getCachedReplies = unstable_cache(
+    //   async (characterId: string, noteId: string) => {
+    //     //   console.log(`Fetching replies for character ${characterId} and note ${noteId}`);
+    //       return await getReplies(characterId, noteId);
+    //   },
+    //   ['replies'],
+    //   { revalidate: 60 } // Revalidate every 60 seconds
+    // );
 
     try {
-        const { feeds } = await getCachedReplies(id, rid);
+        const { feeds } = await getReplies(id, rid);
         replies = feeds;
         // console.log(`RepliesList: Received ${replies.length} replies at depth ${depth}`);
     } catch (e) {
         error = e;
-        console.error('Error in RepliesList:', e);
+        console.error("Error in RepliesList:", e);
     }
 
     let borderCss = "border-gray-200 border-b-2";
@@ -62,7 +64,11 @@ export default async function RepliesList({
         <>
             <div>
                 {replies.map((r) => (
-                    <div className={borderCss} key={getId(r.note.key)} data-depth={depth}>
+                    <div
+                        className={borderCss}
+                        key={getId(r.note.key)}
+                        data-depth={depth}
+                    >
                         <div>
                             {r.entity ? (
                                 <SharingCard

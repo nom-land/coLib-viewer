@@ -7,11 +7,12 @@ import { Feeds } from "nomland.js";
 import { getFeeds } from "@/app/utils";
 import LinkPreview from "@/components/linkPreview";
 
-export async function generateMetadata({
-    params,
-}: {
-    params: { slug: string };
-}) {
+export async function generateMetadata(
+    props: {
+        params: Promise<{ slug: string }>;
+    }
+) {
+    const params = await props.params;
     const { slug } = params;
 
     const data = await getData(slug);
@@ -47,8 +48,8 @@ async function getData(slug: string) {
     };
 }
 
-export default async function Magazine(props: { params: { slug: string } }) {
-    const { slug } = props.params;
+export default async function Magazine(props: { params: Promise<{ slug: string }> }) {
+    const { slug } = (await props.params);
     const magazineContents = await getData(slug);
     // TODO: change to record
     const entityIdRecords = magazineContents.feeds

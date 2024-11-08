@@ -17,7 +17,10 @@ async function getInitialData(communityId: string) {
     return { feeds: feedsData.feeds, members, community: feedsData.community };
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
+export async function generateMetadata(props: {
+    params: Promise<{ id: string }>;
+}) {
+    const params = await props.params;
     const c = communityProfiles.find((c) => c.id === params.id);
 
     return {
@@ -27,11 +30,10 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
     };
 }
 
-export default async function CommunityPage({
-    params,
-}: {
-    params: { id: string };
+export default async function CommunityPage(props: {
+    params: Promise<{ id: string }>;
 }) {
+    const params = await props.params;
     const communityId = params.id;
     const data = await getInitialData(communityId);
     if (!data) {
@@ -77,5 +79,3 @@ export default async function CommunityPage({
         </div>
     );
 }
-
-export const revalidate = 60; // revalidate this page every 60 seconds

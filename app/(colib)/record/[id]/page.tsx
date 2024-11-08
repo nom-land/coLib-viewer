@@ -16,11 +16,12 @@ async function getData(id: string) {
     };
 }
 
-export default async function RecordDisplay({
-    params,
-}: {
-    params: { id: string };
-}) {
+export default async function RecordDisplay(
+    props: {
+        params: Promise<{ id: string }>;
+    }
+) {
+    const params = await props.params;
     const rid = params.id;
 
     const { feeds, entry } = await getData(rid);
