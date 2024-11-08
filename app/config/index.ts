@@ -23,17 +23,18 @@ export function getMembersLinkType() {
 export const communityProfiles = [
     {
         id: "59949",
+        name: "Uncommons｜💚💊",
+        description: "Crypto Salon for Public Goods Builders.",
+        image: "/uncommons.jpg",
+    },
+    {
+        id: "72535",
         name: "MyCoFi 共讀筆記🍄",
         description:
             "《探索 MycoFi：Web3及其他领域的菌丝体设计模式》 中文版由 Uncommons 与 LXDAO 合作翻译，并与 AAStar 联合举办共读活动，旨在通过共读探讨菌丝体结构与 Web3 经济模式的联系。",
         image: "/mycofi.jpg",
     },
-    {
-        id: "72535",
-        name: "NFT Community",
-        description: "NFT Community",
-        image: "/nft.jpg",
-    },
+
     // {
     //     id: "60095",
     //     name: "WAMO 2023 ChiangMai🇹🇭",
